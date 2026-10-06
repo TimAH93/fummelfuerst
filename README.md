@@ -10,7 +10,11 @@ Adaptive guitar improvisation trainer: hear → understand → locate → play �
   checked over 1,000 seeds: its own solution must pass its own independent check,
   and every wrong answer must fail.
 
-No UI yet, no runtime dependencies.
+- **Listening core** (pulled forward for the tuner and mic checking): YIN pitch detection,
+  tuner reading (nearest string, cents), and a note tracker that turns frames into
+  played notes. Pure functions on sample buffers; the Web Audio layer comes with the UI.
+
+No UI yet, no runtime dependencies. UI direction: [docs/ui-guidelines.md](docs/ui-guidelines.md) (draft).
 
 ```bash
 npm install        # tsx, typescript, @types/node (dev only)
@@ -25,8 +29,9 @@ src/core/
   theory/   pitch · spelling · interval · scale · chord · harmony
   guitar/   tuning · fretboard
   exercises/ rng · types · registry · attempt · families/{noteFind, intervalHunt, melodyChord}
+  listen/   pitch (YIN) · tuner · tracker
   index.ts  public API
-tests/      theory · fretboard · exercises (.test.ts) · expect.ts (tiny assert helper)
+tests/      theory · fretboard · exercises · listen (.test.ts) · expect.ts (tiny assert helper)
 ```
 
 Everything derives from interval formulas: scales and chords are a root plus degree
