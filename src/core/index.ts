@@ -10,3 +10,4 @@ export * from './exercises';
 export * from './listen';
 export * from './voicing';
 export * from './mastery';
+export * from './curriculum';

@@ -14,6 +14,10 @@ Adaptive guitar improvisation trainer: hear → understand → locate → play �
   inversions), a fourth family *triad build*, and the learner model: per-skill moving accuracy
   (α = 0.3), Leitner boxes 0–5, mastery = accuracy × confidence × tempo, weighted random
   selection, help levels 0–3 with hysteresis. Simulated players verify it targets weaknesses.
+- **Curriculum** – training-mode style: per track an ordered path of small drills
+  (12 fretboard, 42 interval, 32 triad, 14 melody). The app recommends one drill; the learner
+  model only chooses inside it. A drill is passed once every skill is mastered and has held
+  over a break; it comes back only if it clearly slips.
 - **Listening core** (pulled forward for the tuner and mic checking): YIN pitch detection,
   tuner reading (nearest string, cents), and a note tracker that turns frames into
   played notes. Pure functions on sample buffers; the Web Audio layer comes with the UI.
@@ -36,8 +40,9 @@ src/core/
   listen/   pitch (YIN) · tuner · tracker
   voicing/  voicing search · tabs · string sets
   mastery/  learner state · skill stats · help levels · selection
+  curriculum/ tracks · drills · recommendation
   index.ts  public API
-tests/      theory · fretboard · exercises · voicing · mastery · listen (.test.ts) · expect.ts (tiny assert helper)
+tests/      theory · fretboard · exercises · voicing · mastery · curriculum · listen (.test.ts) · expect.ts (tiny assert helper)
 ```
 
 Everything derives from interval formulas: scales and chords are a root plus degree
@@ -96,6 +101,21 @@ state = applyAttempt(state, recordAttempt(exercise, response, meta), getFamily(e
 - **Selection:** family uniformly, then a skill with weight
   `weakness + due + novelty (+ small floor)`, ×0.1 if among the last 5. Random proportional, never argmax.
   New skills enter only while fewer than 8 per family are "in learning" (seen, box < 2).
-- **Leitner:** right and quick → next box; right but slow → stays (at least box 1); wrong → box 0.
+- **Leitner:** right and quick *when due* → next box; early practice keeps the schedule;
+  right but slow → stays (at least box 1); wrong → box 0.
 - **Help levels** are kept per skill group (`interval:b3`, `triad:maj`, …): fade after 4 good answers
   in a row *and* group mastery ≥ 0.5 / 0.65 / 0.8; come back after 2 misses in a row.
+
+## Curriculum
+
+```ts
+const curriculum = buildCurriculum(catalog);
+const drill = recommendDrill(state, curriculum, 'intervals');   // 'Quinte aufwärts – Nachbarsaite'
+const { exercise, helpLevel } = nextDrillExercise(state, drill, catalog, rng, Date.now());
+// … answer …
+state = markPassed(applyAttempt(state, attempt, tempo), curriculum, Date.now());
+drillProgress(state, drill);   // { status: 'learning', progress: 0.62, comfortable: 2, total: 4 }
+```
+
+The order lives in `src/core/curriculum/curriculum.ts` as plain lists – edit there to reorder.
+Interval drills group string pairs by hand shape: adjacent, adjacent across G/B, one string skipped.

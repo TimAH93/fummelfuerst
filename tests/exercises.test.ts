@@ -121,7 +121,7 @@ for (const [ctxName, ctx] of CONTEXTS) {
         const t = ctx.tuning;
         const accepted = allPositions(ctx).filter((p) => evaluate(ex, { kind: 'positions', positions: [p] }).correct);
         expect(accepted.map(key)).toEqual([key(position)]);
-        expect(fretSpan([from.fret, position.fret]) <= ctx.maxSpan).toBe(true);
+        expect(Math.abs(from.fret - position.fret) + 1 <= ctx.maxSpan).toBe(true);
         expect(pcAt(t, from)).toBe(notePc(fromNote));
         expect(pcAt(t, position)).toBe(notePc(note));
         // The letter distance must match the named interval (octave folds to unison).

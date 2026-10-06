@@ -1,4 +1,4 @@
-import { FretPos, fretSpan, pitchAt } from '../../guitar/fretboard';
+import { FretPos, pitchAt } from '../../guitar/fretboard';
 import { Degree, defaultDegree, degreeToString, intervalInfo, parseDegree, transpose, transposeDown } from '../../theory/interval';
 import { toPc } from '../../theory/pitch';
 import { Note, noteName } from '../../theory/spelling';
@@ -33,6 +33,13 @@ export interface IntervalHuntFocus {
 
 const MAX_TRIES = 500;
 
+/**
+ * Interval shapes are about the hand's grid, so the open string counts as fret 0 here:
+ * open A → low E fret 12 is playable, but it is not the fifth shape we want to drill.
+ */
+export const intervalInPosition = (fromFret: number, toFret: number, maxSpan: number): boolean =>
+  Math.abs(fromFret - toFret) + 1 <= maxSpan;
+
 /** Spelling of start note + interval with the fewest accidentals overall; ties broken by rng. */
 function spell(pc: number, semitones: number, direction: Direction, pick: <T>(xs: readonly T[]) => T) {
   const degrees = semitones === 6 ? [parseDegree('b5'), parseDegree('#4')] : [defaultDegree(semitones)];
@@ -66,7 +73,7 @@ export const intervalHunt: ExerciseFamily<IntervalHuntParams, IntervalHuntSoluti
       const targets = strings
         .filter((s) => s !== fromString && (focus.targetString === undefined || s === focus.targetString))
         .map((s) => ({ string: s, fret: wanted - tuning.strings[s] }))
-        .filter((p) => p.fret >= range.minFret && p.fret <= range.maxFret && fretSpan([from.fret, p.fret]) <= maxSpan);
+        .filter((p) => p.fret >= range.minFret && p.fret <= range.maxFret && intervalInPosition(from.fret, p.fret, maxSpan));
       if (targets.length === 0) continue;
 
       const position = rng.pick(targets);
@@ -94,7 +101,7 @@ export const intervalHunt: ExerciseFamily<IntervalHuntParams, IntervalHuntSoluti
             let feasible = false;
             for (let f = range.minFret; f <= range.maxFret && !feasible; f++) {
               const g = tuning.strings[fromString] + f + step - tuning.strings[targetString];
-              feasible = g >= range.minFret && g <= range.maxFret && fretSpan([f, g]) <= maxSpan;
+              feasible = g >= range.minFret && g <= range.maxFret && intervalInPosition(f, g, maxSpan);
             }
             if (!feasible) continue;
             out.push({

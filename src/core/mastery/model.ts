@@ -36,6 +36,8 @@ export interface LearnerState {
   help: Record<string, HelpState>;
   /** Most recent leaf skills, newest first. */
   recent: string[];
+  /** Drill id → epoch ms when it first became comfortable. */
+  passed: Record<string, number>;
 }
 
 export const ALPHA = 0.3;
@@ -47,7 +49,7 @@ export const RECENT_LENGTH = 5;
 /** A new skill starts undecided rather than at zero. */
 const PRIOR = 0.5;
 
-export const emptyState = (): LearnerState => ({ schemaVersion: SCHEMA_VERSION, skills: {}, help: {}, recent: [] });
+export const emptyState = (): LearnerState => ({ schemaVersion: SCHEMA_VERSION, skills: {}, help: {}, recent: [], passed: {} });
 
 /** 'interval:b3/up/strings:5-4' → ['interval', 'interval:b3', 'interval:b3/up', 'interval:b3/up/strings:5-4']. */
 export function skillPath(id: string): string[] {
@@ -90,10 +92,13 @@ function updateStats(s: SkillStats | undefined, a: Attempt, tempo: number, leaf:
     lastSeen: a.at,
   };
   if (leaf) {
+    // A box is earned only when the skill was due: ten right answers in one sitting
+    // prove short-term memory, not that it sticks.
     if (!a.evaluation.correct) next.box = 0;
-    else if (isGood(a, tempo)) next.box = Math.min(5, prev.box + 1);
+    else if (isGood(a, tempo) && a.at >= prev.due) next.box = Math.min(5, prev.box + 1);
     else next.box = Math.max(1, prev.box);
-    next.due = a.at + LEITNER_MS[next.box];
+    // Early practice keeps the schedule; only a due or wrong answer reschedules.
+    if (!s || !a.evaluation.correct || a.at >= prev.due) next.due = a.at + LEITNER_MS[next.box];
   }
   return next;
 }

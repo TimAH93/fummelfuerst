@@ -13,6 +13,20 @@ everything marked *(proposal)* is a starting point to be confirmed or changed.
 - Fingering diagrams and tabs appear on the fretboard screen and in the reveal,
   **never as a template before playing.**
 
+## One thing at a time *(decided)*
+
+Like a fighting-game training mode: practise one small move until it is comfortable.
+
+- The home screen shows **one drill** – its title, a progress bar, and **Start**. Nothing else
+  competes for attention. No menu of 15 options.
+- The app recommends exactly one next drill per track. The player decides when to move on;
+  the app never forces it.
+- Nothing is skipped. A drill you already know is simply marked comfortable quickly.
+- Switching track (fretboard / intervals / triads / melody) and the tuner sit behind small,
+  quiet controls, not on equal footing with Start.
+- When a passed drill has clearly slipped, it is the one recommendation again – shown as
+  "Wiederholen", without alarm.
+
 ## Type and contrast *(proposal)*
 
 | Element | Size | Notes |
@@ -29,7 +43,8 @@ everything marked *(proposal)* is a starting point to be confirmed or changed.
 
 ## Layout *(proposal)*
 
-- Portrait first, single column, nothing scrolls during an exercise.
+- Portrait first on the phone, single column, nothing scrolls during an exercise.
+- Tablet (iPad): same screens, landscape allowed; the fretboard in the reveal gets the extra width.
 - Big tap targets (≥ 64 px) in the lower third, reachable with one thumb.
 - At most two actions visible: e.g. *reveal* and *next*. Self-rating after the reveal is
   three equally sized buttons: **missed / found / instant**.

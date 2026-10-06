@@ -90,15 +90,24 @@ describe('skill stats', () => {
     let s = emptyState();
     const boxes: number[] = [];
     for (let i = 0; i < 6; i++) {
-      s = applyAttempt(s, attempt('note:C/string:5', true, i), TEMPO);
+      const due = s.skills['note:C/string:5']?.due ?? 0;
+      s = applyAttempt(s, attempt('note:C/string:5', true, due), TEMPO);
       boxes.push(s.skills['note:C/string:5'].box);
     }
     expect(boxes).toEqual([1, 2, 3, 4, 5, 5]);
-    expect(s.skills['note:C/string:5'].due).toBe(5 + LEITNER_MS[5]);
-    s = applyAttempt(s, attempt('note:C/string:5', 'found', 10), TEMPO);
+    const at = s.skills['note:C/string:5'].lastSeen;
+    expect(s.skills['note:C/string:5'].due).toBe(at + LEITNER_MS[5]);
+    s = applyAttempt(s, attempt('note:C/string:5', 'found', at + LEITNER_MS[5]), TEMPO);
     expect(s.skills['note:C/string:5'].box).toBe(5); // right but slow: stays
-    s = applyAttempt(s, attempt('note:C/string:5', false, 11), TEMPO);
+    s = applyAttempt(s, attempt('note:C/string:5', false, at + LEITNER_MS[5] + 1), TEMPO);
     expect(s.skills['note:C/string:5'].box).toBe(0);
+  });
+  it('earns a box only when the skill was due', () => {
+    let s = emptyState();
+    for (let i = 0; i < 10; i++) s = applyAttempt(s, attempt('note:C/string:5', true, i * 1000), TEMPO);
+    expect(s.skills['note:C/string:5'].box).toBe(1); // ten in a row within 10 s
+    s = applyAttempt(s, attempt('note:C/string:5', true, LEITNER_MS[1]), TEMPO);
+    expect(s.skills['note:C/string:5'].box).toBe(2); // after the 10-minute gap
   });
   it('scores tempo from latency for timed answers', () => {
     const timed = (ms: number): Attempt => ({ ...attempt('note:C/string:5', true, 0, ms), response: { kind: 'positions', positions: [] }, evaluation: { correct: true }, mode: 'tap' });
