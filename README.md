@@ -10,6 +10,10 @@ Adaptive guitar improvisation trainer: hear → understand → locate → play �
   checked over 1,000 seeds: its own solution must pass its own independent check,
   and every wrong answer must fail.
 
+- **Stage 3** – voicing search (span ≤ 4, fingers ≤ 4 with a simple barre rule, string sets,
+  inversions), a fourth family *triad build*, and the learner model: per-skill moving accuracy
+  (α = 0.3), Leitner boxes 0–5, mastery = accuracy × confidence × tempo, weighted random
+  selection, help levels 0–3 with hysteresis. Simulated players verify it targets weaknesses.
 - **Listening core** (pulled forward for the tuner and mic checking): YIN pitch detection,
   tuner reading (nearest string, cents), and a note tracker that turns frames into
   played notes. Pure functions on sample buffers; the Web Audio layer comes with the UI.
@@ -30,8 +34,10 @@ src/core/
   guitar/   tuning · fretboard
   exercises/ rng · types · registry · attempt · families/{noteFind, intervalHunt, melodyChord}
   listen/   pitch (YIN) · tuner · tracker
+  voicing/  voicing search · tabs · string sets
+  mastery/  learner state · skill stats · help levels · selection
   index.ts  public API
-tests/      theory · fretboard · exercises · listen (.test.ts) · expect.ts (tiny assert helper)
+tests/      theory · fretboard · exercises · voicing · mastery · listen (.test.ts) · expect.ts (tiny assert helper)
 ```
 
 Everything derives from interval formulas: scales and chords are a root plus degree
@@ -72,3 +78,24 @@ generateExercise('melody-chord', 7, undefined, { mode: 'naturalMinor', tonic: 'A
   `note:F#/string:5`, `interval:b3/up/strings:5-4`, `melody:minor/deg:3`.
 - **Attempts** store family + seed, not the exercise; the seed regenerates it.
 - **Fret span** = highest − lowest *fretted* fret + 1; open strings are free.
+
+## Learner model
+
+```ts
+import { buildCatalog, emptyState, nextExercise, applyAttempt, recordAttempt, createRng, getFamily } from './src/core';
+
+const catalog = buildCatalog();               // every trainable skill + the focus that produces it
+let state = emptyState();                      // plain JSON with schemaVersion, persisted later
+const rng = createRng(sessionSeed);
+
+const { exercise, helpLevel } = nextExercise(state, catalog, rng, { now: Date.now(), families: ['interval-hunt'] });
+// … player answers …
+state = applyAttempt(state, recordAttempt(exercise, response, meta), getFamily(exercise.family).tempo);
+```
+
+- **Selection:** family uniformly, then a skill with weight
+  `weakness + due + novelty (+ small floor)`, ×0.1 if among the last 5. Random proportional, never argmax.
+  New skills enter only while fewer than 8 per family are "in learning" (seen, box < 2).
+- **Leitner:** right and quick → next box; right but slow → stays (at least box 1); wrong → box 0.
+- **Help levels** are kept per skill group (`interval:b3`, `triad:maj`, …): fade after 4 good answers
+  in a row *and* group mastery ≥ 0.5 / 0.65 / 0.8; come back after 2 misses in a row.

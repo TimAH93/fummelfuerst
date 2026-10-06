@@ -45,6 +45,15 @@ export const noteFind: ExerciseFamily<NoteFindParams, NoteFindSolution, NoteFind
     };
   },
 
+  skillSpace({ tuning, range }) {
+    const strings = range.strings ?? tuning.strings.map((_, i) => i);
+    return strings.flatMap((string) =>
+      Array.from({ length: 12 }, (_, pc) => pc)
+        .filter((pc) => positionsOf(tuning, pc, { ...range, strings: [string] }).length > 0)
+        .map((pc) => ({ skill: `note:${pcSkill(pc)}/string:${stringNo(tuning, string)}`, focus: { pc, string } })),
+    );
+  },
+
   check(ex, r) {
     if (r.kind !== 'positions') return { correct: false };
     const { tuning, range } = ex.context;

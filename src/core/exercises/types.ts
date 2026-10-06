@@ -60,6 +60,11 @@ export interface Exercise<P = unknown, S = unknown> {
   solution: S;
 }
 
+export interface SkillTarget<F = unknown> {
+  skill: string;
+  focus: F;
+}
+
 export interface Generated<P, S> {
   params: P;
   solution: S;
@@ -77,6 +82,8 @@ export interface ExerciseFamily<P, S, F = Partial<P>> {
   /** Answer times that count as fast / slow; the learner model scores tempo between them. */
   tempo: { fastMs: number; slowMs: number };
   generate(rng: Rng, ctx: ExerciseContext, focus?: F): Generated<P, S>;
+  /** Every skill this family can produce in a context, with the focus that produces it. */
+  skillSpace(ctx: ExerciseContext): SkillTarget<F>[];
   /** Independent check of an answer – must not trust `ex.solution`. */
   check(ex: Exercise<P, S>, response: AutoResponse): Evaluation;
   /** The canonical correct answer, as the reveal would show it. */

@@ -89,6 +89,14 @@ export const melodyChord: ExerciseFamily<MelodyChordParams, MelodyChordSolution,
     };
   },
 
+  skillSpace: () =>
+    (['major', 'naturalMinor'] as KeyMode[]).flatMap((mode) =>
+      [1, 2, 3, 4, 5, 6, 7].map((scaleDegree) => ({
+        skill: `melody:${mode === 'major' ? 'major' : 'minor'}/deg:${scaleDegree}`,
+        focus: { mode, scaleDegree },
+      })),
+    ),
+
   // Recomputes fitting chords from the chips' own chord tones, not from the stored solution.
   check(ex, r) {
     if (r.kind !== 'choices') return { correct: false };

@@ -73,6 +73,27 @@ export const triadBuild: ExerciseFamily<TriadBuildParams, TriadBuildSolution, Tr
     throw new Error(`triad-build: nothing playable for focus ${JSON.stringify(focus)}`);
   },
 
+  skillSpace({ tuning, range, maxSpan }) {
+    const sets = adjacentStringSets(tuning, 3).filter((set) => !range.strings || set.every((s) => range.strings!.includes(s)));
+    const out: { skill: string; focus: TriadBuildFocus }[] = [];
+    for (const typeId of TRIAD_TYPES)
+      for (const inversion of [0, 1, 2])
+        for (const strings of sets) {
+          const feasible = Array.from({ length: 12 }, (_, pc) => pc).some((pc) =>
+            drillSpellings(pc).some((root) => {
+              const c = chord(root, typeId);
+              if (chordToneNames(c).some((n) => /##|bb/.test(n))) return false;
+              return findVoicings(tuning, c, { minFret: range.minFret, maxFret: range.maxFret, maxSpan, strings, noDoubling: true, inversion }).length > 0;
+            }),
+          );
+          if (feasible) out.push({
+            skill: `triad:${typeId}/inv:${inversion}/strings:${strings.map((s) => stringNo(tuning, s)).join('-')}`,
+            focus: { typeId, inversion, lowString: strings[0] },
+          });
+        }
+    return out;
+  },
+
   // Independent of the voicing search: checks the three notes directly.
   check(ex, r) {
     if (r.kind !== 'positions') return { correct: false };

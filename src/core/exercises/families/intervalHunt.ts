@@ -82,6 +82,29 @@ export const intervalHunt: ExerciseFamily<IntervalHuntParams, IntervalHuntSoluti
     throw new Error(`interval-hunt: no in-position answer for focus ${JSON.stringify(focus)}`);
   },
 
+  skillSpace({ tuning, range, maxSpan }) {
+    const strings = range.strings ?? tuning.strings.map((_, i) => i);
+    const out: { skill: string; focus: IntervalHuntFocus }[] = [];
+    for (let semitones = 1; semitones <= 12; semitones++)
+      for (const direction of ['up', 'down'] as Direction[])
+        for (const fromString of strings)
+          for (const targetString of strings) {
+            if (fromString === targetString) continue;
+            const step = direction === 'up' ? semitones : -semitones;
+            let feasible = false;
+            for (let f = range.minFret; f <= range.maxFret && !feasible; f++) {
+              const g = tuning.strings[fromString] + f + step - tuning.strings[targetString];
+              feasible = g >= range.minFret && g <= range.maxFret && fretSpan([f, g]) <= maxSpan;
+            }
+            if (!feasible) continue;
+            out.push({
+              skill: `interval:${intervalInfo(semitones).degree}/${direction}/strings:${stringNo(tuning, fromString)}-${stringNo(tuning, targetString)}`,
+              focus: { semitones, direction, fromString, targetString },
+            });
+          }
+    return out;
+  },
+
   check(ex, r) {
     if (r.kind !== 'positions') return { correct: false };
     const { tuning, range } = ex.context;
