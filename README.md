@@ -22,10 +22,14 @@ Adaptive guitar improvisation trainer: hear → understand → locate → play �
   tuner reading (nearest string, cents), and a note tracker that turns frames into
   played notes. Pure functions on sample buffers; the Web Audio layer comes with the UI.
 
-No UI yet, no runtime dependencies. UI direction: [docs/ui-guidelines.md](docs/ui-guidelines.md) (draft).
+- **Stage 4** – installable PWA (Vite + Preact) for tablet and phone: one-drill home screen,
+  practice screen (play → reveal → self-rate, or tap chord chips), tuner via microphone.
+  Progress stays on the device (IndexedDB). UI direction: [docs/ui-guidelines.md](docs/ui-guidelines.md).
 
 ```bash
-npm install        # tsx, typescript, @types/node (dev only)
+npm install
+npm run dev        # app on http://localhost:5173
+npm run build      # static PWA in dist/
 npm test           # Node's built-in runner via tsx
 npm run typecheck
 ```
@@ -33,7 +37,8 @@ npm run typecheck
 ## What is here
 
 ```
-src/core/
+src/app/             UI (Preact): screens/ Home · Practice · Tuner, components/, lib/ (store, mic, prompts)
+src/core/            pure TypeScript, no DOM – checked with lib ES2022 only
   theory/   pitch · spelling · interval · scale · chord · harmony
   guitar/   tuning · fretboard
   exercises/ rng · types · registry · attempt · families/{noteFind, intervalHunt, melodyChord}
@@ -119,3 +124,14 @@ drillProgress(state, drill);   // { status: 'learning', progress: 0.62, comforta
 
 The order lives in `src/core/curriculum/curriculum.ts` as plain lists – edit there to reorder.
 Interval drills group string pairs by hand shape: adjacent, adjacent across G/B, one string skipped.
+
+## On the iPad / iPhone
+
+The app is published from `main` to GitHub Pages by `.github/workflows/pages.yml`
+(one-time: repository *Settings → Pages → Source: GitHub Actions*).
+
+1. Open the Pages URL in **Safari**.
+2. Share → **Zum Home-Bildschirm**. It then starts full-screen and works offline.
+3. The tuner asks for the microphone once. Audio never leaves the device.
+
+Progress lives in the browser storage of that device; iPad and iPhone keep separate progress.

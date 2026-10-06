@@ -1,0 +1,136 @@
+/* Tokens: see docs/ui-guidelines.md. Dark only – the app lives on a music stand. */
+:root {
+  --bg: #0b0b0c;
+  --surface: #17171a;
+  --line: #2c2c31;
+  --text: #ececec;
+  --muted: #a3a3ab;
+  --ok: #3ddc84;
+  --off: #ffb020;
+  --accent: #7cc4ff;
+  --radius: 18px;
+  --tap: 72px;
+  color-scheme: dark;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-variant-numeric: tabular-nums;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text); }
+body { -webkit-tap-highlight-color: transparent; overscroll-behavior: none; }
+button { font: inherit; color: inherit; cursor: pointer; touch-action: manipulation; }
+button:disabled { opacity: 0.4; cursor: default; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+@media (prefers-reduced-motion: no-preference) { button { transition: background 120ms, border-color 120ms; } }
+
+.screen {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  padding: max(16px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left));
+  gap: clamp(12px, 2.5vh, 28px);
+}
+
+/* ── Bars ─────────────────────────────────────────────── */
+.bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.foot { margin-top: auto; }
+.quiet {
+  background: transparent; border: 1px solid var(--line); border-radius: 999px;
+  min-height: 48px; padding: 0 20px; font-size: 18px; color: var(--muted);
+}
+.tracks { display: flex; gap: 8px; flex-wrap: wrap; }
+.track {
+  background: transparent; border: 1px solid var(--line); border-radius: 999px;
+  min-height: 48px; padding: 0 18px; font-size: 18px; color: var(--muted);
+}
+.track.on { background: var(--surface); color: var(--text); border-color: var(--muted); }
+.drill-head { display: flex; flex-direction: column; gap: 8px; flex: 1; min-width: 0; }
+.drill-name { font-size: 20px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* ── Home / focus panels ─────────────────────────────── */
+.focus {
+  flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center;
+  text-align: center; gap: clamp(14px, 3vh, 32px); max-width: 900px; width: 100%; margin: 0 auto;
+}
+.eyebrow { margin: 0; font-size: 22px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.eyebrow.ok { color: var(--ok); }
+.drill-title { margin: 0; font-size: clamp(40px, 6.5vw, 76px); line-height: 1.1; font-weight: 700; }
+.meta { margin: 0; font-size: 20px; color: var(--muted); }
+.progress { width: min(640px, 100%); height: 12px; background: var(--surface); border-radius: 999px; overflow: hidden; }
+.practice .progress { width: 100%; height: 8px; }
+.progress-fill { height: 100%; background: var(--ok); }
+
+.primary {
+  min-height: var(--tap); min-width: min(420px, 100%); padding: 0 40px; font-size: 28px; font-weight: 700;
+  background: var(--text); color: var(--bg); border: none; border-radius: var(--radius);
+}
+.secondary {
+  min-height: var(--tap); padding: 0 32px; font-size: 24px;
+  background: transparent; border: 2px solid var(--line); border-radius: var(--radius);
+}
+
+/* ── Practice ─────────────────────────────────────────── */
+.question { text-align: center; display: flex; flex-direction: column; gap: 10px; padding-top: 2vh; }
+.target { font-size: clamp(96px, 18vw, 220px); font-weight: 800; line-height: 1; letter-spacing: -0.02em; }
+.practice .target { font-size: clamp(72px, 13vw, 180px); }
+.context { font-size: clamp(28px, 4vw, 44px); color: var(--text); opacity: 0.85; }
+.hint { font-size: clamp(22px, 2.6vw, 30px); color: var(--muted); }
+.solution { font-size: clamp(26px, 3.4vw, 40px); color: var(--ok); display: flex; flex-direction: column; gap: 6px; }
+
+.board { width: 100%; max-width: 1400px; margin: 0 auto; }
+.fretboard { width: 100%; height: auto; display: block; }
+.fretboard .string { stroke: var(--line); stroke-width: 3; }
+.fretboard .string.on { stroke: var(--accent); stroke-width: 5; }
+.fretboard .fret { stroke: var(--line); stroke-width: 3; }
+.fretboard .nut { stroke: var(--muted); stroke-width: 8; }
+.fretboard .fret-no { fill: var(--muted); font-size: 22px; }
+.fretboard .dot circle { fill: var(--ok); }
+.fretboard .dot text { fill: var(--bg); font-size: 20px; font-weight: 800; }
+.fretboard .dot.given circle { fill: var(--muted); }
+.fretboard .dot.alt circle { fill: none; stroke: var(--ok); stroke-width: 3; opacity: 0.6; }
+
+.chips { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 12px; max-width: 1100px; width: 100%; margin: 0 auto; }
+.chip {
+  min-height: 96px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+  background: var(--surface); border: 2px solid var(--line); border-radius: var(--radius);
+}
+.chip-name { font-size: 34px; font-weight: 700; }
+.chip-roman { font-size: 18px; color: var(--muted); }
+.chip.on { border-color: var(--text); background: #26262b; }
+.chip.right { border-color: var(--ok); color: var(--ok); }
+.chip.wrong { border-color: var(--off); color: var(--off); }
+.chip.missed { border-color: var(--ok); border-style: dashed; }
+.chip:disabled { opacity: 1; }
+
+.actions { margin-top: auto; display: flex; flex-direction: column; align-items: center; gap: 14px; }
+.focus .actions { margin-top: 0; flex-direction: row; flex-wrap: wrap; justify-content: center; }
+.rate { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; width: min(1000px, 100%); }
+.rate-btn { min-height: 88px; font-size: 26px; font-weight: 700; border-radius: var(--radius); border: 2px solid var(--line); background: var(--surface); }
+.rate-btn.miss { color: var(--off); border-color: var(--off); }
+.rate-btn.instant { color: var(--ok); border-color: var(--ok); }
+.verdict { margin: 0; font-size: 30px; font-weight: 700; }
+.verdict.ok { color: var(--ok); }
+.verdict.off { color: var(--off); }
+
+/* ── Tuner ────────────────────────────────────────────── */
+.tuner-face { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3vh; text-align: center; }
+.tuner-face .target { font-size: clamp(120px, 22vw, 260px); }
+.needle { position: relative; width: min(900px, 92%); height: 64px; border-bottom: 3px solid var(--line); }
+.needle-zone { position: absolute; left: 47%; width: 6%; top: 0; bottom: 0; background: rgba(61, 220, 132, 0.15); }
+.needle-center { position: absolute; left: 50%; top: 0; bottom: 0; width: 3px; background: var(--muted); transform: translateX(-50%); }
+.needle-mark { position: absolute; top: 4px; bottom: 4px; width: 10px; border-radius: 5px; background: var(--off); transform: translateX(-50%); }
+.in-tune .needle-mark { background: var(--ok); }
+.in-tune .target { color: var(--ok); }
+.cents { font-size: clamp(40px, 6vw, 64px); font-weight: 700; min-height: 1.2em; }
+
+
+/* Phone: tighter controls so three rating buttons fit side by side. */
+@media (max-width: 700px) {
+  .rate { gap: 8px; }
+  .rate-btn { min-height: 76px; font-size: 19px; min-width: 0; padding: 0 6px; }
+  .primary { min-width: 100%; font-size: 24px; }
+  .chips { grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .chip { min-height: 76px; }
+  .chip-name { font-size: 24px; }
+  .track, .quiet { font-size: 16px; padding: 0 14px; min-height: 44px; }
+}
