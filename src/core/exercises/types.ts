@@ -74,6 +74,8 @@ export interface ExerciseFamily<P, S, F = Partial<P>> {
   id: string;
   name: string;
   modes: AnswerMode[];
+  /** Answer times that count as fast / slow; the learner model scores tempo between them. */
+  tempo: { fastMs: number; slowMs: number };
   generate(rng: Rng, ctx: ExerciseContext, focus?: F): Generated<P, S>;
   /** Independent check of an answer – must not trust `ex.solution`. */
   check(ex: Exercise<P, S>, response: AutoResponse): Evaluation;

@@ -49,6 +49,7 @@ export const melodyChord: ExerciseFamily<MelodyChordParams, MelodyChordSolution,
   id: 'melody-chord',
   name: 'Melody note → chord',
   modes: ['tap', 'play'],
+  tempo: { fastMs: 2500, slowMs: 10000 },
 
   generate(rng, ctx, focus = {}) {
     const mode = focus.mode ?? rng.pick<KeyMode>(['major', 'naturalMinor']);

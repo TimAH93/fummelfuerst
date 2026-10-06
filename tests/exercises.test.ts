@@ -10,6 +10,8 @@ import {
   MelodyChordSolution,
   NoteFindParams,
   NoteFindSolution,
+  TriadBuildParams,
+  TriadBuildSolution,
   createRng,
   degreeBetween,
   degreeToString,
@@ -76,8 +78,8 @@ describe('fret span', () => {
 });
 
 describe('exercise registry', () => {
-  it('has the three v0.1 families', () => {
-    expect(listFamilies().map((f) => f.id)).toEqual(['note-find', 'interval-hunt', 'melody-chord']);
+  it('has the four v0.1 families', () => {
+    expect(listFamilies().map((f) => f.id)).toEqual(['note-find', 'interval-hunt', 'melody-chord', 'triad-build']);
   });
   it('rejects unknown families', () => {
     expect(() => generateExercise('nope', 1)).toThrow(/Unknown exercise family/);
@@ -130,6 +132,22 @@ for (const [ctxName, ctx] of CONTEXTS) {
       }
     });
 
+    it('triad-build: every shape passes, every one-note slip fails', () => {
+      for (const seed of seeds) {
+        const ex = generateExercise<TriadBuildParams, TriadBuildSolution>('triad-build', seed, ctx);
+        for (const shape of ex.solution.shapes) {
+          expect(evaluate(ex, { kind: 'positions', positions: shape.positions }).correct).toBe(true);
+          for (let i = 0; i < 3; i++)
+            for (const d of [-2, -1, 1, 2]) {
+              const slipped = shape.positions.map((p, j) => (j === i ? { ...p, fret: p.fret + d } : p));
+              if (evaluate(ex, { kind: 'positions', positions: slipped }).correct) throw new Error(`seed ${seed}: slip accepted ${shape.tab}`);
+            }
+          // Same notes, but only two of them: not a triad.
+          expect(evaluate(ex, { kind: 'positions', positions: shape.positions.slice(0, 2) }).correct).toBe(false);
+        }
+      }
+    });
+
     it('melody-chord: three fitting triads, every other chip combination is wrong', () => {
       for (const seed of seeds) {
         const ex = generateExercise<MelodyChordParams, MelodyChordSolution>('melody-chord', seed, ctx);
@@ -154,6 +172,9 @@ describe('coverage over 1,000 seeds', () => {
   it('interval-hunt reaches all 12 intervals in both directions', () => {
     const seen = new Set(seeds.map((s) => generateExercise('interval-hunt', s).skills[0].split('/').slice(0, 2).join('/')));
     expect(seen.size).toBe(24);
+  });
+  it('triad-build reaches 4 types × 3 inversions × 4 string sets', () => {
+    expect(new Set(seeds.flatMap((s) => generateExercise('triad-build', s).skills)).size).toBe(48);
   });
   it('melody-chord reaches every degree in major and minor', () => {
     expect(new Set(seeds.flatMap((s) => generateExercise('melody-chord', s).skills)).size).toBe(14);
@@ -198,6 +219,16 @@ describe('musical spot checks via focus', () => {
       mode: 'major', tonic: 'F', scaleDegree: 4,
     });
     expect(ex.solution.chords.map((c) => `${c.symbol}:${c.fn}`)).toEqual(['Gm:b3', 'Bb:1', 'Edim:b5']);
+  });
+  it('triad-build: F major 1st inversion on strings 4-3-2 is A-C-F (7-5-6)', () => {
+    const ex = generateExercise<TriadBuildParams, TriadBuildSolution>('triad-build', 1, DEFAULT_CONTEXT, { typeId: 'maj', inversion: 1, lowString: 2, pc: 5 });
+    expect(ex.solution.shapes.map((s) => s.tab)).toEqual(['xx756x']);
+    expect(ex.solution.shapes[0].tones).toEqual(['A', 'C', 'F']);
+  });
+  it('triad-build: wrong inversion of the right chord is rejected', () => {
+    const ex = generateExercise<TriadBuildParams, TriadBuildSolution>('triad-build', 1, DEFAULT_CONTEXT, { typeId: 'maj', inversion: 1, lowString: 2, pc: 5 });
+    // F major root position on 4-3-2: F A C = 3-2-1
+    expect(evaluate(ex, { kind: 'positions', positions: [{ string: 2, fret: 3 }, { string: 3, fret: 2 }, { string: 4, fret: 1 }] }).correct).toBe(false);
   });
   it('impossible focus throws instead of looping', () => {
     expect(() => generateExercise('note-find', 1, DEFAULT_CONTEXT, { string: 9 })).toThrow(/impossible focus/);

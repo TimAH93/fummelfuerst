@@ -25,6 +25,7 @@ export const noteFind: ExerciseFamily<NoteFindParams, NoteFindSolution, NoteFind
   id: 'note-find',
   name: 'Find the note',
   modes: ['play', 'tap'],
+  tempo: { fastMs: 2000, slowMs: 8000 },
 
   generate(rng, ctx, focus = {}) {
     const { tuning, range } = ctx;

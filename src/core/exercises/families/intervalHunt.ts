@@ -50,6 +50,7 @@ export const intervalHunt: ExerciseFamily<IntervalHuntParams, IntervalHuntSoluti
   id: 'interval-hunt',
   name: 'Interval hunt',
   modes: ['play', 'tap'],
+  tempo: { fastMs: 2500, slowMs: 10000 },
 
   generate(rng, ctx, focus = {}) {
     const { tuning, range, maxSpan } = ctx;

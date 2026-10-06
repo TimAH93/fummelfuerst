@@ -8,3 +8,4 @@ export * from './guitar/tuning';
 export * from './guitar/fretboard';
 export * from './exercises';
 export * from './listen';
+export * from './voicing';
