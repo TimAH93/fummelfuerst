@@ -8,7 +8,8 @@ export function expect<T>(actual: T) {
     toEqual: (expected: unknown) => assert.deepStrictEqual(actual, expected),
     toBeNull: () => assert.strictEqual(actual, null),
     toContain: (item: unknown) => assert.ok((actual as unknown[]).includes(item), `expected to contain ${String(item)}`),
+    toBeCloseTo: (n: number, eps = 1e-9) => assert.ok(Math.abs((actual as number) - n) < eps, `${String(actual)} is not ≈ ${n}`),
     toBeGreaterThan: (n: number) => assert.ok((actual as number) > n, `${String(actual)} is not > ${n}`),
-    toThrow: (re?: RegExp) => assert.throws(actual as () => unknown, re),
+    toThrow: (re?: RegExp) => (re ? assert.throws(actual as () => unknown, re) : assert.throws(actual as () => unknown)),
   };
 }

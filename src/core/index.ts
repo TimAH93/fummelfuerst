@@ -6,3 +6,8 @@ export * from './theory/chord';
 export * from './theory/harmony';
 export * from './guitar/tuning';
 export * from './guitar/fretboard';
+export * from './exercises';
+export * from './listen';
+export * from './voicing';
+export * from './mastery';
+export * from './curriculum';

@@ -24,6 +24,7 @@ import {
   scaleNoteNames,
   semitonesBetween,
   transpose,
+  transposeDown,
   parseDegree,
 } from '../src/core';
 
@@ -64,6 +65,12 @@ describe('intervals', () => {
     expect(noteName(transpose(parseNote('E'), parseDegree('3')))).toBe('G#');
     expect(noteName(transpose(parseNote('F'), parseDegree('4')))).toBe('Bb');
     expect(noteName(transpose(parseNote('B'), parseDegree('b5')))).toBe('F');
+  });
+  it('transposes downwards with correct letters', () => {
+    expect(noteName(transposeDown(parseNote('C'), parseDegree('3')))).toBe('Ab');
+    expect(noteName(transposeDown(parseNote('F'), parseDegree('5')))).toBe('Bb');
+    expect(noteName(transposeDown(parseNote('C'), parseDegree('b5')))).toBe('F#');
+    expect(noteName(transposeDown(parseNote('E'), parseDegree('8')))).toBe('E');
   });
   it('derives the degree between two spelled notes', () => {
     expect(degreeToString(degreeBetween(parseNote('G'), parseNote('C')))).toBe('4');
