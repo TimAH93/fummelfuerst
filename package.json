@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "test": "tsx --test tests/*.test.ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit && tsc --noEmit -p tests"
   },
   "devDependencies": {
     "tsx": "^4.19.0",

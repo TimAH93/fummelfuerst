@@ -86,3 +86,12 @@ export function nearestInterval(t: Tuning, from: FretPos, semitones: number, opt
       Math.abs(pitchAt(t, a) - base) - Math.abs(pitchAt(t, b) - base),
   );
 }
+
+/**
+ * Frets the hand covers: highest − lowest fretted fret + 1. Open strings need no finger
+ * and are ignored, so frets 5–8 span 4, and an open string plus fret 3 spans 1.
+ */
+export function fretSpan(frets: number[]): number {
+  const fretted = frets.filter((f) => f > 0);
+  return fretted.length === 0 ? 0 : Math.max(...fretted) - Math.min(...fretted) + 1;
+}

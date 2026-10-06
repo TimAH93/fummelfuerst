@@ -42,6 +42,13 @@ export function transpose(root: Note, d: Degree): Note {
   return { letter, acc: signedMod12(targetPc - NATURAL_PC[letter]) };
 }
 
+/** Spell the note a degree below a root: down a major 3rd from C is Ab, down a 5th from F is Bb. */
+export function transposeDown(root: Note, d: Degree): Note {
+  const letter = mod(root.letter - (d.number - 1), 7) as Letter;
+  const targetPc = notePc(root) - degreeSemitones(d);
+  return { letter, acc: signedMod12(targetPc - NATURAL_PC[letter]) };
+}
+
 /** The (simple) degree of `note` above `root`, from letters and pitch: G→C = '4', A→C = 'b3'. */
 export function degreeBetween(root: Note, note: Note): Degree {
   const steps = mod(note.letter - root.letter, 7);

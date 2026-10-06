@@ -9,6 +9,6 @@ export function expect<T>(actual: T) {
     toBeNull: () => assert.strictEqual(actual, null),
     toContain: (item: unknown) => assert.ok((actual as unknown[]).includes(item), `expected to contain ${String(item)}`),
     toBeGreaterThan: (n: number) => assert.ok((actual as number) > n, `${String(actual)} is not > ${n}`),
-    toThrow: (re?: RegExp) => assert.throws(actual as () => unknown, re),
+    toThrow: (re?: RegExp) => (re ? assert.throws(actual as () => unknown, re) : assert.throws(actual as () => unknown)),
   };
 }

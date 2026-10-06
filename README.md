@@ -2,13 +2,19 @@
 
 Adaptive guitar improvisation trainer: hear → understand → locate → play → harmonize → improvise.
 
-## Stage 1
+## Status
 
-Pure TypeScript music-theory and fretboard engine. No UI yet, no runtime dependencies.
+- **Stage 1** – pure TypeScript music-theory and fretboard engine.
+- **Stage 2** – exercise core: seeded RNG, exercise/attempt types, family registry,
+  three families (note find, interval hunt, melody note → chord). Every family is
+  checked over 1,000 seeds: its own solution must pass its own independent check,
+  and every wrong answer must fail.
+
+No UI yet, no runtime dependencies.
 
 ```bash
 npm install        # tsx, typescript, @types/node (dev only)
-npm test           # 38 tests, Node's built-in runner
+npm test           # Node's built-in runner via tsx
 npm run typecheck
 ```
 
@@ -18,8 +24,9 @@ npm run typecheck
 src/core/
   theory/   pitch · spelling · interval · scale · chord · harmony
   guitar/   tuning · fretboard
+  exercises/ rng · types · registry · attempt · families/{noteFind, intervalHunt, melodyChord}
   index.ts  public API
-tests/      theory.test.ts · fretboard.test.ts · expect.ts (tiny assert helper)
+tests/      theory · fretboard · exercises (.test.ts) · expect.ts (tiny assert helper)
 ```
 
 Everything derives from interval formulas: scales and chords are a root plus degree
@@ -40,3 +47,23 @@ nearestInterval(STANDARD, { string: 1, fret: 3 } /* C */, 4 /* M3 */)[0];
 
 String index 0 is the low E; `stringLabel()` gives the guitarist's 6…1 numbering.
 Adding a scale or chord type is one line in `scale.ts` / `chord.ts`.
+
+## Exercises
+
+```ts
+import { generateExercise, evaluate, recordAttempt, describeExercise } from './src/core';
+
+const ex = generateExercise('interval-hunt', 1234);           // same seed → same exercise
+describeExercise(ex);  // 'minor 2nd (b2) up from E [string 3, fret 9] on string 2 → F'
+evaluate(ex, { kind: 'positions', positions: [{ string: 4, fret: 6 }] }); // { correct: true, hits: 1, … }
+
+// Pin part of the question (the learner model will use this to target weak skills):
+generateExercise('melody-chord', 7, undefined, { mode: 'naturalMinor', tonic: 'A', scaleDegree: 3 });
+```
+
+- **Modes:** `tap` (checked automatically: fretboard positions or chord chips) and
+  `play` (play on the guitar, reveal, self-rate `miss` / `found` / `instant`).
+- **Skill ids** are hierarchical and use guitarist string numbers (6 = low E):
+  `note:F#/string:5`, `interval:b3/up/strings:5-4`, `melody:minor/deg:3`.
+- **Attempts** store family + seed, not the exercise; the seed regenerates it.
+- **Fret span** = highest − lowest *fretted* fret + 1; open strings are free.
