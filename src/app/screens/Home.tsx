@@ -2,6 +2,7 @@ import { Drill, LearnerState, TRACKS, TrackId, drillProgress, hasSlipped, recomm
 import { Progress } from '../components/Progress';
 import { curriculum } from '../lib/session';
 import { Settings } from '../lib/store';
+import { useLink } from './Link';
 
 interface Props {
   state: LearnerState;
@@ -9,9 +10,11 @@ interface Props {
   onSettings: (s: Settings) => void;
   onStart: (d: Drill) => void;
   onTuner: () => void;
+  onLink: () => void;
 }
 
-export function Home({ state, settings, onSettings, onStart, onTuner }: Props) {
+export function Home({ state, settings, onSettings, onStart, onTuner, onLink }: Props) {
+  const link = useLink();
   const drill = recommendDrill(state, curriculum, settings.track);
   const path = curriculum.filter((d) => d.track === settings.track);
   const passed = path.filter((d) => state.passed[d.id] !== undefined).length;
@@ -52,6 +55,9 @@ export function Home({ state, settings, onSettings, onStart, onTuner }: Props) {
 
       <footer class="bar foot">
         <span class="meta">{passed} / {path.length} geschafft</span>
+        <button class="quiet" onClick={onLink}>
+          {link.status === 'connected' ? '🎹 gekoppelt' : 'Keyboard koppeln'}
+        </button>
         <button
           class="quiet"
           onClick={() => onSettings({ ...settings, noteNames: settings.noteNames === 'german' ? 'international' : 'german' })}

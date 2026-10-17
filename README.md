@@ -22,6 +22,11 @@ Adaptive guitar improvisation trainer: hear → understand → locate → play �
   (Chrome/Edge on desktop and Android; on-screen keys elsewhere): build the triad on the keys,
   it is checked as soon as the chord is held, then the reveal shows the same chord and
   inversion as a shape on three adjacent guitar strings.
+- **Keyboard pairing** – the keyboard can stay on the PC (next to FL Studio): open the app
+  in Chrome on the PC, "Keyboard koppeln" → PC, enter the 6-digit code shown on the tablet.
+  The public PeerJS broker only introduces the devices; notes then go directly over WebRTC.
+  The pairing is remembered and resumes after a reload. On Windows, if FL Studio holds the
+  MIDI port exclusively, route FL's MIDI output to a loopMIDI port and let Chrome read that.
 - **Listening core** (pulled forward for the tuner and mic checking): YIN pitch detection,
   tuner reading (nearest string, cents), and a note tracker that turns frames into
   played notes. Pure functions on sample buffers; the Web Audio layer comes with the UI.

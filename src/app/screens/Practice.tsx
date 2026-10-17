@@ -168,7 +168,7 @@ export function Practice({ drill, state, settings, onState, onDrill, onExit }: P
               <Piano marks={pianoMarks}
                 onToggle={phase === 'ask' ? (m) => setTapped(tapped.includes(m) ? tapped.filter((x) => x !== m) : [...tapped, m]) : undefined} />
               <p class="meta">
-                {midi.status === 'ready' ? `🎹 ${midi.devices.join(', ')}` : midi.status === 'unsupported' ? 'Kein MIDI in diesem Browser – Tasten antippen' : 'Kein MIDI-Gerät – Tasten antippen'}
+                {midi.devices.length ? `🎹 ${midi.devices.join(', ')}` : 'Kein Keyboard – Tasten antippen oder auf der Startseite koppeln'}
               </p>
             </section>
           )}

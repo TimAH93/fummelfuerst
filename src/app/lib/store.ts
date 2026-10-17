@@ -10,6 +10,8 @@ export interface Settings {
   track: TrackId;
   noteNames: NoteNames;
   a4: number;
+  /** Remembered keyboard pairing; resumed when the app opens. */
+  link?: { role: 'host' | 'join'; code: string };
 }
 
 export const DEFAULT_SETTINGS: Settings = { track: 'fretboard', noteNames: 'german', a4: 440 };
