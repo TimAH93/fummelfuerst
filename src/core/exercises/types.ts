@@ -14,7 +14,9 @@ export type SelfRating = 'miss' | 'found' | 'instant';
 /** Answers a family can check on its own. */
 export type AutoResponse =
   | { kind: 'positions'; positions: FretPos[] }
-  | { kind: 'choices'; ids: string[] };
+  | { kind: 'choices'; ids: string[] }
+  /** Notes actually played: from a MIDI keyboard, on-screen keys, or (later) the microphone. */
+  | { kind: 'notes'; midis: number[] };
 
 export type Response = AutoResponse | { kind: 'self'; rating: SelfRating };
 

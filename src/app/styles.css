@@ -112,6 +112,26 @@ button:disabled { opacity: 0.4; cursor: default; }
 .verdict.ok { color: var(--ok); }
 .verdict.off { color: var(--off); }
 
+/* ── Keys ─────────────────────────────────────────────── */
+.keys { width: 100%; max-width: 1400px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.piano { width: 100%; height: auto; max-height: 34vh; display: block; touch-action: manipulation; }
+/* After the answer the keyboard shrinks so the guitar bridge fits on the same screen. */
+.practice:has(.keys.done) { height: 100dvh; min-height: 0; gap: 10px; }
+.keys.done { flex: 1 1 0; min-height: 0; }
+.keys.done .piano { height: 100%; min-height: 0; max-height: none; }
+.board.bridge { flex: 2 1 0; min-height: 0; }
+.board.bridge .fretboard { height: 100%; max-height: none; }
+.practice:has(.keys.done) .target { font-size: clamp(48px, 7vw, 96px); }
+.practice:has(.keys.done) .context { font-size: clamp(22px, 2.6vw, 30px); }
+.practice:has(.keys.done) .solution { font-size: clamp(22px, 2.6vw, 30px); }
+.piano .key { cursor: pointer; }
+.piano .white { fill: #d9d9de; stroke: var(--bg); stroke-width: 2; }
+.piano .black { fill: #1d1d22; stroke: var(--bg); stroke-width: 2; }
+.piano .held { fill: var(--accent); }
+.piano .right { fill: var(--ok); }
+.piano .wrong { fill: var(--off); }
+.piano .key-label { fill: #55555c; font-size: 16px; pointer-events: none; }
+
 /* ── Tuner ────────────────────────────────────────────── */
 .tuner-face { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3vh; text-align: center; }
 .tuner-face .target { font-size: clamp(120px, 22vw, 260px); }

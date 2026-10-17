@@ -71,7 +71,7 @@ describe('skill catalog', () => {
     expect([...new Set(catalog.map((c) => c.family))]).toEqual(listFamilies().map((f) => f.id));
     expect(catalog.filter((c) => c.family === 'note-find').length).toBe(72);
     expect(catalog.filter((c) => c.family === 'melody-chord').length).toBe(14);
-    expect(catalog.filter((c) => c.family === 'triad-build').length).toBe(48);
+    expect(catalog.filter((c) => c.family === 'triad-build').length).toBe(46);
   });
 });
 

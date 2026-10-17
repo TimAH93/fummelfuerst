@@ -2,6 +2,8 @@ import {
   Exercise,
   HelpLevel,
   IntervalHuntParams,
+  KeysChordParams,
+  KeysChordSolution,
   IntervalHuntSolution,
   MelodyChordParams,
   MelodyChordSolution,
@@ -85,6 +87,16 @@ export function promptFor(ex: Exercise, help: HelpLevel, style: NoteNames): Prom
         board: full ? { dots: [], strings: p.strings } : undefined,
       };
     }
+    case 'keys-chord': {
+      const p = ex.params as KeysChordParams;
+      const c = chord(p.root, p.typeId);
+      const tones = chordToneNames(c).map((n) => showNote(parseNote(n), style));
+      return {
+        main: showChord(c, style),
+        sub: `${['Grundstellung', '1. Umkehrung', '2. Umkehrung'][p.inversion]} · auf den Tasten`,
+        hint: full ? `Töne ${tones.join(' – ')} · Bass: ${tones[p.inversion]}` : undefined,
+      };
+    }
     case 'melody-chord': {
       const p = ex.params as MelodyChordParams;
       return {
@@ -144,6 +156,21 @@ export function revealFor(ex: Exercise, style: NoteNames): Reveal {
           ],
           strings: p.strings,
         },
+      };
+    }
+    case 'keys-chord': {
+      const s = ex.solution as KeysChordSolution;
+      const p = ex.params as KeysChordParams;
+      const c = chord(p.root, p.typeId);
+      const tones = s.tones.map((n) => showNote(parseNote(n), style)).join(' – ');
+      if (!s.guitar) return { lines: [tones] };
+      const label = (pos: { string: number; fret: number }) => {
+        const d = functionInChord(c, toPc(pitchAt(t, pos)));
+        return d ? (d.acc === 0 ? '' : d.acc < 0 ? '♭' : '♯') + d.number : '';
+      };
+      return {
+        lines: [tones, `Gitarre: Saiten ${strings(t, s.guitar.strings)} (${s.guitar.tab})`],
+        board: { dots: s.guitar.positions.map((q) => ({ ...q, label: label(q), kind: 'answer' as const })), strings: s.guitar.strings },
       };
     }
     case 'melody-chord': {

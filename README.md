@@ -18,6 +18,10 @@ Adaptive guitar improvisation trainer: hear → understand → locate → play �
   (12 fretboard, 42 interval, 32 triad, 14 melody). The app recommends one drill; the learner
   model only chooses inside it. A drill is passed once every skill is mastered and has held
   over a break; it comes back only if it clearly slips.
+- **Keys → guitar** – a fifth track for a MIDI keyboard (e.g. FLkey 37) via Web MIDI
+  (Chrome/Edge on desktop and Android; on-screen keys elsewhere): build the triad on the keys,
+  it is checked as soon as the chord is held, then the reveal shows the same chord and
+  inversion as a shape on three adjacent guitar strings.
 - **Listening core** (pulled forward for the tuner and mic checking): YIN pitch detection,
   tuner reading (nearest string, cents), and a note tracker that turns frames into
   played notes. Pure functions on sample buffers; the Web Audio layer comes with the UI.
@@ -46,6 +50,7 @@ src/core/            pure TypeScript, no DOM – checked with lib ES2022 only
   voicing/  voicing search · tabs · string sets
   mastery/  learner state · skill stats · help levels · selection
   curriculum/ tracks · drills · recommendation
+  keys/     name held MIDI chords (type + inversion)
   index.ts  public API
 tests/      theory · fretboard · exercises · voicing · mastery · curriculum · listen (.test.ts) · expect.ts (tiny assert helper)
 ```
