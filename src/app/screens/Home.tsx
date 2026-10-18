@@ -11,9 +11,10 @@ interface Props {
   onStart: (d: Drill) => void;
   onTuner: () => void;
   onLink: () => void;
+  onBrief: () => void;
 }
 
-export function Home({ state, settings, onSettings, onStart, onTuner, onLink }: Props) {
+export function Home({ state, settings, onSettings, onStart, onTuner, onLink, onBrief }: Props) {
   const link = useLink();
   const drill = recommendDrill(state, curriculum, settings.track);
   const path = curriculum.filter((d) => d.track === settings.track);
@@ -31,7 +32,10 @@ export function Home({ state, settings, onSettings, onStart, onTuner, onLink }: 
             </button>
           ))}
         </nav>
-        <button class="quiet" onClick={onTuner}>Stimmgerät</button>
+        <div class="row">
+          <button class="quiet" onClick={onBrief}>Song-Steckbrief</button>
+          <button class="quiet" onClick={onTuner}>Stimmgerät</button>
+        </div>
       </header>
 
       <section class="focus">

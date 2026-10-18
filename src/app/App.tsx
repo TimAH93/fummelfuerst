@@ -6,8 +6,9 @@ import { Home } from './screens/Home';
 import { Practice } from './screens/Practice';
 import { Tuner } from './screens/Tuner';
 import { Link, resumeLink } from './screens/Link';
+import { SongBrief } from './screens/SongBrief';
 
-type Screen = { name: 'home' } | { name: 'practice'; drill: Drill } | { name: 'tuner' } | { name: 'link' };
+type Screen = { name: 'home' } | { name: 'practice'; drill: Drill } | { name: 'tuner' } | { name: 'link' } | { name: 'brief' };
 
 export function App() {
   const [state, setState] = useState<LearnerState | null>(null);
@@ -43,12 +44,14 @@ export function App() {
         <Practice key={screen.drill.id} drill={screen.drill} state={state} settings={settings}
           onState={updateState} onDrill={(drill) => setScreen({ name: 'practice', drill })} onExit={home} />
       );
+    case 'brief':
+      return <SongBrief onExit={home} />;
     case 'link':
       return <Link settings={settings} onSettings={updateSettings} onExit={home} />;
     case 'tuner':
       return <Tuner tuning={context.tuning} settings={settings} onExit={home} />;
     default:
       return <Home state={state} settings={settings} onSettings={updateSettings}
-        onStart={(drill) => setScreen({ name: 'practice', drill })} onTuner={() => setScreen({ name: 'tuner' })} onLink={() => setScreen({ name: 'link' })} />;
+        onStart={(drill) => setScreen({ name: 'practice', drill })} onTuner={() => setScreen({ name: 'tuner' })} onLink={() => setScreen({ name: 'link' })} onBrief={() => setScreen({ name: 'brief' })} />;
   }
 }

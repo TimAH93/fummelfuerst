@@ -27,6 +27,10 @@ Adaptive guitar improvisation trainer: hear → understand → locate → play �
   The public PeerJS broker only introduces the devices; notes then go directly over WebRTC.
   The pairing is remembered and resumes after a reload. On Windows, if FL Studio holds the
   MIDI port exclusively, route FL's MIDI output to a loopMIDI port and let Chrome read that.
+- **Song brief** – for getting from a loop to a song with a Claude "Song-Coach" project:
+  type or record the loop's chords from the keyboard; the app detects the key (all 24 keys
+  ranked; relative-key ambiguity is shown, borrowed chords like ♭VII flagged), adds tempo,
+  parts, references and where you are stuck, and copies a plain-text brief to paste into Claude.
 - **Listening core** (pulled forward for the tuner and mic checking): YIN pitch detection,
   tuner reading (nearest string, cents), and a note tracker that turns frames into
   played notes. Pure functions on sample buffers; the Web Audio layer comes with the UI.
@@ -56,6 +60,7 @@ src/core/            pure TypeScript, no DOM – checked with lib ES2022 only
   mastery/  learner state · skill stats · help levels · selection
   curriculum/ tracks · drills · recommendation
   keys/     name held MIDI chords (type + inversion)
+  song/     progression parsing · key detection · roman numerals · song brief
   index.ts  public API
 tests/      theory · fretboard · exercises · voicing · mastery · curriculum · listen (.test.ts) · expect.ts (tiny assert helper)
 ```

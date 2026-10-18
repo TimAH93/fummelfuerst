@@ -144,6 +144,35 @@ button:disabled { opacity: 0.4; cursor: default; }
 .target.code { letter-spacing: 0.06em; white-space: nowrap; font-size: clamp(64px, 14vw, 200px); }
 .link .piano { max-width: 900px; max-height: 22vh; }
 
+/* ── Song brief (a form: scrolling is fine here, nobody is holding a guitar) ── */
+.row { display: flex; gap: 10px; align-items: center; }
+.row.wrap { flex-wrap: wrap; }
+.brief-grid { display: grid; grid-template-columns: 1fr; gap: 28px; width: 100%; max-width: 1400px; margin: 0 auto; }
+@media (min-width: 1000px) { .brief-grid { grid-template-columns: 1fr 1fr; align-items: start; } }
+.brief-form, .brief-out { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+.field { display: flex; flex-direction: column; gap: 8px; flex: 1; }
+.field.narrow { max-width: 220px; }
+.field-label { font-size: 18px; color: var(--muted); }
+.field-input {
+  font: inherit; font-size: 22px; color: var(--text); background: var(--surface);
+  border: 2px solid var(--line); border-radius: 12px; padding: 12px 14px; width: 100%;
+}
+.field-input.big { font-size: 34px; font-weight: 700; letter-spacing: 0.02em; }
+textarea.field-input { resize: vertical; }
+.pill { min-height: 48px; padding: 0 18px; font-size: 18px; border-radius: 999px; border: 2px solid var(--line); background: transparent; color: var(--muted); }
+.pill.on { border-color: var(--accent); color: var(--text); background: #16222c; }
+.verdict.small { font-size: 18px; font-weight: 400; }
+.analysis { display: flex; flex-direction: column; gap: 12px; }
+.analysis .key { font-size: clamp(36px, 4.5vw, 56px); font-weight: 800; }
+.numerals { display: flex; flex-wrap: wrap; gap: 10px; }
+.numeral { display: flex; flex-direction: column; align-items: center; min-width: 84px; padding: 10px 12px; background: var(--surface); border: 2px solid var(--line); border-radius: 14px; }
+.numeral.outside { border-color: var(--off); }
+.numeral-chord { font-size: 28px; font-weight: 700; }
+.numeral-roman { font-size: 20px; color: var(--muted); }
+.numeral.outside .numeral-roman { color: var(--off); }
+.brief-text { margin: 0; white-space: pre-wrap; font-family: ui-monospace, 'SF Mono', Menlo, monospace; font-size: 16px; line-height: 1.45; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px; color: var(--text); }
+.brief a { color: var(--accent); }
+
 /* ── Tuner ────────────────────────────────────────────── */
 .tuner-face { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3vh; text-align: center; }
 .tuner-face .target { font-size: clamp(120px, 22vw, 260px); }

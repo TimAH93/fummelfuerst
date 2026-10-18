@@ -1,4 +1,4 @@
-import { Attempt, LearnerState, TrackId, emptyState, parseState } from '../../core';
+import { Attempt, LearnerState, Part, Stuck, TrackId, emptyState, parseState } from '../../core';
 
 /** Local persistence: one IndexedDB database, a key-value store plus an append-only attempt log. */
 const DB_NAME = 'fummelfuerst';
@@ -65,3 +65,27 @@ export const saveSettings = (s: Settings): Promise<IDBValidKey> => tx('kv', 'rea
 
 /** Raw attempts are kept for stage 7: tuning the model against real data. */
 export const logAttempt = (a: Attempt): Promise<IDBValidKey> => tx('attempts', 'readwrite', (st) => st.add(a));
+
+/** Song brief draft: kept so the brief survives closing the app between FL Studio sessions. */
+export interface BriefDraft {
+  chords: string;
+  tempo: string;
+  bars: string;
+  parts: Part[];
+  stuck: Stuck;
+  references: string;
+  note: string;
+}
+
+export const EMPTY_BRIEF: BriefDraft = { chords: '', tempo: '', bars: '8', parts: [], stuck: 'Vom Loop zum Song', references: '', note: '' };
+
+export async function loadBrief(): Promise<BriefDraft> {
+  try {
+    const raw = await tx<Partial<BriefDraft> | undefined>('kv', 'readonly', (s) => s.get('brief'));
+    return { ...EMPTY_BRIEF, ...raw };
+  } catch {
+    return EMPTY_BRIEF;
+  }
+}
+
+export const saveBrief = (b: BriefDraft): Promise<IDBValidKey> => tx('kv', 'readwrite', (st) => st.put(b, 'brief'));
