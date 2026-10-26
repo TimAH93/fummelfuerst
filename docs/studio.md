@@ -27,6 +27,17 @@ außer D ist die schnellere SSD.
 **Werkzeugkiste bis zum ersten fertigen Song:** FL-Stock-Drums, FLEX, Piano in Blue,
 Gitarre über Guitar Rig 6 Player. Nur Presets – erst fertig machen, dann schrauben.
 
+## Instrumente und Aufnahme
+
+| Was | Wofür / Hinweis |
+|---|---|
+| Westerngitarre | Hauptinstrument. Aufnahme über das Yeti X |
+| Blue Yeti X (USB-Kondensatormikrofon) | Gitarre, Bongos, Shaker, Gesang direkt in FL Studio. Für Gitarre: Niere, 20–30 cm vor Bund 12 |
+| Bongos, Shaker | Echte Percussion statt nur Samples |
+| Novation FLkey 37 | Siehe unten |
+| *Fehlt noch:* Sustain-Pedal (6,3-mm-Klinke) | Klavier-Form empfohlen (M-Audio SP-2, Roland DP-10, Yamaha FC4A), gern gebraucht |
+| *Erst bei E-Gitarre nötig:* Audio-Interface mit Instrumenten-Eingang | Das Yeti X hat keinen Gitarreneingang; für Guitar Rig per Kabel braucht es ein Interface |
+
 ## Novation FLkey 37 (1. Generation, User Guide v4.0)
 
 37 anschlagdynamische Tasten, 16 Pads (anschlagdynamisch, Aftertouch), 8 Drehregler,
