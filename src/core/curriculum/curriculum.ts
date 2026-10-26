@@ -10,7 +10,7 @@ import { LearnerState, SkillStats, helpLevelFor, mastery } from '../mastery/mode
  * decides when to move on. Nothing is skipped – a drill you already know is simply
  * comfortable after a few minutes.
  */
-export type TrackId = 'fretboard' | 'intervals' | 'triads' | 'melody' | 'keys';
+export type TrackId = 'fretboard' | 'intervals' | 'triads' | 'melody' | 'keys' | 'neosoul';
 
 export interface Track {
   id: TrackId;
@@ -24,6 +24,7 @@ export const TRACKS: readonly Track[] = [
   { id: 'triads', title: 'Dreiklänge', family: 'triad-build' },
   { id: 'melody', title: 'Melodieton → Akkord', family: 'melody-chord' },
   { id: 'keys', title: 'Tasten → Gitarre', family: 'keys-chord' },
+  { id: 'neosoul', title: 'Neo-Soul-Akkorde', family: 'keys-voicing' },
 ];
 
 export interface Drill {
@@ -135,7 +136,23 @@ const keysSpecs = (): DrillSpec[] => [
   })),
 ];
 
+// ── Neo-soul: sevenths as the foundation, then the colours on top ───────────────
+const NEOSOUL_ORDER: [string, string][] = [
+  ['maj7', 'Major 7 – warm, zuhause'],
+  ['m7', 'Moll 7 – weich, nachdenklich'],
+  ['dom7', 'Dominant 7 – will weiter'],
+  ['m7b5', 'Halbvermindert (m7b5) – Moll-ii-V'],
+  ['maj9', 'Major 9 – schwebend'],
+  ['m9', 'Moll 9 – der Neo-Soul-Klang'],
+  ['dom9', 'Dominant 9 – soulig'],
+  ['dom13', 'Dominant 13 – elegant'],
+  ['dom7s9', '7#9 – bluesig, Reibung'],
+];
+const neosoulSpecs = (): DrillSpec[] =>
+  NEOSOUL_ORDER.map(([type, title]) => ({ id: type, title, match: (s: string) => s === `voicing:${type}` }));
+
 const SPECS: Record<TrackId, () => DrillSpec[]> = {
+  neosoul: neosoulSpecs,
   keys: keysSpecs,
   fretboard: fretboardSpecs,
   intervals: intervalSpecs,

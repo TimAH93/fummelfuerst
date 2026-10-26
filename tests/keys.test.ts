@@ -1,5 +1,5 @@
 import { describe, expect, it } from './expect';
-import { KeysChordParams, KeysChordSolution, DEFAULT_CONTEXT, evaluate, generateExercise, identifyHeld, pcAt, toPc, chord, chordPcs } from '../src/core';
+import { KeysChordParams, KeysChordSolution, KeysVoicingParams, KeysVoicingSolution, DEFAULT_CONTEXT, evaluate, generateExercise, identifyHeld, pcAt, toPc, chord, chordPcs } from '../src/core';
 
 const seeds = Array.from({ length: 1000 }, (_, i) => i);
 
@@ -49,5 +49,71 @@ describe('keys-chord exercise', () => {
       for (let i = 0; i < 3; i++) for (const d of [-1, 1]) expect(ok(n.map((m, j) => (j === i ? m + d : m)))).toBe(false);
       expect(ok(n.slice(0, 2))).toBe(false);
     }
+  });
+});
+
+describe('neo-soul voicing exercise', () => {
+  const gen = (typeId: string, pc: number) =>
+    generateExercise<KeysVoicingParams, KeysVoicingSolution>('keys-voicing', 1, DEFAULT_CONTEXT, { typeId, pc });
+  const ok = (ex: ReturnType<typeof gen>, midis: number[]) => evaluate(ex, { kind: 'notes', midis }).correct;
+
+  it('builds rootless right-hand voicings over the bass', () => {
+    const fm9 = gen('m9', 5);
+    expect(fm9.solution.rightHand).toEqual(['Ab:b3', 'C:5', 'Eb:b7', 'G:9']);
+    expect(fm9.solution.required).toEqual(['Ab:b3', 'Eb:b7', 'G:9']);
+    expect(gen('dom7s9', 0).solution.rightHand).toEqual(['E:3', 'Bb:b7', 'D#:#9']);
+    expect(gen('dom13', 8).solution.rightHand).toEqual(['Gb:b7', 'Bb:9', 'C:3', 'F:13']);
+  });
+  it('accepts what a player would play, rejects what changes the chord', () => {
+    const ex = gen('m9', 5); // Fm9: F | Ab C Eb G
+    expect(ok(ex, [41, 56, 60, 63, 67])).toBe(true); // the voicing
+    expect(ok(ex, [41, 56, 63, 67])).toBe(true); // fifth left out
+    expect(ok(ex, [29, 56, 63, 67, 72])).toBe(true); // other octaves, extra chord tone on top
+    expect(ok(ex, [41, 56, 60, 63])).toBe(false); // no 9th: that is Fm7
+    expect(ok(ex, [44, 53, 60, 63, 67])).toBe(false); // Ab in the bass
+    expect(ok(ex, [41, 56, 60, 63, 66])).toBe(false); // Gb is not in Fm9
+  });
+  it('spells with flats on a tie (Ebm7, not D#m7)', () => {
+    for (const seed of seeds.slice(0, 50)) {
+      const ex = generateExercise<KeysVoicingParams, KeysVoicingSolution>('keys-voicing', seed, DEFAULT_CONTEXT, { typeId: 'm7', pc: 3 });
+      expect(ex.params.root.acc <= 0).toBe(true);
+    }
+  });
+  it('finds a guitar shape with the root in the bass for every type and root', () => {
+    for (const typeId of ['maj7', 'm7', 'dom7', 'm7b5', 'maj9', 'm9', 'dom9', 'dom13', 'dom7s9'])
+      for (let pc = 0; pc < 12; pc++) {
+        const ex = gen(typeId, pc);
+        const g = ex.solution.guitar;
+        if (!g) throw new Error(`${typeId} on ${pc}: no guitar shape`);
+        const low = g.positions[0];
+        expect(pcAt(DEFAULT_CONTEXT.tuning, low)).toBe(pc);
+      }
+  });
+});
+
+describe('neo-soul voicings fit a 37-key board', () => {
+  it('bass and right hand stay within C3–C6, bass lowest', () => {
+    for (const seed of seeds) {
+      const ex = generateExercise<KeysVoicingParams, KeysVoicingSolution>('keys-voicing', seed);
+      const [bass, ...rh] = ex.solution.notes;
+      expect(bass >= 48 && bass <= 59 && rh.every((n) => n > bass && n <= 84)).toBe(true);
+    }
+  });
+});
+
+describe('jazz guitar shapes', () => {
+  it('prefers the classic grips over shapes with muted inner strings', () => {
+    const shape = (typeId: string, pc: number) =>
+      generateExercise<KeysVoicingParams, KeysVoicingSolution>('keys-voicing', 1, DEFAULT_CONTEXT, { typeId, pc }).solution.guitar!.tab;
+    expect(shape('maj7', 9) === '542xx4').toBe(false); // Amaj7: a real grip, not two muted inner strings
+    expect(shape('dom7s9', 0)).toBe('x3234x'); // the "Hendrix chord"
+    for (const typeId of ['maj7', 'm7', 'dom7', 'm7b5', 'maj9', 'm9', 'dom9', 'dom13', 'dom7s9'])
+      for (let pc = 0; pc < 12; pc++) {
+        const t = shape(typeId, pc);
+        const frets = t.includes('-') ? t.split('-') : [...t];
+        const played = frets.map((f, i) => (f === 'x' ? -1 : i)).filter((i) => i >= 0);
+        const inner = frets.slice(played[0] + 2, played[played.length - 1]).filter((f) => f === 'x').length;
+        if (inner > 0) throw new Error(`${typeId} on ${pc}: ${t} mutes an inner string`);
+      }
   });
 });

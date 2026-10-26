@@ -27,6 +27,10 @@ Adaptive guitar improvisation trainer: hear → understand → locate → play �
   The public PeerJS broker only introduces the devices; notes then go directly over WebRTC.
   The pairing is remembered and resumes after a reload. On Windows, if FL Studio holds the
   MIDI port exclusively, route FL's MIDI output to a loopMIDI port and let Chrome read that.
+- **Neo-soul chords** – a sixth track: seventh and ninth chords (maj7 … m9, 9, 13, 7#9) played
+  the way keyboard players voice them – root in the left hand, colour tones without the root in the
+  right. Checked by function: guide tones (3rd, 7th) and colour (9, #9, 13) must be there, the plain
+  fifth may be left out. The reveal shows a jazz guitar grip with the root in the bass.
 - **Song brief** – for getting from a loop to a song with a Claude "Song-Coach" project:
   type or record the loop's chords from the keyboard; the app detects the key (all 24 keys
   ranked; relative-key ambiguity is shown, borrowed chords like ♭VII flagged), adds tempo,

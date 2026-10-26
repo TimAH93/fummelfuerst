@@ -66,7 +66,10 @@ function spellRoot(key: Scale, pc: PitchClass): { note: Note; step: number; acc:
 }
 
 const NUMERALS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII'];
-const SUFFIX: Record<string, string> = { maj: '', min: '', dim: '°', aug: '+', maj7: 'maj7', m7: '7', dom7: '7', dim7: '°7', m7b5: 'ø7' };
+const SUFFIX: Record<string, string> = {
+  maj: '', min: '', dim: '°', aug: '+', maj7: 'maj7', m7: '7', dom7: '7', dim7: '°7', m7b5: 'ø7',
+  maj9: 'maj9', m9: '9', dom9: '9', dom7s9: '7#9', dom13: '13',
+};
 
 function numeralIn(key: Scale, mode: KeyMode, c: ProgChord): Numeral {
   const { note, step, acc } = spellRoot(key, c.rootPc);
@@ -76,7 +79,7 @@ function numeralIn(key: Scale, mode: KeyMode, c: ProgChord): Numeral {
   const roman = (acc < 0 ? '♭' : acc > 0 ? '♯' : '') + (minorish ? base.toLowerCase() : base) + SUFFIX[c.typeId];
   const inScale = pcsOf(c).every((p) => scalePcs(key).includes(p));
   const harmonicMinorDominant =
-    mode === 'naturalMinor' && step === 4 && acc === 0 && (c.typeId === 'maj' || c.typeId === 'dom7');
+    mode === 'naturalMinor' && step === 4 && acc === 0 && ['maj', 'dom7', 'dom9', 'dom7s9', 'dom13'].includes(c.typeId);
   return { symbol: noteName(note) + type.symbol, roman, diatonic: inScale, harmonicMinorDominant: harmonicMinorDominant || undefined };
 }
 
@@ -95,9 +98,9 @@ export function analyzeProgression(chords: ProgChord[]): KeyFit[] {
     const key = scale(parseNote(t), mode);
     const numerals = chords.map((c) => numeralIn(key, mode, c));
     const tonicPc = notePc(key.tonic);
-    const tonicType = mode === 'major' ? ['maj', 'maj7'] : ['min', 'm7'];
+    const tonicType = mode === 'major' ? ['maj', 'maj7', 'maj9'] : ['min', 'm7', 'm9'];
     const isTonic = (c: ProgChord) => c.rootPc === tonicPc && tonicType.includes(c.typeId);
-    const isDominant = (c: ProgChord) => c.rootPc === toPc(tonicPc + 7) && ['maj', 'dom7'].includes(c.typeId);
+    const isDominant = (c: ProgChord) => c.rootPc === toPc(tonicPc + 7) && ['maj', 'dom7', 'dom9', 'dom7s9', 'dom13'].includes(c.typeId);
     let score = numerals.reduce((a, n) => a + (n.diatonic ? 1 : n.harmonicMinorDominant ? 0.9 : 0), 0);
     if (isTonic(chords[0])) score += 1;
     const last = chords[chords.length - 1];

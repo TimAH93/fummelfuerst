@@ -24,13 +24,16 @@ export function drillSpellings(pc: PitchClass): Note[] {
  * Root spelling for a chord drill: the one whose chord tones need the fewest accidentals
  * (Ab major, not G# major with B#). Ties are broken by the rng.
  */
-export function pickChordRoot(rng: Rng, pc: PitchClass, typeId: string): Note {
+export function pickChordRoot(rng: Rng, pc: PitchClass, typeId: string, preferFlats = false): Note {
   const options = drillSpellings(pc).map((root) => ({
     root,
     cost: chordTones(chord(root, typeId)).reduce((a, n) => a + Math.abs(n.acc), 0),
   }));
   const best = Math.min(...options.map((o) => o.cost));
-  return rng.pick(options.filter((o) => o.cost === best)).root;
+  const tied = options.filter((o) => o.cost === best);
+  // Jazz charts spell with flats when it is a toss-up (Ebm7, not D#m7).
+  const flats = tied.filter((o) => o.root.acc <= 0);
+  return rng.pick(preferFlats && flats.length ? flats : tied).root;
 }
 
 export function pickSpelling(rng: Rng, pc: PitchClass): Note {

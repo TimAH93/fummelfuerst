@@ -30,6 +30,12 @@ export const CHORD_TYPES: readonly ChordType[] = [
   def('dom7', 'dominant 7', '7', ['dom7'], '1 3 5 b7'),
   def('dim7', 'diminished 7', 'dim7', ['°7', 'o7'], '1 b3 b5 bb7'),
   def('m7b5', 'half-diminished 7', 'm7b5', ['ø', 'ø7', '-7b5', 'min7b5'], '1 b3 b5 b7'),
+  // Extended chords: the neo-soul / jazz palette.
+  def('maj9', 'major 9', 'maj9', ['M9', 'Δ9', 'ma9'], '1 3 5 7 9'),
+  def('m9', 'minor 9', 'm9', ['min9', '-9'], '1 b3 5 b7 9'),
+  def('dom9', 'dominant 9', '9', ['dom9'], '1 3 5 b7 9'),
+  def('dom7s9', 'dominant 7 sharp 9', '7#9', ['7(#9)', '7+9'], '1 3 5 b7 #9'),
+  def('dom13', 'dominant 13', '13', ['dom13'], '1 3 5 b7 9 13'),
 ];
 
 export const chordType = (id: string): ChordType => {

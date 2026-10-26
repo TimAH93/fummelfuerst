@@ -47,6 +47,8 @@ export interface VoicingSearch {
    * count as fret 0 for the span – so "open B under G-string fret 11" is not offered.
    */
   shape?: boolean;
+  /** Chord tones that may be left out (pitch classes), e.g. the fifth of a 9th chord on guitar. */
+  optional?: number[];
 }
 
 /** True when positions form a movable hand shape: rising pitch per string, span with open = fret 0. */
@@ -99,7 +101,7 @@ export function describeVoicing(t: Tuning, chord: Chord, frets: Frets): Voicing 
 export function findVoicings(t: Tuning, chord: Chord, opts: VoicingSearch = {}): Voicing[] {
   const {
     minFret = 0, maxFret = 15, maxSpan = 4, strings, minStrings = 3,
-    innerMutes = false, noDoubling = false, inversion, maxFingers = 4, shape = false,
+    innerMutes = false, noDoubling = false, inversion, maxFingers = 4, shape = false, optional = [],
   } = opts;
   const pcs = new Set(chordPcs(chord));
   const n = t.strings.length;
@@ -132,8 +134,8 @@ export function findVoicings(t: Tuning, chord: Chord, opts: VoicingSearch = {}):
     const v = describeVoicing(t, chord, [...current]);
     if (!v) return;
     const present = new Set(v.notes.map((x) => toPc(x.midi)));
-    if (present.size !== pcs.size) return;
-    if (noDoubling && v.notes.length !== pcs.size) return;
+    if ([...pcs].some((p) => !present.has(p) && !optional.includes(p))) return;
+    if (noDoubling && v.notes.length !== present.size) return;
     if (inversion !== undefined && v.inversion !== inversion) return;
     if (v.fingers > maxFingers) return;
     if (shape && !isShape(t, v.notes.map((x) => x.pos), maxSpan)) return;

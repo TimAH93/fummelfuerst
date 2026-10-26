@@ -79,7 +79,7 @@ describe('fret span', () => {
 
 describe('exercise registry', () => {
   it('has all registered families', () => {
-    expect(listFamilies().map((f) => f.id)).toEqual(['note-find', 'interval-hunt', 'melody-chord', 'triad-build', 'keys-chord']);
+    expect(listFamilies().map((f) => f.id)).toEqual(['note-find', 'interval-hunt', 'melody-chord', 'triad-build', 'keys-chord', 'keys-voicing']);
   });
   it('rejects unknown families', () => {
     expect(() => generateExercise('nope', 1)).toThrow(/Unknown exercise family/);
