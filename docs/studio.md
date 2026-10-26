@@ -5,7 +5,8 @@ und als Kontext für den Song-Coach (Claude-Projekt).
 
 ## Ich
 
-- Gitarre seit ~10 Jahren, immer wieder: Westerngitarre, früher drei E-Gitarren, vor allem Riffs.
+- Gitarre seit ~10 Jahren, immer wieder: Westerngitarre (aktuell keine E-Gitarre, auch keine geplant), früher drei E-Gitarren, vor allem Riffs.
+- Möchte auch selbst singen.
 - Theorie-Unterricht gehabt: Skalen, Tonleitern, Noten. Nie in einer Band, noch nie einen Song fertig gemacht.
 - DAW-Anfänger. Problem: Ich komme vom Loop nicht zum ganzen Song.
 - Stil: offen, viele Richtungen. Der Coach leitet ihn aus Referenz-Songs ab.
@@ -17,7 +18,7 @@ und als Kontext für den Song-Coach (Claude-Projekt).
 | FL Studio Producer Edition | gekauft (Image-Line) | DAW: Arrangieren, Audio-Aufnahme (Gitarre), Mixen |
 | FLEX + Packs: Black Octopus Pandora, Saif Sameer Fulcrum, Liquid DnB | Image-Line-Konto | Synth-Presets, u. a. für Drum'n'Bass |
 | Piano in Blue (Cinesamples/Sonicsmiths) | NI-Konto: Full version | Steinway D von 1949 (Columbia 30th Street), 3 Mikrofon-Positionen, Band-/Direkt-Weg. Läuft im kostenlosen Kontakt Player |
-| Guitar Rig 5 Factory Selection | NI-Konto: Full version (kostenlose Fassung) | Amp-Simulation, ältere Version |
+| Guitar Rig 5 Factory Selection | NI-Konto: Full version (kostenlose Fassung) | Amp-Simulation – ohne E-Gitarre derzeit nur als Effekt für Gesang/Akustikgitarre interessant |
 | Komplete Start (kostenlos, noch registrieren) | NI-Konto: Not registered | v. a. **Guitar Rig 6 Player** (Gitarre), **TRK-01 Bass**, **Kontakt Factory Selection**, **Supercharger** (Kompressor) |
 | IL Coupon / Virtual Cash | Image-Line-Konto | Guthaben prüfen |
 
@@ -32,11 +33,10 @@ Westerngitarre (übers Yeti X aufgenommen). Nur Presets – erst fertig machen, 
 | Was | Wofür / Hinweis |
 |---|---|
 | Westerngitarre | Hauptinstrument. Aufnahme über das Yeti X |
-| Blue Yeti X (USB-Kondensatormikrofon) | Gitarre, Bongos, Shaker, Gesang direkt in FL Studio. Für Gitarre: Niere, 20–30 cm vor Bund 12 |
+| Blue Yeti X (USB-Kondensatormikrofon) | Gitarre, Bongos, Shaker und **Gesang** (will ich selbst ausprobieren) direkt in FL Studio. Für Gitarre: Niere, 20–30 cm vor Bund 12 |
 | Bongos, Shaker | Echte Percussion statt nur Samples |
 | Novation FLkey 37 | Siehe unten |
-| *Fehlt noch:* Sustain-Pedal (6,3-mm-Klinke) | Klavier-Form empfohlen (M-Audio SP-2, Roland DP-10, Yamaha FC4A), gern gebraucht |
-| *Erst bei E-Gitarre nötig:* Audio-Interface mit Instrumenten-Eingang | Das Yeti X hat keinen Gitarreneingang; für Guitar Rig per Kabel braucht es ein Interface |
+| *Optional:* Sustain-Pedal (6,3-mm-Klinke) | Nicht nötig für den ersten Song; lohnt sich fürs Klavierspielen mit Piano in Blue. Nur stabile Klavier-Form (M-Audio SP-2, Roland DP-10, Yamaha FC4A), gebraucht ~20 € fair |
 
 ## Novation FLkey 37 (1. Generation, User Guide v4.0)
 
