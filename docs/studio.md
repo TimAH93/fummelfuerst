@@ -36,7 +36,7 @@ Westerngitarre (übers Yeti X aufgenommen). Nur Presets – erst fertig machen, 
 | Blue Yeti X (USB-Kondensatormikrofon) | Gitarre, Bongos, Shaker und **Gesang** (will ich selbst ausprobieren) direkt in FL Studio. Für Gitarre: Niere, 20–30 cm vor Bund 12 |
 | Bongos, Shaker | Echte Percussion statt nur Samples |
 | Novation FLkey 37 | Siehe unten |
-| *Optional:* Sustain-Pedal (6,3-mm-Klinke) | Nicht nötig für den ersten Song; lohnt sich fürs Klavierspielen mit Piano in Blue. Nur stabile Klavier-Form (M-Audio SP-2, Roland DP-10, Yamaha FC4A), gebraucht ~20 € fair |
+| M-Audio SP-2 Sustain-Pedal (Klavier-Form, neu) | Fürs Klavierspielen mit Piano in Blue. Vor dem USB-Kabel einstecken und beim Einstecken nicht treten – das FLkey erkennt die Polung selbst |
 
 ## Novation FLkey 37 (1. Generation, User Guide v4.0)
 
