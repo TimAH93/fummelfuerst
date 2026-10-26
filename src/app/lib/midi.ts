@@ -18,6 +18,9 @@ export interface MidiState {
  */
 export const isNotePort = (name: string | null | undefined): boolean => !/\bDAW\b|MIDIIN2|MIDIOUT2/i.test(name ?? '');
 
+/** Zero-based MIDI channel 10. */
+const DRUM_CHANNEL = 9;
+
 let localStatus: MidiStatus = typeof navigator !== 'undefined' && 'requestMIDIAccess' in navigator ? 'pending' : 'unsupported';
 const statusListeners = new Set<(s: MidiStatus) => void>();
 let started = false;
@@ -35,6 +38,8 @@ export function ensureLocalMidi(): void {
     const data = e.data;
     if (!data || data.length < 3) return;
     const cmd = data[0] & 0xf0;
+    // Channel 10 is the General MIDI drum channel (FLkey drum pads): hits, not pitches.
+    if ((data[0] & 0x0f) === DRUM_CHANNEL) return;
     if (cmd === 0x90 && data[2] > 0) down.add(data[1]);
     else if (cmd === 0x80 || (cmd === 0x90 && data[2] === 0)) down.delete(data[1]);
     else return;
