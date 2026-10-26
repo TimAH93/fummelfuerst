@@ -14,6 +14,17 @@
 ## Dateien
 - [`02-neosoul-skizze.mid`](02-neosoul-skizze.mid): Bass, Akkorde, Melodie – 8 Takte, Swing und
   Dynamik schon eingebaut (nicht quantisieren, sonst geht das Gefühl verloren)
+- [`02-neosoul-begleitung.mid`](02-neosoul-begleitung.mid) und [`02-neosoul-melodie.mid`](02-neosoul-melodie.mid):
+  dieselbe Musik getrennt, für zwei Kanäle („Piano Begleitung“, „Piano Melodie“)
+
+## Song-Bauplan (Vorschlag)
+| Teil | Takte | Inhalt |
+|---|---|---|
+| Intro | 4 | nur Begleitung, erste Hälfte |
+| A | 8 | Begleitung + Melodie |
+| B | 8 | Begleitung + eigene Melodie (selbst einspielen) |
+| A | 8 | Begleitung + Melodie |
+| Outro | 4 | nur Begleitung, ausklingen |
 
 ## Stand
 - [ ] In neues FL-Projekt laden, anhören
