@@ -22,6 +22,7 @@
 
 ## Dateien
 - [`01-klavierballade.mid`](01-klavierballade.mid): die Akkordfolge als MIDI (4 Takte, 70 BPM) zum Reinziehen ins Piano Roll
+- [`01-klavierballade-v2.mid`](01-klavierballade-v2.mid): reicher – Cmaj7 · G/B · Am7 · Fmaj7, linke Hand Bass–Quinte–Oktave, Melodie G E D E | D B D | C E G A | G E
 
 ## Stand
 - [x] Piano in Blue in FL Studio geladen
