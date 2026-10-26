@@ -12,6 +12,12 @@ export interface MidiState {
   held: number[];
 }
 
+/**
+ * Controllers like the FLkey expose a second "DAW" port for FL Studio's script (named
+ * MIDIIN2/MIDIOUT2 on Windows). It carries control messages, not played notes – ignore it.
+ */
+export const isNotePort = (name: string | null | undefined): boolean => !/\bDAW\b|MIDIIN2|MIDIOUT2/i.test(name ?? '');
+
 let localStatus: MidiStatus = typeof navigator !== 'undefined' && 'requestMIDIAccess' in navigator ? 'pending' : 'unsupported';
 const statusListeners = new Set<(s: MidiStatus) => void>();
 let started = false;
@@ -38,7 +44,7 @@ export function ensureLocalMidi(): void {
     .requestMIDIAccess()
     .then((access) => {
       const wire = () => {
-        const inputs = [...access.inputs.values()];
+        const inputs = [...access.inputs.values()].filter((i) => isNotePort(i.name));
         inputs.forEach((i) => (i.onmidimessage = onMessage));
         setDevices('local', inputs.map((i) => i.name ?? 'MIDI'));
         setStatus(inputs.length ? 'ready' : 'no-device');
