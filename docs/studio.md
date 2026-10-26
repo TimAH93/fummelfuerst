@@ -25,7 +25,7 @@ Installation: Programme auf C, Projekte/Samples/Libraries auf D (z. B. `D:\Musik
 außer D ist die schnellere SSD.
 
 **Werkzeugkiste bis zum ersten fertigen Song:** FL-Stock-Drums, FLEX, Piano in Blue,
-Gitarre über Guitar Rig 6 Player. Nur Presets – erst fertig machen, dann schrauben.
+Westerngitarre (übers Yeti X aufgenommen). Nur Presets – erst fertig machen, dann schrauben.
 
 ## Instrumente und Aufnahme
 
