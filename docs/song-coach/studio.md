@@ -11,6 +11,8 @@ und als Kontext für den Song-Coach (Claude-Projekt, siehe README.md in diesem O
 - Theorie-Unterricht gehabt: Skalen, Tonleitern, Noten. Nie in einer Band, noch nie einen Song fertig gemacht.
 - DAW-Anfänger. Problem: Ich komme vom Loop nicht zum ganzen Song.
 - Stil: offen, viele Richtungen. Der Coach leitet ihn aus Referenz-Songs ab.
+  Gerade besonders: **Neo-Soul / jazzige Klavier-Harmonik** (Septakkorde, Nonen, Swing) und
+  emotionale Klavierstücke; später Beats Richtung Kanye / J Dilla.
 
 ## Software
 
