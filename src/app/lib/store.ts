@@ -14,7 +14,7 @@ export interface Settings {
   link?: { role: 'host' | 'join'; code: string };
 }
 
-export const DEFAULT_SETTINGS: Settings = { track: 'fretboard', noteNames: 'german', a4: 440 };
+export const DEFAULT_SETTINGS: Settings = { track: 'fretboard', noteNames: 'international', a4: 440 };
 
 let dbPromise: Promise<IDBDatabase> | null = null;
 
