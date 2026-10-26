@@ -7,7 +7,8 @@ und als Kontext für den Song-Coach (Claude-Projekt, siehe README.md in diesem O
 
 - Gitarre seit ~10 Jahren, immer wieder: Westerngitarre (aktuell keine E-Gitarre, auch keine geplant), früher drei E-Gitarren, vor allem Riffs.
 - Möchte auch selbst singen.
-- Notennamen international: B (nicht H), Bb (nicht B).
+- Notennamen und Musikbegriffe **englisch**: B (nicht H), Bb (nicht B), F minor, C major,
+  natural/harmonic minor, minor pentatonic, root position, 1st inversion … Sonst Deutsch.
 - Theorie-Unterricht gehabt: Skalen, Tonleitern, Noten. Nie in einer Band, noch nie einen Song fertig gemacht.
 - DAW-Anfänger. Problem: Ich komme vom Loop nicht zum ganzen Song.
 - Stil: offen, viele Richtungen. Der Coach leitet ihn aus Referenz-Songs ab.
