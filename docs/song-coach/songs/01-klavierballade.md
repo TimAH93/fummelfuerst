@@ -20,6 +20,9 @@
 | A' | 8 | 2 | wie A, leiser |
 | Ende | 2 | 1 | C ausklingen lassen |
 
+## Dateien
+- [`01-klavierballade.mid`](01-klavierballade.mid): die Akkordfolge als MIDI (4 Takte, 70 BPM) zum Reinziehen ins Piano Roll
+
 ## Stand
 - [x] Piano in Blue in FL Studio geladen
 - [ ] Akkorde spielen, schönsten Durchgang per Score Log sichern
