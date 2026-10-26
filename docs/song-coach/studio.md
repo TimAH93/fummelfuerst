@@ -14,6 +14,17 @@ und als Kontext für den Song-Coach (Claude-Projekt, siehe README.md in diesem O
   Gerade besonders: **Neo-Soul / jazzige Klavier-Harmonik** (Septakkorde, Nonen, Swing) und
   emotionale Klavierstücke; später Beats Richtung Kanye / J Dilla.
 
+## Ziele
+
+1. **Musik bauen:** eigene Ideen in FL Studio zu fertigen Songs machen.
+2. **Live loopen:** mit dem FLkey ein Stück live schichten – Akkorde einspielen, Loop läuft weiter,
+   Bass, Melodie, Drums drüber, mit den Reglern live arrangieren. Stufenleiter:
+   1. Akkordfolge 4× ohne Stocken im Takt (Metronom)
+   2. Akkorde aufnehmen, frei drüber improvisieren
+   3. Akkorde → Bass → Melodie schichten, ohne Stopp (Loop Recording + Blend Notes, ein Kanal pro Instrument)
+   4. Drums auf den Pads (FPC) dazu
+   5. Live arrangieren mit den Reglern (Channel Volume): rein, raus, Pause, Drop
+
 ## Software
 
 | Was | Status | Wofür |
