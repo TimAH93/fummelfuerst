@@ -24,25 +24,22 @@
 - **Descending run** als Fill: F – Eb – Db – C über Bb – Ab – G (F natural minor), führt zurück an den Anfang
 - Offen: aufräumen (Quantize ~50 %), G oder Ab im Lauf über Ab13
 
-## Song-Bauplan
-Regel: **alle 8 Takte ändert sich genau eine Sache.**
+## Song-Bauplan – 1 Minute (20 Takte bei 82 BPM ≈ 58 s)
+| Teil | Takte | Was passiert |
+|---|---|---|
+| Intro | 2 | nur Begleitung, leise |
+| A1 | 8 | meine Phrase |
+| A2 | 8 | dieselbe Phrase in Oktaven (die eine Steigerung) |
+| Outro | 2 | Fm9 ausklingen, oben Db → C (♭6 → 5) |
 
-| Teil | Takte | Energie | Was neu ist |
-|---|---|---|---|
-| Intro | 4 | 2 | nur Begleitung, leise |
-| A1 | 8 | 4 | meine Phrase |
-| A2 | 8 | 5 | Phrase in Oktaven, leise Drums kommen dazu |
-| B | 8 | 6 | neue Akkorde (Kontrast), Melodie sparsam und hoch |
-| Pause | 1 | 0 | nur Ausklingen |
-| A3 | 8 | 8 | Phrase zurück, alles drin, Lauf als Fill |
-| Outro | 4–6 | 2 | nur Klavier, endet auf Fm9 mit Db → C |
+Längere Fassung (B-Teil mit neuen Akkorden, Drums) erst bei Bedarf.
 
 ## Stand
 - [x] In neues FL-Projekt laden, anhören
 - [x] Eigene Melodie-Phrase eingespielt (siehe oben)
 - [ ] Phrase aufräumen
-- [ ] A1 / A2 bauen
-- [ ] Teil B: neue Akkorde (MIDI vom Assistenten)
+- [ ] A1 / A2 (Oktaven) bauen
+- [ ] Intro, Outro, in der Playlist zusammensetzen, MP3 exportieren
 - [ ] Drums: langsamer, schleppender Beat (FPC)
 
 ## Notizen
