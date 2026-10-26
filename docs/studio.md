@@ -17,9 +17,9 @@ und als Kontext für den Song-Coach (Claude-Projekt).
 |---|---|---|
 | FL Studio Producer Edition | gekauft (Image-Line) | DAW: Arrangieren, Audio-Aufnahme (Gitarre), Mixen |
 | FLEX + Packs: Black Octopus Pandora, Saif Sameer Fulcrum, Liquid DnB | Image-Line-Konto | Synth-Presets, u. a. für Drum'n'Bass |
-| Piano in Blue (Cinesamples/Sonicsmiths) | NI-Konto: Full version | Steinway D von 1949 (Columbia 30th Street), 3 Mikrofon-Positionen, Band-/Direkt-Weg. Läuft im kostenlosen Kontakt Player |
+| Piano in Blue 3.0 (Cinesamples/Sonicsmiths) | NI-Konto: Full version, installiert (11,8 GB) | Steinway D von 1949 (Columbia 30th Street), 3 Mikrofon-Positionen, Band-/Direkt-Weg. Läuft im kostenlosen Kontakt Player |
 | Guitar Rig 5 Factory Selection | NI-Konto: Full version (kostenlose Fassung) | Amp-Simulation – ohne E-Gitarre derzeit nur als Effekt für Gesang/Akustikgitarre interessant |
-| Komplete Start (kostenlos, noch registrieren) | NI-Konto: Not registered | v. a. **Guitar Rig 6 Player** (Gitarre), **TRK-01 Bass**, **Kontakt Factory Selection**, **Supercharger** (Kompressor) |
+| Komplete Start (kostenlos) | NI-Konto, installiert: Kontakt 8 Player, Kontakt Factory Selection, TRK-01 Bass, Supercharger | TRK-01 Bass braucht **Reaktor 6 Player** (bei Bedarf nachinstallieren). Bewusst weggelassen: Guitar Rig 6, Play Series, Expansions, Komplete Kontrol, Reaktor-Extras |
 | IL Coupon / Virtual Cash | Image-Line-Konto | Guthaben prüfen |
 
 Installation: Programme auf C, Projekte/Samples/Libraries auf D (z. B. `D:\Musik\…`),
@@ -66,3 +66,8 @@ Pitch/Mod-Rad, Sustain-Eingang, 5-Pol-MIDI-Out. Braucht FL Studio ≥ 20.9.2, wi
 - Instrument-Pads chromatisch ab C5 (MIDI 84).
 - Firmware-Updates und Custom Modes: components.novationmusic.com (Chrome).
 - Software-Bundle und Novation Sound Collective: customer.novationmusic.com/register – noch prüfen, was dabei ist.
+
+## Native Access
+
+Nur zum Herunterladen, Aktivieren und Aktualisieren – muss nicht mit Windows starten.
+Programme: `C:\Program Files\Native Instruments`; Inhalte (Samples) und Downloads auf D.
