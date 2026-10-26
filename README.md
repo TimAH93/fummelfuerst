@@ -150,3 +150,8 @@ The app is published from `main` to GitHub Pages by `.github/workflows/pages.yml
 3. The tuner asks for the microphone once. Audio never leaves the device.
 
 Progress lives in the browser storage of that device; iPad and iPhone keep separate progress.
+
+## Song-Coach
+
+`docs/song-coach/` holds the setup for a Claude project that coaches songwriting step by step:
+project instructions, the studio overview (gear, software, FLkey 37 features) and one file per song.

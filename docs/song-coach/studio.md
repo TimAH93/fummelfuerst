@@ -1,7 +1,7 @@
 # Mein Studio
 
 Was ich zum Musikmachen habe, und was davon wofür taugt. Gedacht für mich, für Fummelfürst
-und als Kontext für den Song-Coach (Claude-Projekt).
+und als Kontext für den Song-Coach (Claude-Projekt, siehe README.md in diesem Ordner).
 
 ## Ich
 
