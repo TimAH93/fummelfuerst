@@ -18,6 +18,19 @@ Adaptive guitar improvisation trainer: hear → understand → locate → play �
   (12 fretboard, 42 interval, 32 triad, 14 melody). The app recommends one drill; the learner
   model only chooses inside it. A drill is passed once every skill is mastered and has held
   over a break; it comes back only if it clearly slips.
+- **Keys → guitar** – a fifth track for a MIDI keyboard (e.g. FLkey 37) via Web MIDI
+  (Chrome/Edge on desktop and Android; on-screen keys elsewhere): build the triad on the keys,
+  it is checked as soon as the chord is held, then the reveal shows the same chord and
+  inversion as a shape on three adjacent guitar strings.
+- **Keyboard pairing** – the keyboard can stay on the PC (next to FL Studio): open the app
+  in Chrome on the PC, "Keyboard koppeln" → PC, enter the 6-digit code shown on the tablet.
+  The public PeerJS broker only introduces the devices; notes then go directly over WebRTC.
+  The pairing is remembered and resumes after a reload. On Windows, if FL Studio holds the
+  MIDI port exclusively, route FL's MIDI output to a loopMIDI port and let Chrome read that.
+- **Song brief** – for getting from a loop to a song with a Claude "Song-Coach" project:
+  type or record the loop's chords from the keyboard; the app detects the key (all 24 keys
+  ranked; relative-key ambiguity is shown, borrowed chords like ♭VII flagged), adds tempo,
+  parts, references and where you are stuck, and copies a plain-text brief to paste into Claude.
 - **Listening core** (pulled forward for the tuner and mic checking): YIN pitch detection,
   tuner reading (nearest string, cents), and a note tracker that turns frames into
   played notes. Pure functions on sample buffers; the Web Audio layer comes with the UI.
@@ -46,6 +59,8 @@ src/core/            pure TypeScript, no DOM – checked with lib ES2022 only
   voicing/  voicing search · tabs · string sets
   mastery/  learner state · skill stats · help levels · selection
   curriculum/ tracks · drills · recommendation
+  keys/     name held MIDI chords (type + inversion)
+  song/     progression parsing · key detection · roman numerals · song brief
   index.ts  public API
 tests/      theory · fretboard · exercises · voicing · mastery · curriculum · listen (.test.ts) · expect.ts (tiny assert helper)
 ```
@@ -135,3 +150,8 @@ The app is published from `main` to GitHub Pages by `.github/workflows/pages.yml
 3. The tuner asks for the microphone once. Audio never leaves the device.
 
 Progress lives in the browser storage of that device; iPad and iPhone keep separate progress.
+
+## Song-Coach
+
+`docs/song-coach/` holds the setup for a Claude project that coaches songwriting step by step:
+project instructions, the studio overview (gear, software, FLkey 37 features) and one file per song.

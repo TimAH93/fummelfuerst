@@ -11,3 +11,5 @@ export * from './listen';
 export * from './voicing';
 export * from './mastery';
 export * from './curriculum';
+export * from './keys';
+export * from './song';

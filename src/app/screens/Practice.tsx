@@ -3,6 +3,7 @@ import {
   AnswerMode,
   Drill,
   Evaluation,
+  KeysChordSolution,
   LearnerState,
   MelodyChordParams,
   Response,
@@ -18,6 +19,8 @@ import {
   recordAttempt,
 } from '../../core';
 import { Fretboard } from '../components/Fretboard';
+import { Piano, PianoMarks } from '../components/Piano';
+import { useMidi } from '../lib/midi';
 import { Progress } from '../components/Progress';
 import { showChord } from '../lib/names';
 import { promptFor, revealFor } from '../lib/prompts';
@@ -36,7 +39,8 @@ interface Props {
 
 type Phase = 'ask' | 'revealed' | 'checked';
 
-const modeFor = (family: string): AnswerMode => (family === 'melody-chord' ? 'tap' : 'play');
+const TAP_FAMILIES = ['melody-chord', 'keys-chord'];
+const modeFor = (family: string): AnswerMode => (TAP_FAMILIES.includes(family) ? 'tap' : 'play');
 
 export function Practice({ drill, state, settings, onState, onDrill, onExit }: Props) {
   useWakeLock();
@@ -50,10 +54,15 @@ export function Practice({ drill, state, settings, onState, onDrill, onExit }: P
   const [picked, setPicked] = useState<string[]>([]);
   const [evaluation, setEvaluation] = useState<Evaluation | null>(null);
   const [justPassed, setJustPassed] = useState(false);
+  const [tapped, setTapped] = useState<number[]>([]);
+  const [played, setPlayed] = useState<number[]>([]);
+  const isKeys = exercise.family === 'keys-chord';
 
   useEffect(() => {
     setPhase('ask');
     setPicked([]);
+    setTapped([]);
+    setPlayed([]);
     setEvaluation(null);
     setShownAt(performance.now());
   }, [exercise.id, round]);
@@ -81,13 +90,21 @@ export function Practice({ drill, state, settings, onState, onDrill, onExit }: P
     commit({ kind: 'self', rating }, latency);
     setRound((r) => r + 1);
   };
-  const check = () => {
+  const submit = (response: Response) => {
     const ms = performance.now() - shownAt;
-    const response: Response = { kind: 'choices', ids: picked };
     setEvaluation(evaluate(exercise, response));
     commit(response, ms);
     setPhase('checked');
   };
+  const submitNotes = (midis: number[]) => {
+    setPlayed(midis);
+    submit({ kind: 'notes', midis });
+  };
+  const check = () => (isKeys ? submitNotes(tapped) : submit({ kind: 'choices', ids: picked }));
+  // A chord held still on the MIDI keyboard answers by itself – hands stay on the keys.
+  const midi = useMidi((midis) => {
+    if (isKeys && phase === 'ask' && !justPassed) submitNotes(midis);
+  });
   const advance = () => setRound((r) => r + 1);
 
   // Keyboard (tablet with keyboard, or a foot pedal that sends keys): space/enter, 1–3.
@@ -104,6 +121,14 @@ export function Practice({ drill, state, settings, onState, onDrill, onExit }: P
 
   const nextDrill = recommendDrill(state, curriculum, drill.track);
   const showBoard = phase === 'ask' ? prompt.board : reveal.board;
+  const keysSolution = isKeys ? (exercise.solution as KeysChordSolution).notes : [];
+  const chordPcsNow = isKeys ? keysSolution.map((m) => m % 12) : [];
+  const pianoMarks: PianoMarks =
+    phase === 'ask'
+      ? { held: [...new Set([...midi.held, ...tapped])] }
+      : evaluation?.correct
+        ? { right: played }
+        : { held: played, right: keysSolution, wrong: played.filter((m) => !chordPcsNow.includes(m % 12)) };
 
   return (
     <main class="screen practice">
@@ -138,8 +163,18 @@ export function Practice({ drill, state, settings, onState, onDrill, onExit }: P
             )}
           </section>
 
-          {showBoard && mode === 'play' && (
-            <section class="board">
+          {isKeys && (
+            <section class={phase === 'ask' ? 'keys' : 'keys done'}>
+              <Piano marks={pianoMarks}
+                onToggle={phase === 'ask' ? (m) => setTapped(tapped.includes(m) ? tapped.filter((x) => x !== m) : [...tapped, m]) : undefined} />
+              <p class="meta">
+                {midi.devices.length ? `🎹 ${midi.devices.join(', ')}` : 'Kein Keyboard – Tasten antippen oder auf der Startseite koppeln'}
+              </p>
+            </section>
+          )}
+
+          {showBoard && (mode === 'play' || (isKeys && phase === 'checked')) && (
+            <section class={isKeys ? 'board bridge' : 'board'}>
               <Fretboard tuning={exercise.context.tuning} maxFret={exercise.context.range.maxFret} board={showBoard} label="Griffbrett" />
             </section>
           )}
@@ -170,7 +205,9 @@ export function Practice({ drill, state, settings, onState, onDrill, onExit }: P
                 <button class="rate-btn instant" onClick={() => rate('instant')}>✓ Sofort</button>
               </div>
             )}
-            {mode === 'tap' && phase === 'ask' && <button class="primary" disabled={picked.length === 0} onClick={check}>Prüfen</button>}
+            {mode === 'tap' && phase === 'ask' && (
+              <button class="primary" disabled={isKeys ? tapped.length < 3 : picked.length === 0} onClick={check}>Prüfen</button>
+            )}
             {mode === 'tap' && phase === 'checked' && (
               <>
                 <p class={evaluation?.correct ? 'verdict ok' : 'verdict off'}>{evaluation?.correct ? '✓ Richtig' : '✗ Nicht ganz'}</p>

@@ -1,9 +1,9 @@
-import { FretPos, fretSpan, pcAt, pitchAt } from '../../guitar/fretboard';
+import { FretPos, pcAt, pitchAt } from '../../guitar/fretboard';
 import { Chord, chord, chordPcs, chordSymbol, chordToneNames } from '../../theory/chord';
 import { toPc } from '../../theory/pitch';
 import { Note, noteName } from '../../theory/spelling';
-import { INVERSION_NAMES, adjacentStringSets, findVoicings, tab } from '../../voicing/voicing';
-import { assertFocus, drillSpellings, stringNo } from '../common';
+import { INVERSION_NAMES, adjacentStringSets, findVoicings, isShape, tab } from '../../voicing/voicing';
+import { assertFocus, drillSpellings, pickChordRoot, stringNo } from '../common';
 import { ExerciseFamily } from '../types';
 
 export const TRIAD_TYPES = ['maj', 'min', 'dim', 'aug'] as const;
@@ -50,12 +50,12 @@ export const triadBuild: ExerciseFamily<TriadBuildParams, TriadBuildSolution, Tr
       const typeId = focus.typeId ?? rng.pick(TRIAD_TYPES);
       const inversion = focus.inversion ?? rng.int(0, 2);
       const strings = focus.lowString !== undefined ? sets.find((s) => s[0] === focus.lowString)! : rng.pick(sets);
-      const root = rng.pick(drillSpellings(focus.pc ?? rng.int(0, 11)));
+      const root = pickChordRoot(rng, focus.pc ?? rng.int(0, 11), typeId);
       const c = chord(root, typeId);
       // Skip spellings that need double accidentals (D#aug would need F## and A##; Eb aug is used instead).
       if (chordToneNames(c).some((n) => /##|bb/.test(n))) continue;
       const voicings = findVoicings(tuning, c, {
-        minFret: range.minFret, maxFret: range.maxFret, maxSpan, strings, noDoubling: true, inversion,
+        minFret: range.minFret, maxFret: range.maxFret, maxSpan, strings, noDoubling: true, inversion, shape: true,
       });
       if (voicings.length === 0) continue;
       return {
@@ -83,7 +83,7 @@ export const triadBuild: ExerciseFamily<TriadBuildParams, TriadBuildSolution, Tr
             drillSpellings(pc).some((root) => {
               const c = chord(root, typeId);
               if (chordToneNames(c).some((n) => /##|bb/.test(n))) return false;
-              return findVoicings(tuning, c, { minFret: range.minFret, maxFret: range.maxFret, maxSpan, strings, noDoubling: true, inversion }).length > 0;
+              return findVoicings(tuning, c, { minFret: range.minFret, maxFret: range.maxFret, maxSpan, strings, noDoubling: true, inversion, shape: true }).length > 0;
             }),
           );
           if (feasible) out.push({
@@ -108,7 +108,7 @@ export const triadBuild: ExerciseFamily<TriadBuildParams, TriadBuildSolution, Tr
     const allTones = played.size === 3 && pcs.every((pc) => played.has(pc));
     const bass = given.length ? given.reduce((a, b) => (pitchAt(tuning, b) < pitchAt(tuning, a) ? b : a)) : null;
     const bassOk = bass !== null && toPc(pitchAt(tuning, bass)) === pcs[inversion];
-    const spanOk = fretSpan(given.map((p) => p.fret)) <= maxSpan;
+    const spanOk = given.length > 0 && isShape(tuning, given, maxSpan);
     const correct = inRange && onSet && allTones && bassOk && spanOk;
     const hits = given.filter((p) => pcs.includes(pcAt(tuning, p))).length;
     return { correct, hits, wrong: given.length - hits, missed: Math.max(0, 3 - hits) };

@@ -1,4 +1,5 @@
 import { Tuning } from '../guitar/tuning';
+import { chord, chordTones } from '../theory/chord';
 import { PitchClass } from '../theory/pitch';
 import { Note, enharmonics, noteName, pcName } from '../theory/spelling';
 import { Rng } from './rng';
@@ -17,6 +18,19 @@ export function drillSpellings(pc: PitchClass): Note[] {
   const opts = enharmonics(pc, 1);
   const natural = opts.filter((n) => n.acc === 0);
   return natural.length > 0 ? natural : opts;
+}
+
+/**
+ * Root spelling for a chord drill: the one whose chord tones need the fewest accidentals
+ * (Ab major, not G# major with B#). Ties are broken by the rng.
+ */
+export function pickChordRoot(rng: Rng, pc: PitchClass, typeId: string): Note {
+  const options = drillSpellings(pc).map((root) => ({
+    root,
+    cost: chordTones(chord(root, typeId)).reduce((a, n) => a + Math.abs(n.acc), 0),
+  }));
+  const best = Math.min(...options.map((o) => o.cost));
+  return rng.pick(options.filter((o) => o.cost === best)).root;
 }
 
 export function pickSpelling(rng: Rng, pc: PitchClass): Note {

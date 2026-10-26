@@ -78,8 +78,8 @@ describe('fret span', () => {
 });
 
 describe('exercise registry', () => {
-  it('has the four v0.1 families', () => {
-    expect(listFamilies().map((f) => f.id)).toEqual(['note-find', 'interval-hunt', 'melody-chord', 'triad-build']);
+  it('has all registered families', () => {
+    expect(listFamilies().map((f) => f.id)).toEqual(['note-find', 'interval-hunt', 'melody-chord', 'triad-build', 'keys-chord']);
   });
   it('rejects unknown families', () => {
     expect(() => generateExercise('nope', 1)).toThrow(/Unknown exercise family/);
@@ -173,8 +173,9 @@ describe('coverage over 1,000 seeds', () => {
     const seen = new Set(seeds.map((s) => generateExercise('interval-hunt', s).skills[0].split('/').slice(0, 2).join('/')));
     expect(seen.size).toBe(24);
   });
-  it('triad-build reaches 4 types × 3 inversions × 4 string sets', () => {
-    expect(new Set(seeds.flatMap((s) => generateExercise('triad-build', s).skills)).size).toBe(48);
+  it('triad-build reaches 4 types × 3 inversions × 4 string sets, minus dim root position on 5-4-3 and 6-5-4', () => {
+    // Those need a 5-fret stretch on fourth-tuned strings (see voicing tests).
+    expect(new Set(seeds.flatMap((s) => generateExercise('triad-build', s).skills)).size).toBe(46);
   });
   it('melody-chord reaches every degree in major and minor', () => {
     expect(new Set(seeds.flatMap((s) => generateExercise('melody-chord', s).skills)).size).toBe(14);
@@ -190,6 +191,17 @@ describe('musical spot checks via focus', () => {
   it('note-find: E on the low string is fret 0 and 12', () => {
     const ex = generateExercise<NoteFindParams, NoteFindSolution>('note-find', 1, DEFAULT_CONTEXT, { pc: 4, string: 0 });
     expect(ex.solution.positions.map((p) => p.fret)).toEqual([0, 12]);
+  });
+  it('triad shapes rise string by string: no open B under a G-string fret 11', () => {
+    for (const seed of seeds) {
+      const ex = generateExercise<TriadBuildParams, TriadBuildSolution>('triad-build', seed);
+      for (const sh of ex.solution.shapes) {
+        const pitches = sh.positions.map((p) => DEFAULT_CONTEXT.tuning.strings[p.string] + p.fret);
+        expect(pitches[0] < pitches[1] && pitches[1] < pitches[2]).toBe(true);
+        const frets = sh.positions.map((p) => p.fret);
+        expect(Math.max(...frets) - Math.min(...frets) + 1 <= 4).toBe(true);
+      }
+    }
   });
   it('interval-hunt across G/B: major 3rd up from G string to B string', () => {
     for (const seed of seeds.slice(0, 50)) {

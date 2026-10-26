@@ -10,7 +10,7 @@ import { LearnerState, SkillStats, helpLevelFor, mastery } from '../mastery/mode
  * decides when to move on. Nothing is skipped – a drill you already know is simply
  * comfortable after a few minutes.
  */
-export type TrackId = 'fretboard' | 'intervals' | 'triads' | 'melody';
+export type TrackId = 'fretboard' | 'intervals' | 'triads' | 'melody' | 'keys';
 
 export interface Track {
   id: TrackId;
@@ -23,6 +23,7 @@ export const TRACKS: readonly Track[] = [
   { id: 'intervals', title: 'Intervalle', family: 'interval-hunt' },
   { id: 'triads', title: 'Dreiklänge', family: 'triad-build' },
   { id: 'melody', title: 'Melodieton → Akkord', family: 'melody-chord' },
+  { id: 'keys', title: 'Tasten → Gitarre', family: 'keys-chord' },
 ];
 
 export interface Drill {
@@ -118,7 +119,24 @@ const melodySpecs = (): DrillSpec[] =>
     })),
   );
 
+// ── Keys → guitar: build it where the intervals are visible, then carry it over ──
+const keysSpecs = (): DrillSpec[] => [
+  ...(['maj', 'min'] as const).flatMap((type) =>
+    [0, 1, 2].map((inv) => ({
+      id: `${type}/${inv}`,
+      title: `Tasten: ${type === 'maj' ? 'Dur' : 'Moll'}, ${INV_TITLE[inv]}`,
+      match: (s: string) => s === `keys:${type}/inv:${inv}`,
+    })),
+  ),
+  ...(['dim', 'aug'] as const).map((type) => ({
+    id: type,
+    title: `Tasten: ${type === 'dim' ? 'Vermindert' : 'Übermäßig'}, alle Umkehrungen`,
+    match: (s: string) => s.startsWith(`keys:${type}/`),
+  })),
+];
+
 const SPECS: Record<TrackId, () => DrillSpec[]> = {
+  keys: keysSpecs,
   fretboard: fretboardSpecs,
   intervals: intervalSpecs,
   triads: triadSpecs,
