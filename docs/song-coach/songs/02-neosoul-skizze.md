@@ -47,5 +47,8 @@ Längere Fassung (B-Teil mit neuen Akkorden, Drums) erst bei Bedarf.
 - [ ] A1 / A2 (Oktaven) bauen
 - [ ] Intro, Outro, in der Playlist zusammensetzen, MP3 exportieren
 - [ ] Drums: langsamer, schleppender Beat (FPC)
+- [x] User Chords auf dem FLkey: Pad 1 Dbmaj9, 2 C7#9, 3 Fm9, 4 Ebm9, 5 Ab13 (Pad 5 evtl. nochmal sauber einspeichern: Ab tief | Gb C F)
+- [x] Über die Akkorde gejammt (Scale Mode F minor / F minor pentatonic), Melodie-Prinzip: ein Zielton pro Akkord
 
 ## Notizen
+- Selbst gehört, dass nach Ebm9 noch ein Akkord fehlt → Ab13 (ii – V – I in Db).
