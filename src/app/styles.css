@@ -173,6 +173,10 @@ textarea.field-input { resize: vertical; }
 .brief-text { margin: 0; white-space: pre-wrap; font-family: ui-monospace, 'SF Mono', Menlo, monospace; font-size: 16px; line-height: 1.45; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px; color: var(--text); }
 .brief a { color: var(--accent); }
 
+/* ── Chord monitor ─────────────────────────────────────── */
+.monitor .piano { max-width: 1100px; max-height: 30vh; }
+.monitor .target { min-height: 1em; }
+
 /* ── Tuner ────────────────────────────────────────────── */
 .tuner-face { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3vh; text-align: center; }
 .tuner-face .target { font-size: clamp(120px, 22vw, 260px); }
