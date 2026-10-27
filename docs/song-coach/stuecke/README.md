@@ -13,3 +13,9 @@
 - Links ein wiegendes Ostinato **Dbmaj9 | Bbm11**, im Mittelteil **Dbmaj9 | Gbmaj7#11**.
 - Rechts eine Melodie: Pentatonik → Lydian-Farben (G, C) → Höhepunkt → Theme kehrt zurück.
 - Zwei Tracks (Melodie/Begleitung) plus Sustain-Pedal (CC64).
+
+## Claude Debussy – Clair de Lune (Suite bergamasque, 1905)
+
+- Datei: `debussy-clair-de-lune.mid` (ca. 5:24, Db major, 9/8, zwei Tracks: upper/lower)
+- Quelle: [Mutopia Project](https://www.mutopiaproject.org), vom Setzer gemeinfrei gestellt (Public Domain).
+  MIDI mit LilyPond erzeugt; Dynamik aktiviert, linke Hand an die Lautstärke der rechten angepasst.
