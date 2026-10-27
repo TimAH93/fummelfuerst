@@ -17,6 +17,18 @@ describe('identify held chords', () => {
     expect(name([60, 64, 68])).toBe('0aug/0'); // symmetric: bass wins
     expect(name([60, 64, 67, 70])).toBe('07/0'); // C7
   });
+  it('names voicings that leave out the perfect fifth, as players do', () => {
+    const name = (m: number[]) => {
+      const h = identifyHeld(m);
+      return h ? `${h.rootPc}${h.type.symbol}` : null;
+    };
+    expect(name([48, 52, 58, 63])).toBe('07#9'); // C E Bb D#
+    expect(name([51, 61, 65, 67, 72])).toBe('313'); // Eb | Db F G C
+    expect(name([41, 56, 63, 67])).toBe('5m9'); // F | Ab Eb G
+    expect(name([48, 52, 59])).toBe('0maj7'); // C E B: the shell voicing (1 3 7) of Cmaj7
+    expect(name([48, 52, 58])).toBe('07'); // C E Bb: shell voicing of C7
+    expect(name([48, 52, 55, 58])).toBe('07'); // exact match still wins over a fifth-less 9th
+  });
   it('returns null for fewer than three pitch classes or unknown sets', () => {
     expect(identifyHeld([60, 72, 64])).toBe(null);
     expect(identifyHeld([60, 62, 67])).toBe(null); // sus2 is not in the chord table

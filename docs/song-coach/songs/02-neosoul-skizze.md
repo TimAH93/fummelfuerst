@@ -17,6 +17,12 @@
 - [`02-neosoul-begleitung.mid`](02-neosoul-begleitung.mid) und [`02-neosoul-melodie.mid`](02-neosoul-melodie.mid):
   dieselbe Musik getrennt, für zwei Kanäle („Piano Begleitung“, „Piano Melodie“)
 
+## Akkord-Spielwiese
+[`02-akkord-spielwiese.mid`](02-akkord-spielwiese.mid): drei Folgen à 4 Takte, 82 BPM, Bass + Akkord ohne Grundton
+- **A – Original:** Dbmaj9 · C7#9 · Fm9 · Ebm9
+- **B – warm, nach Hause:** Bbm9 · Eb13 · Abmaj9 · Dbmaj9 (ii – V – I – IV in Ab major)
+- **C – träumend, abwärts:** Gbmaj9 · Fm9 · Ebm9 · Dbmaj9 (Bass läuft schrittweise runter: Gb F Eb Db)
+
 ## Meine Phrase (Teil A)
 - **Repeated-note pickup:** kurze, wiederholte Cs als Anlauf, dann C lang
 - **Motiv mit Seufzer:** C – Eb – Db – C; Db → C ist **♭6 → 5** in F minor (lament / sigh)
