@@ -19,3 +19,9 @@
 - Datei: `debussy-clair-de-lune.mid` (ca. 5:24, Db major, 9/8, zwei Tracks: upper/lower)
 - Quelle: [Mutopia Project](https://www.mutopiaproject.org), vom Setzer gemeinfrei gestellt (Public Domain).
   MIDI mit LilyPond erzeugt; Dynamik aktiviert, linke Hand an die Lautstärke der rechten angepasst.
+
+## Erik Satie – Gymnopédie No. 1 und No. 3 (1888)
+
+- Dateien: `satie-gymnopedie-1.mid` (ca. 3:33), `satie-gymnopedie-3.mid` (ca. 2:44), 3/4, 66 BPM
+- Quelle: [Mutopia Project](https://www.mutopiaproject.org), vom Setzer gemeinfrei gestellt (Public Domain).
+  MIDI mit LilyPond erzeugt; Wiederholungen ausgeschrieben, linke Hand an die Lautstärke der rechten angepasst.
