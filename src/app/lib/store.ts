@@ -14,6 +14,8 @@ export interface Settings {
   link?: { role: 'host' | 'join'; code: string };
   /** Key the jam screen reads chords in; unset = read it from the chords played. */
   jamKey?: { tonic: string; mode: KeyMode } | null;
+  /** Jam screen "Mehr": key, function, melody guide and next chords on top of the plain chord name. */
+  jamDetails?: boolean;
   /** Tempo the recorder snaps chord lengths to. */
   recBpm?: number;
   /** Songs finished before the app counted them. */
