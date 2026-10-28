@@ -10,6 +10,8 @@ export interface PianoMarks {
   held?: number[];
   right?: number[];
   wrong?: number[];
+  /** A chord picked from a suggestion: shown in amber until keys are pressed. */
+  pick?: number[];
   /** Small markers on keys (melody guide): kind decides the look, label is a degree like '3' or 'b7'. */
   dots?: Record<number, { kind: DotKind; label?: string }>;
 }
@@ -25,7 +27,7 @@ export function Piano({ low = 48, high = 84, marks, onToggle, noteNames = 'inter
   const H = 180;
   const width = whites.length * W;
   const cls = (m: number) =>
-    marks.wrong?.includes(m) ? 'wrong' : marks.right?.includes(m) ? 'right' : marks.held?.includes(m) ? 'held' : '';
+    marks.wrong?.includes(m) ? 'wrong' : marks.right?.includes(m) ? 'right' : marks.held?.includes(m) ? 'held' : marks.pick?.includes(m) ? 'pick' : '';
   const whiteX = (m: number) => whites.indexOf(m) * W;
   const blacks: number[] = [];
   for (let m = low; m <= high; m++) if (BLACK.has(m % 12)) blacks.push(m);
