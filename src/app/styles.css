@@ -279,6 +279,17 @@ textarea.field-input { resize: vertical; }
 .piano .dot.avoid text { fill: var(--off); }
 .piano .black ~ .dot.avoid text { fill: var(--off); }
 
+/* ── Segmented mode switch, found chords ─────────────── */
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; }
+.seg-btn { background: transparent; border: none; min-height: 44px; padding: 0 16px; font-size: 17px; color: var(--muted); }
+.seg-btn.on { background: var(--surface); color: var(--text); }
+.found { display: flex; flex-direction: column; align-items: center; gap: 10px; width: 100%; }
+.found-list { display: flex; flex-direction: column; align-items: center; gap: 8px; width: 100%; }
+.found-chip { display: inline-flex; align-items: stretch; border: 2px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--surface); }
+.found-chip.on { border-color: var(--ok); }
+.found-name { background: transparent; border: none; font-size: 20px; font-weight: 700; padding: 8px 14px; }
+.found-act { background: transparent; border: none; border-left: 1px solid var(--line); color: var(--muted); font-size: 16px; padding: 0 12px; }
+
 /* ── Recorder ─────────────────────────────────────────── */
 .field.inline { flex-direction: row; align-items: center; gap: 8px; max-width: none; }
 .field.inline .field-input { width: 90px; font-size: 20px; padding: 8px 10px; text-align: center; }

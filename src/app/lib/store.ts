@@ -14,8 +14,8 @@ export interface Settings {
   link?: { role: 'host' | 'join'; code: string };
   /** Key the jam screen reads chords in; unset = read it from the chords played. */
   jamKey?: { tonic: string; mode: KeyMode } | null;
-  /** Jam screen "Mehr": key, function, melody guide and next chords on top of the plain chord name. */
-  jamDetails?: boolean;
+  /** Jam screen mode: plain overview, chord finding (key, function, next chords) or melody guide. */
+  jamMode?: 'overview' | 'chords' | 'melody';
   /** Tempo the recorder snaps chord lengths to. */
   recBpm?: number;
   /** Songs finished before the app counted them. */
@@ -137,3 +137,19 @@ export async function loadSessions(): Promise<SessionEntry[]> {
 }
 
 export const saveSessions = (log: SessionEntry[]): Promise<IDBValidKey> => tx('kv', 'readwrite', (st) => st.put(log.slice(-200), 'sessions'));
+
+/** Chords the player found and liked on the jam screen, newest last. */
+export interface FoundChord {
+  at: number;
+  midis: number[];
+}
+
+export async function loadFound(): Promise<FoundChord[]> {
+  try {
+    return (await tx<FoundChord[] | undefined>('kv', 'readonly', (s) => s.get('found'))) ?? [];
+  } catch {
+    return [];
+  }
+}
+
+export const saveFound = (list: FoundChord[]): Promise<IDBValidKey> => tx('kv', 'readwrite', (st) => st.put(list.slice(-40), 'found'));

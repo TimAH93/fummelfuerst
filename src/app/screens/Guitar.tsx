@@ -5,7 +5,7 @@ import {
 } from '../../core';
 import { Fretboard } from '../components/Fretboard';
 import { Grip } from '../components/Grip';
-import { showChord } from '../lib/names';
+import { showChord, showDegree } from '../lib/names';
 import { context } from '../lib/session';
 import { Settings, loadBrief } from '../lib/store';
 import { useWakeLock } from '../lib/wakeLock';
@@ -45,7 +45,7 @@ export function Guitar({ pads, settings, onExit }: Props) {
   const fit = analyzeProgression(parsed.progs)[0];
   const key: Key | null = fit ? { tonic: fit.tonic, mode: fit.mode } : null;
   const overChord = over !== null && chords[over] ? chords[over] : null;
-  const dots = key && plan ? soloBoard(tuning, key, plan.capo, pentatonic, overChord) : [];
+  const dots = key && plan ? soloBoard(tuning, key, plan.capo, pentatonic, overChord).map((d) => ({ ...d, label: d.label ? showDegree(d.label) : d.label })) : [];
   const fromBrief = async () => setText((await loadBrief()).chords);
   const scaleName = key ? `${keyLabel(key).split(' ')[0]} ${pentatonic ? (key.mode === 'major' ? 'major pentatonic' : 'minor pentatonic') : key.mode === 'major' ? 'major' : 'natural minor'}` : '';
 
@@ -85,7 +85,7 @@ export function Guitar({ pads, settings, onExit }: Props) {
                   {g ? (
                     <>
                       <span class="grip-shape">{plan.capo > 0 || g.simplified ? `Griff: ${showChord(g.plays, style)}${g.simplified ? ' *' : ''}` : ' '}</span>
-                      <Grip frets={g.frets} labels={g.labels} title={`${showChord(g.plays, style)} ${g.tab}`} />
+                      <Grip frets={g.frets} labels={g.labels.map((l) => (l ? showDegree(l) : l))} title={`${showChord(g.plays, style)} ${g.tab}`} />
                       <span class="grip-tab">{g.tab}</span>
                     </>
                   ) : (
