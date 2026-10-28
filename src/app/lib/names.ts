@@ -28,7 +28,7 @@ export const FUNCTION_DE: Record<string, string> = {
 };
 
 export const keyName = (tonic: Note, mode: 'major' | 'naturalMinor', style: NoteNames): string =>
-  mode === 'major' ? `${showNote(tonic, style)}-Dur` : `${showNote(tonic, style).toLowerCase()}-Moll`;
+  `${showNote(tonic, style)} ${mode === 'major' ? 'major' : 'minor'}`;
 
 /** Guitarist numbering with the open-string name: 'Saite 5 (A)'. */
 export const stringName = (stringNo: number, openName: string): string => `Saite ${stringNo} (${openName})`;

@@ -1,4 +1,4 @@
-import { Attempt, LearnerState, Part, Stuck, TrackId, emptyState, parseState } from '../../core';
+import { Attempt, KeyMode, LearnerState, Part, Stuck, TrackId, emptyState, parseState } from '../../core';
 
 /** Local persistence: one IndexedDB database, a key-value store plus an append-only attempt log. */
 const DB_NAME = 'fummelfuerst';
@@ -12,6 +12,8 @@ export interface Settings {
   a4: number;
   /** Remembered keyboard pairing; resumed when the app opens. */
   link?: { role: 'host' | 'join'; code: string };
+  /** Key the jam screen reads chords in; unset = read it from the chords played. */
+  jamKey?: { tonic: string; mode: KeyMode } | null;
 }
 
 export const DEFAULT_SETTINGS: Settings = { track: 'fretboard', noteNames: 'international', a4: 440 };

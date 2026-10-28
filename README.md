@@ -31,9 +31,14 @@ Adaptive guitar improvisation trainer: hear → understand → locate → play �
   the way keyboard players voice them – root in the left hand, colour tones without the root in the
   right. Checked by function: guide tones (3rd, 7th) and colour (9, #9, 13) must be there, the plain
   fifth may be left out. The reveal shows a jazz guitar grip with the root in the bass.
-- **"Was spiele ich?"** – live chord monitor: whatever is held on the (paired) keyboard is named
-  with each tone's role (Dbmaj9: Db 1 · F 3 · Ab 5 · C 7 · Eb 9). Handy for FLkey pad chords,
-  which the device itself does not name.
+- **"Was spiele ich?"** – jam screen for FLkey pad chords (the device itself does not name them):
+  the held chord with each tone's role (Dbmaj9: Db 1 · F 3 · Ab 5 · C 7 · Eb 9), its function in
+  the key (ii9 in Db major · "bereitet die V vor"; secondary dominants read as V7/iii), two or
+  three chords that tend to come next with the reason in a few words, and a melody guide on the
+  keyboard: 3rd and 7th as targets, extensions as colour, scale tones as safe passing notes, the
+  avoid note ringed. A melody key played over the chord is named live ("Bb = 11 über Fm9:
+  Durchgang"). The chord stays after the pad is released; the key is read from the chords played
+  (sticky, so Db major / F minor loops do not flicker) or locked by hand.
 - **Song brief** – for getting from a loop to a song with a Claude "Song-Coach" project:
   type or record the loop's chords from the keyboard; the app detects the key (all 24 keys
   ranked; relative-key ambiguity is shown, borrowed chords like ♭VII flagged), adds tempo,

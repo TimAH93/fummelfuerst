@@ -48,9 +48,20 @@ export function chordFromHeld(midis: Midi[]): ProgChord | null {
 }
 
 const pcsOf = (c: ProgChord): PitchClass[] => chordType(c.typeId).formula.map((d) => toPc(c.rootPc + degreeSemitones(d)));
+/** Root, third, fifth, seventh: what decides whether a chord is at home. Extensions (9, 13) are colour. */
+const corePcs = (c: ProgChord): PitchClass[] =>
+  chordType(c.typeId).formula.filter((d) => d.number <= 7).map((d) => toPc(c.rootPc + degreeSemitones(d)));
+
+/** A key as the app talks about it: tonic plus major / natural minor. */
+export interface Key {
+  tonic: Note;
+  mode: KeyMode;
+}
+
+export const keyScale = (k: Key): Scale => scale(k.tonic, k.mode);
 
 /** Spell a root inside a key: the scale's own letter when it is a scale tone, otherwise a lowered degree (♭VII, ♭VI …). */
-function spellRoot(key: Scale, pc: PitchClass): { note: Note; step: number; acc: number } {
+export function spellInKey(key: Scale, pc: PitchClass): { note: Note; step: number; acc: number } {
   const notes = scaleNotes(key);
   const exact = notes.findIndex((n) => notePc(n) === pc);
   if (exact >= 0) return { note: notes[exact], step: exact, acc: 0 };
@@ -71,13 +82,13 @@ const SUFFIX: Record<string, string> = {
   maj9: 'maj9', m9: '9', dom9: '9', dom7s9: '7#9', dom13: '13',
 };
 
-function numeralIn(key: Scale, mode: KeyMode, c: ProgChord): Numeral {
-  const { note, step, acc } = spellRoot(key, c.rootPc);
+export function numeralIn(key: Scale, mode: KeyMode, c: ProgChord): Numeral {
+  const { note, step, acc } = spellInKey(key, c.rootPc);
   const type = chordType(c.typeId);
   const minorish = type.formula.some((d) => d.number === 3 && d.acc === -1);
   const base = NUMERALS[step];
   const roman = (acc < 0 ? '♭' : acc > 0 ? '♯' : '') + (minorish ? base.toLowerCase() : base) + SUFFIX[c.typeId];
-  const inScale = pcsOf(c).every((p) => scalePcs(key).includes(p));
+  const inScale = corePcs(c).every((p) => scalePcs(key).includes(p));
   const harmonicMinorDominant =
     mode === 'naturalMinor' && step === 4 && acc === 0 && ['maj', 'dom7', 'dom9', 'dom7s9', 'dom13'].includes(c.typeId);
   return { symbol: noteName(note) + type.symbol, roman, diatonic: inScale, harmonicMinorDominant: harmonicMinorDominant || undefined };
@@ -114,8 +125,6 @@ export function analyzeProgression(chords: ProgChord[]): KeyFit[] {
 /** True when the runner-up is close enough to mention (typically the relative key). */
 export const isAmbiguous = (fits: KeyFit[]): boolean => fits.length > 1 && fits[0].score - fits[1].score < 1;
 
-export function keyLabel(f: KeyFit): string {
-  const t = noteName(f.tonic);
-  return f.mode === 'major' ? `${t}-Dur` : `${t.toLowerCase()}-Moll`;
-}
+/** "Db major", "F minor" – English terms, as on the FLkey and in FL Studio. */
+export const keyLabel = (k: Key): string => `${noteName(k.tonic)} ${k.mode === 'major' ? 'major' : 'minor'}`;
 

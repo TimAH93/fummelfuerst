@@ -46,7 +46,7 @@ export function App() {
           onState={updateState} onDrill={(drill) => setScreen({ name: 'practice', drill })} onExit={home} />
       );
     case 'monitor':
-      return <ChordMonitor settings={settings} onExit={home} />;
+      return <ChordMonitor settings={settings} onSettings={updateSettings} onExit={home} />;
     case 'brief':
       return <SongBrief onExit={home} />;
     case 'link':

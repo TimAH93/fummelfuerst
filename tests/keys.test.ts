@@ -28,6 +28,8 @@ describe('identify held chords', () => {
     expect(name([48, 52, 59])).toBe('0maj7'); // C E B: the shell voicing (1 3 7) of Cmaj7
     expect(name([48, 52, 58])).toBe('07'); // C E Bb: shell voicing of C7
     expect(name([48, 52, 55, 58])).toBe('07'); // exact match still wins over a fifth-less 9th
+    expect(name([44, 54, 60, 65])).toBe('813'); // Ab | Gb C F: a 13th chord without fifth and ninth
+    expect(name([48, 52, 58, 62])).toBe('09'); // C E Bb D: the ninth itself must be there for a 9th chord
   });
   it('returns null for fewer than three pitch classes or unknown sets', () => {
     expect(identifyHeld([60, 72, 64])).toBe(null);
