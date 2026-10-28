@@ -10,10 +10,26 @@
   --accent: #7cc4ff;
   --radius: 18px;
   --tap: 72px;
+  --title-font: inherit;
+  --title-weight: 700;
+  --title-style: normal;
+  --title-spacing: 0;
+  --title-transform: none;
   color-scheme: dark;
   font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   font-variant-numeric: tabular-nums;
 }
+
+/* Ranks (songs finished) tint the app a little; data-level comes from the song count. */
+:root[data-level="1"] { --bg: #0a0c11; --surface: #15181f; --accent: #8fd0ff; --title-font: Georgia, 'Times New Roman', serif; }
+:root[data-level="2"] { --bg: #0d0a12; --surface: #19152a; --accent: #b39cff; --title-font: Georgia, serif; --title-style: italic; }
+:root[data-level="3"] { --bg: #0a100d; --surface: #141f19; --accent: #5fe3a1; --title-spacing: 0.08em; --title-transform: uppercase; --title-weight: 800; }
+:root[data-level="4"] { --bg: #110d0a; --surface: #211913; --accent: #ffb86b; --title-font: 'Palatino Linotype', Palatino, Georgia, serif; --title-weight: 600; }
+:root[data-level="5"] { --bg: #110a10; --surface: #221526; --accent: #ff9ad5; --title-font: Georgia, serif; --title-weight: 800; --title-spacing: 0.04em; }
+:root[data-level="6"] { --bg: #0a0f12; --surface: #132026; --accent: #6fe0e6; --title-font: ui-monospace, Menlo, monospace; --title-spacing: 0.06em; }
+:root[data-level="7"] { --bg: #12100a; --surface: #262114; --accent: #ffd36b; --title-font: Georgia, serif; --title-style: italic; --title-weight: 800; }
+:root[data-level="8"] { --bg: #130a0c; --surface: #26141a; --accent: #ff8f8f; --title-font: 'Palatino Linotype', Palatino, serif; --title-transform: uppercase; --title-spacing: 0.12em; }
+:root[data-level="9"] { --bg: #0e0e0a; --surface: #262414; --accent: #ffe680; --title-font: Georgia, serif; --title-weight: 900; --title-spacing: 0.1em; --title-transform: uppercase; }
 
 * { box-sizing: border-box; }
 html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text); }
@@ -48,6 +64,32 @@ button:disabled { opacity: 0.4; cursor: default; }
 .drill-name { font-size: 20px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .home .bar { flex-wrap: wrap; }
 .quiet.small { min-height: 40px; font-size: 16px; padding: 0 14px; }
+
+/* ── Brand with the song count ───────────────────────── */
+.brand { display: flex; flex-direction: column; align-items: flex-start; gap: 3px; background: transparent; border: none; padding: 4px 0; text-align: left; min-width: 180px; }
+.brand-name { font-size: 22px; color: var(--text); font-family: var(--title-font); font-weight: var(--title-weight); font-style: var(--title-style); letter-spacing: var(--title-spacing); text-transform: var(--title-transform); }
+.brand-emblem { color: var(--accent); }
+.brand-songs { font-size: 14px; color: var(--muted); }
+.brand-bar { width: 160px; height: 4px; border-radius: 999px; background: var(--surface); overflow: hidden; }
+.brand-fill { display: block; height: 100%; background: var(--accent); }
+.songs-panel { display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 1100px; margin: 0 auto; padding: 14px 18px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); }
+.ranks { display: flex; flex-wrap: wrap; gap: 8px; }
+.rank { padding: 4px 10px; border-radius: 999px; border: 1px solid var(--line); font-size: 14px; color: var(--muted); }
+.rank.reached { color: var(--text); border-color: var(--muted); }
+.rank.now { border-color: var(--accent); color: var(--accent); }
+
+/* ── Celebration ──────────────────────────────────────── */
+.celebrate { min-height: 100dvh; display: flex; align-items: center; justify-content: center; padding: 24px; background: var(--bg); }
+.celebrate-card { position: relative; display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; max-width: 700px; padding: 40px 32px; border-radius: 28px; background: var(--surface); border: 2px solid var(--accent); animation: pop 400ms ease-out; }
+.celebrate-number { font-size: clamp(96px, 20vw, 220px); font-weight: 900; line-height: 1; color: var(--accent); }
+.celebrate-what { font-size: 24px; color: var(--muted); margin-top: -8px; }
+.celebrate-card .drill-title { font-family: var(--title-font); font-style: var(--title-style); letter-spacing: var(--title-spacing); text-transform: var(--title-transform); }
+.celebrate-notes { position: absolute; inset: 0; pointer-events: none; overflow: hidden; border-radius: 28px; }
+.celebrate-notes span { position: absolute; bottom: -40px; font-size: 40px; color: var(--accent); opacity: 0; animation: rise 2.4s ease-out infinite; }
+.celebrate-notes span:nth-child(1) { left: 10%; } .celebrate-notes span:nth-child(2) { left: 30%; } .celebrate-notes span:nth-child(3) { left: 50%; } .celebrate-notes span:nth-child(4) { left: 70%; } .celebrate-notes span:nth-child(5) { left: 88%; }
+@keyframes pop { from { transform: scale(0.92); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+@keyframes rise { 0% { transform: translateY(0) rotate(-10deg); opacity: 0; } 15% { opacity: 0.8; } 100% { transform: translateY(-120vh) rotate(15deg); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .celebrate-card, .celebrate-notes span { animation: none; } .celebrate-notes { display: none; } }
 
 /* ── Home: three areas ──────────────────────────────────── */
 .home-grid { display: flex; flex-direction: column; gap: clamp(18px, 3vh, 36px); width: 100%; max-width: 1100px; margin: 0 auto; }
