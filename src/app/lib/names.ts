@@ -32,3 +32,6 @@ export const keyName = (tonic: Note, mode: 'major' | 'naturalMinor', style: Note
 
 /** Guitarist numbering with the open-string name: 'Saite 5 (A)'. */
 export const stringName = (stringNo: number, openName: string): string => `Saite ${stringNo} (${openName})`;
+
+/** Degree tokens with real accidentals: 'b3' → '♭3', '#9' → '♯9' – so a ♭ is never read as the note B. */
+export const showDegree = (tok: string): string => tok.replace(/bb/g, '𝄫').replace(/b/g, '♭').replace(/#/g, '♯');

@@ -48,6 +48,9 @@ der Coach verweisen kann:
 - **Summen** – Idee ins Tablet summen/pfeifen → Noten auf dem Raster, Tonart-Tipp, MIDI-Export.
 - **Im Takt** – Click mit Vorzähler, jeder Pad-Wechsel wird gegen die Eins bewertet (±80 ms);
   4 saubere Loops in Folge = Live-Loop-Stufe 1.
+- **Lexikon** – Akkorde und Folgen nach Genre in der gewählten Tonart, zum Anhören auf dem Tablet,
+  auf die Pads legen oder als MIDI. **Dein Spiel** (im Jam-Screen): was oft gespielt wird, Wechsel,
+  Tonart, Genre-Tendenz und Vorschläge; CSV-Export.
 - **Gitarre** – Akkorde (z. B. von den Pads) als Griffe mit Tab, Capo-Rechner (Capo 1 → C-Formen
   für die Db-Akkorde), Scale zum Drüberspielen ab Capo gezählt, Zieltöne pro Akkord.
 - **Pads** – Karte der 16 User-Chord-Pads mit Anleitung zum Speichern (inkl. Octave –).

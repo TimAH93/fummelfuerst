@@ -119,6 +119,18 @@ describe('chords', () => {
       dom9: 'C E G Bb D',
       dom7s9: 'C E G Bb D#', // the #9 is D#, not Eb
       dom13: 'C E G Bb D A',
+      sus2: 'C D G',
+      sus4: 'C F G',
+      add9: 'C E G D',
+      madd9: 'C Eb G D',
+      six: 'C E G A',
+      m6: 'C Eb G A',
+      sixnine: 'C E G A D',
+      m11: 'C Eb G Bb D F',
+      dom7sus4: 'C F G Bb',
+      dom7b9: 'C E G Bb Db',
+      maj7s11: 'C E G B F#',
+      mMaj7: 'C Eb G B',
     });
   });
   it('parses chord symbols', () => {

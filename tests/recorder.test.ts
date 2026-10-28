@@ -47,7 +47,7 @@ describe('recording', () => {
     r = recordStep(r, [53, 56, 60], 0, 82); // Fm
     r = recordStep(r, [53, 56, 60, 63, 67], 200, 82); // grows to Fm9
     r = recordStep(r, [...PAD3, 80], 500, 82); // Ab on top: melody
-    r = recordStep(r, [60, 62, 67], 900, 82); // sus2: unknown, ignored
+    r = recordStep(r, [60, 61, 62], 900, 82); // a cluster: unknown, ignored
     r = recordStep(r, PAD3.map((m) => m + 12), BAR, 82); // same chord again
     expect(r.chords.length).toBe(1);
     expect(r.chords[0].chord.typeId).toBe('m9');

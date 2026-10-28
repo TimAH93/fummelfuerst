@@ -33,7 +33,11 @@ describe('identify held chords', () => {
   });
   it('returns null for fewer than three pitch classes or unknown sets', () => {
     expect(identifyHeld([60, 72, 64])).toBe(null);
-    expect(identifyHeld([60, 62, 67])).toBe(null); // sus2 is not in the chord table
+    expect(identifyHeld([60, 61, 62])).toBe(null); // a cluster is no chord
+    expect(identifyHeld([60, 62, 67])?.type.id).toBe('sus2'); // Csus2 – and Gsus4 with G in the bass
+    expect(identifyHeld([55, 60, 62])?.type.id).toBe('sus4');
+    expect(identifyHeld([60, 64, 67, 69])?.type.id).toBe('six'); // C6 – and Am7 with A in the bass
+    expect(identifyHeld([57, 60, 64, 67])?.type.id).toBe('m7');
   });
 });
 

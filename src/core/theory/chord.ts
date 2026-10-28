@@ -36,6 +36,19 @@ export const CHORD_TYPES: readonly ChordType[] = [
   def('dom9', 'dominant 9', '9', ['dom9'], '1 3 5 b7 9'),
   def('dom7s9', 'dominant 7 sharp 9', '7#9', ['7(#9)', '7+9'], '1 3 5 b7 #9'),
   def('dom13', 'dominant 13', '13', ['dom13'], '1 3 5 b7 9 13'),
+  // Colour chords from the lexicon: suspensions, added tones, sixths, elevenths, altered ninths.
+  def('sus2', 'suspended 2', 'sus2', ['2'], '1 2 5'),
+  def('sus4', 'suspended 4', 'sus4', ['sus'], '1 4 5'),
+  def('add9', 'added 9', 'add9', ['add2', '(add9)'], '1 3 5 9'),
+  def('madd9', 'minor added 9', 'm(add9)', ['madd9', 'madd2', 'm(add2)'], '1 b3 5 9'),
+  def('six', 'major 6', '6', ['maj6', 'M6'], '1 3 5 6'),
+  def('m6', 'minor 6', 'm6', ['min6', '-6'], '1 b3 5 6'),
+  def('sixnine', '6/9', '6/9', ['69', '6add9'], '1 3 5 6 9'),
+  def('m11', 'minor 11', 'm11', ['min11', '-11'], '1 b3 5 b7 9 11'),
+  def('dom7sus4', 'dominant 7 sus 4', '7sus4', ['7sus'], '1 4 5 b7'),
+  def('dom7b9', 'dominant 7 flat 9', '7b9', ['7(b9)', '7-9'], '1 3 5 b7 b9'),
+  def('maj7s11', 'major 7 sharp 11', 'maj7#11', ['M7#11', 'Δ#11'], '1 3 5 7 #11'),
+  def('mMaj7', 'minor major 7', 'mMaj7', ['m(maj7)', 'mM7', '-Δ7'], '1 b3 5 7'),
 ];
 
 export const chordType = (id: string): ChordType => {

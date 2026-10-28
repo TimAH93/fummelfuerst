@@ -38,6 +38,13 @@ describe('chord function in a key', () => {
   it('spells the root for the key', () => {
     expect(chordFunction(key('E'), one('D#m7')).root).toEqual(parseNote('D#'));
     expect(chordFunction(DB, one('D#m7')).root).toEqual(parseNote('Eb'));
+    expect(chordFunction(DB, one('G7')).root).toEqual(parseNote('G')); // not A𝄫
+    expect(chordFunction(DB, one('G7')).roman).toBe('♯IV7');
+    expect(chordFunction(key('C'), one('Bb')).roman).toBe('♭VII'); // lowered still wins on a tie
+    expect(chordFunction(key('C'), one('F#dim')).roman).toBe('♯iv°');
+    expect(chordFunction(key('C'), one('Db')).roman).toBe('♭II');
+    expect(chordFunction(key('A', 'naturalMinor'), one('G#dim')).roman).toBe('♯vii°');
+    expect(chordFunction(key('A', 'naturalMinor'), one('Bb')).roman).toBe('♭II');
   });
 });
 
@@ -111,9 +118,11 @@ describe('jam state', () => {
   });
   it('does not flip to another root when the melody completes a different chord', () => {
     let s = jamStep(EMPTY_JAM, [60, 64, 67]); // C
-    s = jamStep(s, [60, 64, 67, 69]); // + A = Am7 as a set, but C is being held
+    s = jamStep(s, [60, 64, 67, 65]); // + F: no chord on C contains C E F G, so F is melody
     expect(s.chord).toEqual({ rootPc: 0, typeId: 'maj' });
-    expect(melodyNotes(s, [60, 64, 67, 69])).toEqual([69]);
+    expect(melodyNotes(s, [60, 64, 67, 65])).toEqual([65]);
+    s = jamStep(s, [60, 64, 67, 69]); // + A reads as C6: the same root grown, not a melody note
+    expect(s.chord).toEqual({ rootPc: 0, typeId: 'six' });
   });
   it('upgrades a chord built up slowly instead of calling the extensions melody', () => {
     let s = jamStep(EMPTY_JAM, [53, 56, 60]); // Fm
@@ -124,7 +133,7 @@ describe('jam state', () => {
   });
   it('folds repeats and ignores sets it cannot name', () => {
     let s = jamStep(EMPTY_JAM, PAD3);
-    s = jamStep(s, [60, 62, 67]); // sus2: unknown
+    s = jamStep(s, [60, 61, 62]); // a cluster: unknown
     expect(s.chord?.typeId).toBe('m9');
     s = jamStep(s, PAD3.map((m) => m + 12));
     expect(s.history.length).toBe(1);

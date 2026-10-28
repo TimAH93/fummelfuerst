@@ -60,26 +60,36 @@ export interface Key {
 
 export const keyScale = (k: Key): Scale => scale(k.tonic, k.mode);
 
-/** Spell a root inside a key: the scale's own letter when it is a scale tone, otherwise a lowered degree (♭VII, ♭VI …). */
+/**
+ * Spell a root inside a key: the scale's own letter when it is a scale tone, otherwise the
+ * neighbouring scale tone lowered or raised – whichever needs the fewer accidentals (G in
+ * Db major is ♯IV, not a double-flat ♭V).
+ */
 export function spellInKey(key: Scale, pc: PitchClass): { note: Note; step: number; acc: number } {
   const notes = scaleNotes(key);
   const exact = notes.findIndex((n) => notePc(n) === pc);
   if (exact >= 0) return { note: notes[exact], step: exact, acc: 0 };
-  // Chromatic: name it as the scale tone above, lowered (♭VII in major, ♭II …).
+  const candidates: { note: Note; step: number; acc: number }[] = [];
   const above = notes.findIndex((n) => notePc(n) === toPc(pc + 1));
-  if (above >= 0) {
-    const n = notes[above];
-    return { note: { letter: n.letter as Letter, acc: n.acc - 1 }, step: above, acc: -1 };
-  }
+  if (above >= 0) candidates.push({ note: { letter: notes[above].letter as Letter, acc: notes[above].acc - 1 }, step: above, acc: -1 });
   const below = notes.findIndex((n) => notePc(n) === toPc(pc - 1));
-  const n = notes[below];
-  return { note: { letter: n.letter as Letter, acc: n.acc + 1 }, step: below, acc: 1 };
+  if (below >= 0) candidates.push({ note: { letter: notes[below].letter as Letter, acc: notes[below].acc + 1 }, step: below, acc: 1 });
+  if (candidates.length === 1 || Math.abs(candidates[0].note.acc) !== Math.abs(candidates[1].note.acc)) {
+    return candidates.sort((a, b) => Math.abs(a.note.acc) - Math.abs(b.note.acc))[0];
+  }
+  // A tie between lowered and raised: major keys lower (♭II ♭III ♭VI ♭VII) except the tritone
+  // (♯IV, not ♭V); minor keys raise (♯III ♯IV ♯VI ♯VII) except the Neapolitan ♭II.
+  const [lowered, raised] = candidates;
+  const minor = key.type.id === 'naturalMinor';
+  if (minor) return raised.step === 0 ? lowered : raised;
+  return [0, 3, 4].includes(lowered.step) ? raised : lowered;
 }
 
 const NUMERALS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII'];
 const SUFFIX: Record<string, string> = {
   maj: '', min: '', dim: '°', aug: '+', maj7: 'maj7', m7: '7', dom7: '7', dim7: '°7', m7b5: 'ø7',
   maj9: 'maj9', m9: '9', dom9: '9', dom7s9: '7#9', dom13: '13',
+  sus2: 'sus2', sus4: 'sus4', add9: 'add9', madd9: 'add9', six: '6', m6: '6', sixnine: '6/9', m11: '11', dom7sus4: '7sus4', dom7b9: '7b9', maj7s11: 'maj7#11', mMaj7: 'mMaj7',
 };
 
 export function numeralIn(key: Scale, mode: KeyMode, c: ProgChord): Numeral {

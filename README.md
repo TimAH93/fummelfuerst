@@ -40,6 +40,16 @@ Adaptive guitar improvisation trainer: hear → understand → locate → play �
 - **Reference map** (in Arrangement) – transcribe a form instead of a solo: tap the tempo while
   the reference plays, tap at every section change, and the taps become sections with bar counts
   (snapped to multiples of four when close) as the plan to build on. Core: `song/reference.ts`.
+- **Lexikon** – chords worth knowing and the progressions behind whole genres (Neo-Soul/R&B,
+  Lo-fi, House, Trap, Synthwave/Pop, Klassiker), written as roman numerals (`song/lexicon.ts`, with
+  a small roman-numeral reader) and landed in the key of choice. Hear a chord or a progression on
+  the tablet (`lib/synth.ts`, a small Web Audio e-piano), see it on the keys, keep it, put it on
+  the pads, or save it as MIDI. The chord table grew: sus2, sus4, add9, m(add9), 6, m6, 6/9, m11,
+  7sus4, 7♭9, maj7♯11, mMaj7 – recognised when played, too.
+- **Dein Spiel** (habits, on the jam screen) – every chord recognised goes into a log; from it the
+  most played chords, the recurring changes, the key and the lexicon genre the playing leans to,
+  and nudges: a colour from that genre never played, a continuation after the most-played change
+  not yet tried, a key to leave. CSV export for a database later. Core: `song/habits.ts`.
 - **Gitarre** – the loop's chords as strummable grips (root in the bass, open position first,
   the fifth may go; the full colour falls back to the next simpler type and says so), a capo
   planner that picks the fret where the shapes are easiest (Dbmaj9 · C7#9 · Fm9 · Ebm9 · Ab13 →

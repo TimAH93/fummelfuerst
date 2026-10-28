@@ -1,4 +1,4 @@
-import { Arrangement, Attempt, KeyMode, LearnerState, PadBank, Part, SessionEntry, Stuck, TrackId, emptyBank, emptyState, parseState } from '../../core';
+import { Arrangement, Attempt, KeyMode, LearnerState, PadBank, Part, PlayEntry, SessionEntry, Stuck, TrackId, emptyBank, emptyState, parseState } from '../../core';
 
 /** Local persistence: one IndexedDB database, a key-value store plus an append-only attempt log. */
 const DB_NAME = 'fummelfuerst';
@@ -14,6 +14,8 @@ export interface Settings {
   link?: { role: 'host' | 'join'; code: string };
   /** Key the jam screen reads chords in; unset = read it from the chords played. */
   jamKey?: { tonic: string; mode: KeyMode } | null;
+  /** Jam screen mode: plain overview, chord finding (key, function, next chords) or melody guide. */
+  jamMode?: 'overview' | 'chords' | 'melody';
   /** Tempo the recorder snaps chord lengths to. */
   recBpm?: number;
   /** Songs finished before the app counted them. */
@@ -135,3 +137,30 @@ export async function loadSessions(): Promise<SessionEntry[]> {
 }
 
 export const saveSessions = (log: SessionEntry[]): Promise<IDBValidKey> => tx('kv', 'readwrite', (st) => st.put(log.slice(-200), 'sessions'));
+
+/** Chords the player found and liked on the jam screen, newest last. */
+export interface FoundChord {
+  at: number;
+  midis: number[];
+}
+
+export async function loadFound(): Promise<FoundChord[]> {
+  try {
+    return (await tx<FoundChord[] | undefined>('kv', 'readonly', (s) => s.get('found'))) ?? [];
+  } catch {
+    return [];
+  }
+}
+
+export const saveFound = (list: FoundChord[]): Promise<IDBValidKey> => tx('kv', 'readwrite', (st) => st.put(list.slice(-40), 'found'));
+
+/** Every chord recognised on the jam screen – the playing habits. */
+export async function loadPlayLog(): Promise<PlayEntry[]> {
+  try {
+    return (await tx<PlayEntry[] | undefined>('kv', 'readonly', (s) => s.get('playlog'))) ?? [];
+  } catch {
+    return [];
+  }
+}
+
+export const savePlayLog = (log: PlayEntry[]): Promise<IDBValidKey> => tx('kv', 'readwrite', (st) => st.put(log, 'playlog'));
