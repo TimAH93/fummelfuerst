@@ -30,7 +30,7 @@ und als Kontext für den Song-Coach (Claude-Projekt, siehe README.md in diesem O
    5. Live arrangieren mit den Reglern (Channel Volume): rein, raus, Pause, Drop
 
 Zeit: mehr als 3–4 Sessions pro Woche möglich. Akkorde kommen über die User-Chord-Pads, nicht über
-Fingersätze auf den Tasten.
+Fingersätze auf den Tasten. Lernprinzipien und Wochenrhythmus: [lernplan.md](lernplan.md).
 
 ## Fummelfürst-App (Tablet)
 
