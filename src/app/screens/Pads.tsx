@@ -117,7 +117,7 @@ export function Pads({ pads, onPads, settings, onExit }: Props) {
           <div class="context">
             <b>Pad {sel + 1}</b>{nameOf(sel) ? <> · {nameOf(sel)!.symbol}{nameOf(sel)!.roman ? ` · ${nameOf(sel)!.roman}` : ''}</> : ' · leer'}
           </div>
-          <Piano low={FLKEY_LOW} high={FLKEY_HIGH} marks={marks} />
+          <Piano low={FLKEY_LOW} high={FLKEY_HIGH} marks={marks} noteNames={style} />
           {pad ? (
             <ol class="recipe" data-testid="recipe">
               <li>Pad {sel + 1} <b>halten</b> (User Chord Mode an)</li>
