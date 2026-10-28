@@ -32,6 +32,20 @@ und als Kontext für den Song-Coach (Claude-Projekt, siehe README.md in diesem O
 Zeit: mehr als 3–4 Sessions pro Woche möglich. Akkorde kommen über die User-Chord-Pads, nicht über
 Fingersätze auf den Tasten.
 
+## Fummelfürst-App (Tablet)
+
+Eigene PWA, die mit dem FLkey (direkt per USB oder vom PC gekoppelt) mitliest. Werkzeuge, auf die
+der Coach verweisen kann:
+
+- **Was spiele ich?** – nennt den gehaltenen Akkord (auch Pad-Akkorde), seine Stufe in der Tonart
+  (ii9 in Db major, V7/iii …), 2–3 Folgeakkorde mit Grund, und zeigt Zieltöne/Farbe/Durchgang für
+  die Melodie auf der Klaviatur. Tonart automatisch oder festgelegt.
+- **Aufnehmen** – Akkordfolge vom Keyboard als Chord-Sheet mit Längen; MIDI-Export (auch direkt an
+  den PC), Text, oder in den Song-Steckbrief.
+- **Pads** – Karte der 16 User-Chord-Pads mit Anleitung zum Speichern (inkl. Octave –).
+- **Arrangement** – Teile als Zeitleiste mit Takten und Uhrzeit bei BPM, Vorlagen, Faustregeln.
+- **Song-Steckbrief** – Text für den Coach (Akkorde, Tonart, Stufen, Tempo, was fehlt).
+
 ## Software
 
 | Was | Status | Wofür |

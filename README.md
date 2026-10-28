@@ -39,6 +39,21 @@ Adaptive guitar improvisation trainer: hear → understand → locate → play �
   avoid note ringed. A melody key played over the chord is named live ("Bb = 11 über Fm9:
   Durchgang"). The chord stays after the pad is released; the key is read from the chords played
   (sticky, so Db major / F minor loops do not flicker) or locked by hand.
+- **Akkordfolge aufnehmen** – progression recorder: play the pads in order with FL's metronome
+  running; each chord's length comes from the clock (snapped to 1 / 2 / 4 / 8 / 16 beats, tap a
+  chord to cycle it). The result is a chord sheet with key and numerals, a MIDI file with the
+  voicings as played (download, or "An PC senden" over the pairing so it lands next to FL Studio),
+  text for the song file, or the chords go straight into the song brief. Repeats fold, melody keys
+  on top are ignored, a chord built up slowly (Fm → Fm9) upgrades in place.
+- **Pad-Karte** – what is on the FLkey's 16 User Chord pads (the device never names them), with the
+  numeral in the key. Tap a pad for the recipe to store it: hold the pad, press the keys one at a
+  time, "Octave –" first for a bass below C3. Fill a pad from the keyboard or type a chord symbol and
+  take the suggested voicing (root C3–B3, right hand from C4, so no octave shifting is needed). The
+  jam screen says "Pad 3" when it recognises one.
+- **Arrangement** – planner from loop to song: sections as a timeline with bar numbers and the clock
+  at the tempo (templates: Build-up & Drop, two drops, piano ballad, loop → song, pop, DnB), a big
+  total length, and rules of thumb (nothing longer than 16 bars without a change, a build-up needs
+  its drop, an outro, under a minute). The plan copies as text for the song file.
 - **Song brief** – for getting from a loop to a song with a Claude "Song-Coach" project:
   type or record the loop's chords from the keyboard; the app detects the key (all 24 keys
   ranked; relative-key ambiguity is shown, borrowed chords like ♭VII flagged), adds tempo,
@@ -62,7 +77,7 @@ npm run typecheck
 ## What is here
 
 ```
-src/app/             UI (Preact): screens/ Home · Practice · Tuner, components/, lib/ (store, mic, prompts)
+src/app/             UI (Preact): screens/ Home · Practice · Tuner · ChordMonitor (jam) · Recorder · Pads · Arrangement · SongBrief · Link, components/, lib/
 src/core/            pure TypeScript, no DOM – checked with lib ES2022 only
   theory/   pitch · spelling · interval · scale · chord · harmony
   guitar/   tuning · fretboard

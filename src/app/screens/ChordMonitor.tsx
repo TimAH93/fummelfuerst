@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'preact/hooks';
 import {
-  EMPTY_JAM, Key, KeyMode, MAJOR_TONICS, MINOR_TONICS, autoKey, chord, chordFunction, chordTones, jamStep, melodyGuide,
-  melodyNoteRole, melodyNotes, nextChords, notePc, parseNote, pcToNote, toPc,
+  EMPTY_JAM, Key, KeyMode, MAJOR_TONICS, MINOR_TONICS, PadBank, autoKey, chord, chordFunction, chordTones, jamStep, melodyGuide,
+  melodyNoteRole, melodyNotes, nextChords, notePc, padFor, parseNote, pcToNote, toPc,
 } from '../../core';
 import { DotKind, Piano, PianoMarks } from '../components/Piano';
 import { keyName, showChord, showNote } from '../lib/names';
@@ -12,6 +12,8 @@ import { useWakeLock } from '../lib/wakeLock';
 interface Props {
   settings: Settings;
   onSettings: (s: Settings) => void;
+  /** What is on the FLkey pads, so the screen can say "Pad 3" next to the chord. */
+  pads: PadBank;
   onExit: () => void;
 }
 
@@ -22,7 +24,7 @@ const PIANO_HIGH = 84;
  * Jam screen: the chord held on the keyboard (FLkey pads in User Chord Mode don't show theirs),
  * what it does in the key, which melody tones sit on it, and where it tends to go next.
  */
-export function ChordMonitor({ settings, onSettings, onExit }: Props) {
+export function ChordMonitor({ settings, onSettings, pads, onExit }: Props) {
   useWakeLock();
   const [jam, setJam] = useState(EMPTY_JAM);
   const [auto, setAuto] = useState<Key | null>(null);
@@ -61,6 +63,7 @@ export function ChordMonitor({ settings, onSettings, onExit }: Props) {
   const colours = guide ? guide.tones.filter((t) => t.weight === 'colour') : [];
   const noteOf = (pc: number) => showNote(pcToNote(pc, 'flat'), style);
   const next = c && key ? nextChords(key, c) : [];
+  const padNo = c ? padFor(pads, jam.chordMidis) : null;
   const tonics = (mode: KeyMode) => (mode === 'major' ? MAJOR_TONICS : MINOR_TONICS);
   const pickMode: KeyMode = locked?.mode ?? auto?.mode ?? 'major';
 
@@ -100,7 +103,7 @@ export function ChordMonitor({ settings, onSettings, onExit }: Props) {
         <div class="context" data-testid="chord-function">
           {fn && key ? <><b>{fn.roman}</b> in {keyName(key.tonic, key.mode, style)} · {fn.role}</> : c ? 'Tonart wird erkannt …' : midi.devices.length ? 'Pad oder Akkord drücken' : 'Kein Keyboard – am FLkey anschließen oder koppeln'}
         </div>
-        <p class="meta" data-testid="chord-notes">{tones.join('  ·  ')}</p>
+        <p class="meta" data-testid="chord-notes">{padNo !== null ? `Pad ${padNo + 1}  ·  ` : ''}{tones.join('  ·  ')}</p>
 
         <Piano marks={{ held: jam.chordMidis.filter((m) => midi.held.includes(m)), right: melody, dots }} />
 

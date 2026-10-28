@@ -1,30 +1,41 @@
 import { useEffect, useState } from 'preact/hooks';
-import { Drill, LearnerState } from '../core';
+import { Drill, LearnerState, PadBank, emptyBank } from '../core';
+import { downloadBytes } from './lib/download';
+import { onFile } from './lib/link';
 import { context } from './lib/session';
-import { DEFAULT_SETTINGS, Settings, loadSettings, loadState, saveSettings, saveState } from './lib/store';
+import { DEFAULT_SETTINGS, Settings, loadPads, loadSettings, loadState, savePads, saveSettings, saveState } from './lib/store';
 import { Home } from './screens/Home';
 import { Practice } from './screens/Practice';
 import { Tuner } from './screens/Tuner';
 import { Link, resumeLink } from './screens/Link';
 import { SongBrief } from './screens/SongBrief';
 import { ChordMonitor } from './screens/ChordMonitor';
+import { Recorder } from './screens/Recorder';
+import { Pads } from './screens/Pads';
+import { Arrangement } from './screens/Arrangement';
 
-type Screen = { name: 'home' } | { name: 'practice'; drill: Drill } | { name: 'tuner' } | { name: 'link' } | { name: 'brief' } | { name: 'monitor' };
+type Screen =
+  | { name: 'home' } | { name: 'practice'; drill: Drill } | { name: 'tuner' } | { name: 'link' } | { name: 'brief' }
+  | { name: 'monitor' } | { name: 'recorder' } | { name: 'pads' } | { name: 'arrangement' };
 
 export function App() {
   const [state, setState] = useState<LearnerState | null>(null);
   const [settings, setSettings] = useState<Settings>(DEFAULT_SETTINGS);
   const [screen, setScreen] = useState<Screen>({ name: 'home' });
+  const [pads, setPads] = useState<PadBank>(emptyBank);
 
   useEffect(() => {
-    void Promise.all([loadState(), loadSettings()]).then(([s, st]) => {
+    void Promise.all([loadState(), loadSettings(), loadPads()]).then(([s, st, p]) => {
       setState(s);
       setSettings(st);
+      setPads(p);
       resumeLink(st, (next) => {
         setSettings(next);
         void saveSettings(next);
       });
     });
+    // PC side of a pairing: files the tablet sends (recorded progressions as MIDI) land in Downloads.
+    return onFile((name, mime, data) => downloadBytes(name, mime, data));
   }, []);
 
   if (!state) return <main class="screen" />;
@@ -37,6 +48,10 @@ export function App() {
     setSettings(s);
     void saveSettings(s);
   };
+  const updatePads = (p: PadBank) => {
+    setPads(p);
+    void savePads(p);
+  };
   const home = () => setScreen({ name: 'home' });
 
   switch (screen.name) {
@@ -46,7 +61,13 @@ export function App() {
           onState={updateState} onDrill={(drill) => setScreen({ name: 'practice', drill })} onExit={home} />
       );
     case 'monitor':
-      return <ChordMonitor settings={settings} onSettings={updateSettings} onExit={home} />;
+      return <ChordMonitor settings={settings} onSettings={updateSettings} pads={pads} onExit={home} />;
+    case 'recorder':
+      return <Recorder settings={settings} onSettings={updateSettings} onExit={home} />;
+    case 'pads':
+      return <Pads pads={pads} onPads={updatePads} settings={settings} onExit={home} />;
+    case 'arrangement':
+      return <Arrangement onExit={home} />;
     case 'brief':
       return <SongBrief onExit={home} />;
     case 'link':
@@ -55,6 +76,7 @@ export function App() {
       return <Tuner tuning={context.tuning} settings={settings} onExit={home} />;
     default:
       return <Home state={state} settings={settings} onSettings={updateSettings}
-        onStart={(drill) => setScreen({ name: 'practice', drill })} onTuner={() => setScreen({ name: 'tuner' })} onLink={() => setScreen({ name: 'link' })} onBrief={() => setScreen({ name: 'brief' })} onMonitor={() => setScreen({ name: 'monitor' })} />;
+        onStart={(drill) => setScreen({ name: 'practice', drill })} onTuner={() => setScreen({ name: 'tuner' })} onLink={() => setScreen({ name: 'link' })} onBrief={() => setScreen({ name: 'brief' })} onMonitor={() => setScreen({ name: 'monitor' })}
+        onRecorder={() => setScreen({ name: 'recorder' })} onPads={() => setScreen({ name: 'pads' })} onArrangement={() => setScreen({ name: 'arrangement' })} />;
   }
 }

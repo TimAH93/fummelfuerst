@@ -16,7 +16,7 @@ export const VOICING_TYPES = ['maj7', 'm7', 'dom7', 'm7b5', 'maj9', 'm9', 'dom9'
 export type VoicingType = (typeof VOICING_TYPES)[number];
 
 /** Right-hand voicing, bottom to top, as degree tokens – the sound players reach for. */
-const RIGHT_HAND: Record<VoicingType, string> = {
+export const RIGHT_HAND: Record<VoicingType, string> = {
   maj7: '3 5 7',
   m7: 'b3 5 b7',
   dom7: '3 5 b7',

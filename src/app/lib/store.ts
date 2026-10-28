@@ -1,4 +1,4 @@
-import { Attempt, KeyMode, LearnerState, Part, Stuck, TrackId, emptyState, parseState } from '../../core';
+import { Arrangement, Attempt, KeyMode, LearnerState, PadBank, Part, Stuck, TrackId, emptyBank, emptyState, parseState } from '../../core';
 
 /** Local persistence: one IndexedDB database, a key-value store plus an append-only attempt log. */
 const DB_NAME = 'fummelfuerst';
@@ -14,6 +14,8 @@ export interface Settings {
   link?: { role: 'host' | 'join'; code: string };
   /** Key the jam screen reads chords in; unset = read it from the chords played. */
   jamKey?: { tonic: string; mode: KeyMode } | null;
+  /** Tempo the recorder snaps chord lengths to. */
+  recBpm?: number;
 }
 
 export const DEFAULT_SETTINGS: Settings = { track: 'fretboard', noteNames: 'international', a4: 440 };
@@ -91,3 +93,30 @@ export async function loadBrief(): Promise<BriefDraft> {
 }
 
 export const saveBrief = (b: BriefDraft): Promise<IDBValidKey> => tx('kv', 'readwrite', (st) => st.put(b, 'brief'));
+
+/** What is on the FLkey's User Chord pads. */
+export async function loadPads(): Promise<PadBank> {
+  try {
+    const raw = await tx<PadBank | undefined>('kv', 'readonly', (s) => s.get('pads'));
+    const bank = emptyBank();
+    raw?.forEach((p, i) => { if (p && i < bank.length) bank[i] = p; });
+    return bank;
+  } catch {
+    return emptyBank();
+  }
+}
+
+export const savePads = (b: PadBank): Promise<IDBValidKey> => tx('kv', 'readwrite', (st) => st.put(b, 'pads'));
+
+export const EMPTY_ARRANGEMENT: Arrangement = { bpm: 140, sections: [] };
+
+export async function loadArrangement(): Promise<Arrangement> {
+  try {
+    const raw = await tx<Partial<Arrangement> | undefined>('kv', 'readonly', (s) => s.get('arrangement'));
+    return { ...EMPTY_ARRANGEMENT, ...raw };
+  } catch {
+    return EMPTY_ARRANGEMENT;
+  }
+}
+
+export const saveArrangement = (a: Arrangement): Promise<IDBValidKey> => tx('kv', 'readwrite', (st) => st.put(a, 'arrangement'));
