@@ -45,6 +45,8 @@ export function ChordMonitor({ settings, onSettings, pads, onExit }: Props) {
   const slash = named && bassPc !== null && bassPc !== notePc(named.root) ? ` / ${showNote(pcToNote(bassPc, 'flat'), style)}` : '';
   const symbol = named ? showChord(named, style) + slash : null;
   const tones = named ? chordTones(named).map((n, i) => `${showNote(n, style)} (${named.type.formula[i] ? degreeLabel(named.type.formula[i]) : ''})`) : [];
+  // Before any chord is recognised, single keys still show up by name – a melody line on its own.
+  const heldNames = [...midi.held].sort((a, b) => a - b).map((m) => showNote(pcToNote(toPc(m), 'flat'), style));
 
   const guide = c ? melodyGuide(key, c) : null;
   const melody = melodyNotes(jam, midi.held);
@@ -99,13 +101,13 @@ export function ChordMonitor({ settings, onSettings, pads, onExit }: Props) {
       )}
 
       <section class="focus">
-        <div class="target" data-testid="chord-name">{symbol ?? (midi.held.length ? '–' : ' ')}</div>
+        <div class="target" data-testid="chord-name">{symbol ?? (heldNames.length ? heldNames.join(' ') : ' ')}</div>
         <div class="context" data-testid="chord-function">
           {fn && key ? <><b>{fn.roman}</b> in {keyName(key.tonic, key.mode, style)} · {fn.role}</> : c ? 'Tonart wird erkannt …' : midi.devices.length ? 'Pad oder Akkord drücken' : 'Kein Keyboard – am FLkey anschließen oder koppeln'}
         </div>
-        <p class="meta" data-testid="chord-notes">{padNo !== null ? `Pad ${padNo + 1}  ·  ` : ''}{tones.join('  ·  ')}</p>
+        <p class="meta" data-testid="chord-notes">{padNo !== null ? `Pad ${padNo + 1}  ·  ` : ''}{tones.length ? tones.join('  ·  ') : heldNames.length ? 'Gehalten: ' + heldNames.join(' · ') : ''}</p>
 
-        <Piano marks={{ held: jam.chordMidis.filter((m) => midi.held.includes(m)), right: melody, dots }} noteNames={style} />
+        <Piano marks={{ held: midi.held, right: melody, dots }} noteNames={style} />
 
         <div class={`hint ${melodyRole ? (melodyRole.kind === 'target' || melodyRole.kind === 'colour' ? 'ok' : melodyRole.kind === 'avoid' || melodyRole.kind === 'outside' ? 'off' : '') : ''}`} data-testid="melody-line">
           {melodyRole ? `${melodyName} = ${melodyRole.degree} über ${symbol}: ${melodyRole.text}`
