@@ -7,15 +7,15 @@ herausgezogen und vereinfacht. Nach A minor verschoben: fast nur weiße Tasten.
 - **Grundton + None** (A2 + B3): der Klang, zu dem Henning immer wieder zurückkam → Intro und Outro.
 - **Absteigender Bass A – G – F – E (– E♭ – D) unter liegendem G** → der Break.
 - **i – ♭VII – v – ♭VI** (Hennings B♭m – A♭ – Fm – G♭) → hier **Am – G – Em – F**.
-- **Hennings Two-Step** (Kick 1, „und“ von 1, 3½, kurz vor der nächsten 1; Snare 2 und 4) auf 172 BPM.
+- **DnB-Two-Step** auf 172 BPM: Kick auf 1 und „und“ von 3, Snare auf 2 und 4, Ghost-Snares, rollende Hats; Hennings Extra-Kick auf der letzten Sechzehntel jeden zweiten Takt.
 
 ## Vereinfacht
 - Akkorde **gehalten**, 2 Takte pro Akkord, statt Achtel-/Sechzehntel-Wechsel.
-- Der Bass spielt den Grundton **im Rhythmus der Kick**, damit die Hände nicht springen.
-- Hi-Hats in Achteln statt Sechzehnteln.
+- **Sub-Bass** lang gehalten, ein Ton pro Akkord.
+- In FL **Tempo auf 172** prüfen: beim MIDI-Import wird es nicht immer übernommen.
 
 ## Datei
-- `05-henning-dnb.mid` – 172 BPM, 3 Tracks: Pad, Bass, Drums (GM/FPC: Kick C2, Snare D2, Hat G♭2)
+- `05-henning-dnb.mid` – 172 BPM, 3 Tracks: Pad, Bass, Drums (GM/FPC: Kick C2, Snare D2, Hat G♭2, Open Hat B♭2, Crash D♭3)
 
 ## Aufbau (52 Takte ≈ 73 s)
 | Teil | Takte | Was passiert |
