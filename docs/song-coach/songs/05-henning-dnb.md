@@ -1,5 +1,7 @@
 # Song 05 – Henning DnB (vereinfacht)
 
+**Fest: 172 BPM · A minor.** Zusammen mit Henning: alles, was in den Song soll, mit Metronom in diesem Tempo einspielen.
+
 Aus Hennings Projekt_1 (Score-Log-Rumspielen + gebautes B♭m-Gerüst + DnB-Beat) die guten Ideen
 herausgezogen und vereinfacht. Nach A minor verschoben: fast nur weiße Tasten.
 
