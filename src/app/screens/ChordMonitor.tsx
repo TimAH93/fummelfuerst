@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'preact/hooks';
 import {
-  EMPTY_JAM, INVERSION_NAMES, Key, KeyMode, MAJOR_TONICS, MINOR_TONICS, PadBank, PlayEntry, ProgChord, autoKey, chord, chordFunction, chordTones,
+  EMPTY_JAM, INVERSION_NAMES, loopOf, Key, KeyMode, MAJOR_TONICS, MINOR_TONICS, PadBank, PlayEntry, ProgChord, autoKey, chord, chordFunction, chordTones,
   chordType, degreeSemitones, degreeToString, habits, identifyHeld, jamStep, keyScale, logChord, logCsv, melodyGuide, melodyNoteRole, melodyNotes,
   nextChords, notePc, nudges, padFor, parseNote, pcToNote, spellInKey, suggestVoicing, toPc,
 } from '../../core';
@@ -18,6 +18,8 @@ interface Props {
   /** What is on the FLkey pads, so the screen can say "Pad 3" and put a found chord on a free pad. */
   pads: PadBank;
   onPads: (b: PadBank) => void;
+  /** Practise the progression played so far with the click. */
+  onTrain: (chords: ProgChord[]) => void;
   onExit: () => void;
 }
 
@@ -33,7 +35,7 @@ const OVER_ROOT = ['1', 'b2', '2', 'b3', '3', '4', 'b5', '5', 'b6', '6', 'b7', '
  * what tends to come next. Melodie: which tones sit on the chord. The last two lean on a sticky
  * chord that survives the pad being released.
  */
-export function ChordMonitor({ settings, onSettings, pads, onPads, onExit }: Props) {
+export function ChordMonitor({ settings, onSettings, pads, onPads, onTrain, onExit }: Props) {
   useWakeLock();
   const [jam, setJam] = useState(EMPTY_JAM);
   const [auto, setAuto] = useState<Key | null>(null);
@@ -286,6 +288,9 @@ export function ChordMonitor({ settings, onSettings, pads, onPads, onExit }: Pro
         {mode === 'chords' && jam.history.length > 0 && (
           <div class="next" data-testid="trail">
             <span class="next-label">Bisher gespielt</span>
+            <div class="row center">
+              <button class="pill" onClick={() => { const h = jam.history; const l = loopOf(h); onTrain(l ? h.slice(0, l.period) : h.slice(-8)); }} data-testid="train-trail">▶ Diese Folge üben</button>
+            </div>
             <div class="trail">
               {jam.history.slice(-8).map((pc, i, arr) => {
                 const on = pick !== null && pick.rootPc === pc.rootPc && pick.typeId === pc.typeId;

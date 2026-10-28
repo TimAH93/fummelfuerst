@@ -26,6 +26,7 @@ interface Props {
   onSong: () => void;
   onGuitar: () => void;
   onLexicon: () => void;
+  onTrain: () => void;
 }
 
 function Tile({ name, sub, onClick }: { name: string; sub: string; onClick: () => void }) {
@@ -38,7 +39,7 @@ function Tile({ name, sub, onClick }: { name: string; sub: string; onClick: () =
 }
 
 /** Three areas, in the order the day usually goes: jam, build the song, practise. */
-export function Home({ state, settings, onSettings, onStart, onTuner, onLink, onBrief, onMonitor, onRecorder, onPads, onArrangement, onTiming, onHum, sessions, onSession, songs, onSong, onGuitar, onLexicon }: Props) {
+export function Home({ state, settings, onSettings, onStart, onTuner, onLink, onBrief, onMonitor, onRecorder, onPads, onArrangement, onTiming, onHum, sessions, onSession, songs, onSong, onGuitar, onLexicon, onTrain }: Props) {
   const link = useLink();
   const [showSongs, setShowSongs] = useState(false);
   const exports = weekExports(sessions, Date.now());
@@ -109,6 +110,7 @@ export function Home({ state, settings, onSettings, onStart, onTuner, onLink, on
             <Tile name="Im Takt" sub="Click, Wechsel auf die Eins" onClick={onTiming} />
             <Tile name="Gitarre" sub="Griffe · Capo · Scale zum Loop" onClick={onGuitar} />
             <Tile name="Lexikon" sub="Akkorde & Folgen nach Genre, zum Anhören" onClick={onLexicon} />
+            <Tile name="Folge üben" sub="Deine Pads mit Click, langsam → schneller" onClick={onTrain} />
           </div>
         </section>
 

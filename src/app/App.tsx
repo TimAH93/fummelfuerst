@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'preact/hooks';
-import { Drill, LearnerState, PadBank, SessionEntry, crossed, emptyBank, exportOnly, rankFor, totalSongs } from '../core';
+import { Drill, LearnerState, PadBank, ProgChord, SessionEntry, crossed, emptyBank, exportOnly, padChord, rankFor, totalSongs } from '../core';
 import { downloadBytes } from './lib/download';
 import { onFile } from './lib/link';
 import { context } from './lib/session';
@@ -18,11 +18,12 @@ import { Hum } from './screens/Hum';
 import { Session } from './screens/Session';
 import { Guitar } from './screens/Guitar';
 import { Lexicon } from './screens/Lexicon';
+import { ProgTrainer } from './screens/ProgTrainer';
 import { Celebrate } from './components/Celebrate';
 
 type Screen =
   | { name: 'home' } | { name: 'practice'; drill: Drill } | { name: 'tuner' } | { name: 'link' } | { name: 'brief' }
-  | { name: 'monitor' } | { name: 'recorder' } | { name: 'pads' } | { name: 'arrangement'; reference?: boolean } | { name: 'timing' } | { name: 'hum' } | { name: 'session' } | { name: 'guitar' } | { name: 'lexicon' };
+  | { name: 'monitor' } | { name: 'recorder' } | { name: 'pads' } | { name: 'arrangement'; reference?: boolean } | { name: 'timing' } | { name: 'hum' } | { name: 'session' } | { name: 'guitar' } | { name: 'lexicon' } | { name: 'trainer'; chords: ProgChord[]; bpm?: number };
 
 export function App() {
   const [state, setState] = useState<LearnerState | null>(null);
@@ -89,7 +90,7 @@ export function App() {
           onState={updateState} onDrill={(drill) => setScreen({ name: 'practice', drill })} onExit={home} />
       );
     case 'monitor':
-      return <ChordMonitor settings={settings} onSettings={updateSettings} pads={pads} onPads={updatePads} onExit={home} />;
+      return <ChordMonitor settings={settings} onSettings={updateSettings} pads={pads} onPads={updatePads} onExit={home} onTrain={(chords) => setScreen({ name: 'trainer', chords })} />;
     case 'recorder':
       return <Recorder settings={settings} onSettings={updateSettings} onExit={home} />;
     case 'pads':
@@ -97,7 +98,9 @@ export function App() {
     case 'arrangement':
       return <Arrangement onExit={home} reference={screen.reference} />;
     case 'lexicon':
-      return <Lexicon settings={settings} onSettings={updateSettings} pads={pads} onPads={updatePads} onExit={home} />;
+      return <Lexicon settings={settings} onSettings={updateSettings} pads={pads} onPads={updatePads} onExit={home} onTrain={(chords, bpm) => setScreen({ name: 'trainer', chords, bpm })} />;
+    case 'trainer':
+      return <ProgTrainer key={screen.chords.map((c) => `${c.rootPc}${c.typeId}`).join()} chords={screen.chords} bpm={screen.bpm} settings={settings} onExit={home} />;
     case 'guitar':
       return <Guitar pads={pads} settings={settings} onExit={home} />;
     case 'session':
@@ -117,6 +120,7 @@ export function App() {
         onStart={(drill) => setScreen({ name: 'practice', drill })} onTuner={() => setScreen({ name: 'tuner' })} onLink={() => setScreen({ name: 'link' })} onBrief={() => setScreen({ name: 'brief' })} onMonitor={() => setScreen({ name: 'monitor' })}
         onRecorder={() => setScreen({ name: 'recorder' })} onPads={() => setScreen({ name: 'pads' })} onArrangement={() => setScreen({ name: 'arrangement' })}
         onTiming={() => setScreen({ name: 'timing' })} onHum={() => setScreen({ name: 'hum' })}
-        sessions={sessions} onSession={() => setScreen({ name: 'session' })} songs={songs} onSong={addSong} onGuitar={() => setScreen({ name: 'guitar' })} onLexicon={() => setScreen({ name: 'lexicon' })} />;
+        sessions={sessions} onSession={() => setScreen({ name: 'session' })} songs={songs} onSong={addSong} onGuitar={() => setScreen({ name: 'guitar' })} onLexicon={() => setScreen({ name: 'lexicon' })}
+        onTrain={() => setScreen({ name: 'trainer', chords: pads.map(padChord).filter((c): c is ProgChord => c !== null) })} />;
   }
 }
