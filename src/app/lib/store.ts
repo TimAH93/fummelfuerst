@@ -1,4 +1,4 @@
-import { Arrangement, Attempt, KeyMode, LearnerState, PadBank, Part, Stuck, TrackId, emptyBank, emptyState, parseState } from '../../core';
+import { Arrangement, Attempt, KeyMode, LearnerState, PadBank, Part, SessionEntry, Stuck, TrackId, emptyBank, emptyState, parseState } from '../../core';
 
 /** Local persistence: one IndexedDB database, a key-value store plus an append-only attempt log. */
 const DB_NAME = 'fummelfuerst';
@@ -120,3 +120,14 @@ export async function loadArrangement(): Promise<Arrangement> {
 }
 
 export const saveArrangement = (a: Arrangement): Promise<IDBValidKey> => tx('kv', 'readwrite', (st) => st.put(a, 'arrangement'));
+
+/** Sessions done: plan, genre, topic, exports – feeds the topic rotation and the week count. */
+export async function loadSessions(): Promise<SessionEntry[]> {
+  try {
+    return (await tx<SessionEntry[] | undefined>('kv', 'readonly', (s) => s.get('sessions'))) ?? [];
+  } catch {
+    return [];
+  }
+}
+
+export const saveSessions = (log: SessionEntry[]): Promise<IDBValidKey> => tx('kv', 'readwrite', (st) => st.put(log.slice(-200), 'sessions'));

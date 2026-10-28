@@ -1,13 +1,72 @@
 import { useEffect, useState } from 'preact/hooks';
-import { Arrangement as Plan, KIND_NAMES, Section, SectionKind, TEMPLATES, arrangementText, fmtTime, timeline, tips, totalBars, totalSeconds } from '../../core';
+import {
+  Arrangement as Plan, KIND_NAMES, Section, SectionKind, TEMPLATES, arrangementText, barsBetween, fmtTime, sectionsFromTaps, tapTempo, timeline,
+  tips, totalBars, totalSeconds,
+} from '../../core';
 import { loadArrangement, saveArrangement } from '../lib/store';
 
 const KINDS = Object.keys(KIND_NAMES) as SectionKind[];
 
+interface RefState {
+  tempoTaps: number[];
+  bpm: number | null;
+  /** First downbeat and every section change, clock ms. */
+  sectionTaps: number[];
+}
+
+/**
+ * Reference map: play the reference, tap the tempo, tap "Start" on the first downbeat, tap at
+ * every section change, then "Ende" – the sections become the plan.
+ */
+function ReferenceMap({ bpm, onApply, onClose }: { bpm: number; onApply: (bpm: number, sections: Section[]) => void; onClose: () => void }) {
+  const [ref, setRef] = useState<RefState>({ tempoTaps: [], bpm: null, sectionTaps: [] });
+  const [now, setNow] = useState(Date.now());
+  useEffect(() => {
+    const t = window.setInterval(() => setNow(Date.now()), 500);
+    return () => window.clearInterval(t);
+  }, []);
+  const tempo = ref.bpm ?? bpm;
+  const running = ref.sectionTaps.length > 0;
+  const tapTempoNow = () => {
+    const taps = [...ref.tempoTaps, Date.now()].slice(-8);
+    setRef({ ...ref, tempoTaps: taps, bpm: tapTempo(taps) ?? ref.bpm });
+  };
+  const tapSection = () => setRef({ ...ref, sectionTaps: [...ref.sectionTaps, Date.now()] });
+  const finish = () => {
+    const sections = sectionsFromTaps(ref.sectionTaps, Date.now(), tempo);
+    if (sections.length) onApply(tempo, sections);
+    onClose();
+  };
+  const live = ref.sectionTaps.map((t, i) => barsBetween(t, ref.sectionTaps[i + 1] ?? now, tempo));
+  return (
+    <section class="ref-panel" data-testid="ref-panel">
+      <div class="area-head">
+        <h2 class="area-title">Referenz nachbauen</h2>
+        <button class="quiet small" onClick={onClose}>Schließen</button>
+      </div>
+      <p class="meta">Referenz-Song auf dem Handy oder PC starten. 1. Tempo tippen (8× auf den Beat). 2. „Start“ auf der ersten Eins. 3. Bei jedem Teilwechsel tippen. 4. „Ende“.</p>
+      <div class="row wrap">
+        <button class="ref-big" onClick={tapTempoNow} data-testid="tap-tempo">Tempo tippen{ref.bpm ? ` · ${ref.bpm} BPM` : ref.tempoTaps.length ? ' …' : ''}</button>
+        <button class={running ? 'ref-big go' : 'ref-big'} onClick={tapSection} data-testid="tap-section">
+          {running ? `Teilwechsel · Teil ${ref.sectionTaps.length} läuft` : 'Start (erste Eins)'}
+        </button>
+        {running && <button class="ref-big" onClick={finish} data-testid="ref-end">Ende → Vorlage</button>}
+      </div>
+      {!ref.bpm && <p class="meta">Ohne Tempo-Tipp rechne ich mit {bpm} BPM aus dem Feld oben.</p>}
+      {running && (
+        <div class="ref-taps" data-testid="ref-taps">
+          {live.map((bars, i) => <span class="ref-tap">Teil {i + 1}: {bars} T.</span>)}
+        </div>
+      )}
+    </section>
+  );
+}
+
 /** Arrangement planner: sections as a timeline with bar numbers and the clock – the map from loop to song. */
-export function Arrangement({ onExit }: { onExit: () => void }) {
+export function Arrangement({ onExit, reference = false }: { onExit: () => void; reference?: boolean }) {
   const [plan, setPlan] = useState<Plan | null>(null);
   const [copied, setCopied] = useState(false);
+  const [showRef, setShowRef] = useState(reference);
   useEffect(() => void loadArrangement().then(setPlan), []);
   if (!plan) return <main class="screen" />;
 
@@ -59,7 +118,10 @@ export function Arrangement({ onExit }: { onExit: () => void }) {
         {TEMPLATES.map((t) => (
           <button class="pill" onClick={() => update({ bpm: t.bpm, sections: t.sections.map((s) => ({ ...s })) })}>{t.name}</button>
         ))}
+        <button class={showRef ? 'pill on' : 'pill'} onClick={() => setShowRef(!showRef)} data-testid="ref-toggle">Referenz nachbauen</button>
       </div>
+
+      {showRef && <ReferenceMap bpm={plan.bpm} onApply={(bpm, sections) => update({ bpm, sections })} onClose={() => setShowRef(false)} />}
 
       <section class="arr-total" data-testid="arr-total">
         <span class="arr-time">{fmtTime(total)}</span>

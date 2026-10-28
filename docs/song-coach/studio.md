@@ -30,13 +30,16 @@ und als Kontext für den Song-Coach (Claude-Projekt, siehe README.md in diesem O
    5. Live arrangieren mit den Reglern (Channel Volume): rein, raus, Pause, Drop
 
 Zeit: mehr als 3–4 Sessions pro Woche möglich. Akkorde kommen über die User-Chord-Pads, nicht über
-Fingersätze auf den Tasten.
+Fingersätze auf den Tasten. Lernprinzipien und Wochenrhythmus: [lernplan.md](lernplan.md).
 
 ## Fummelfürst-App (Tablet)
 
 Eigene PWA, die mit dem FLkey (direkt per USB oder vom PC gekoppelt) mitliest. Werkzeuge, auf die
 der Coach verweisen kann:
 
+- **Session planen** – Plan mit Blöcken und Countdown (3 Beats · 1 Track fertig · Referenz + Track ·
+  Impro + Beat · Kurz), Genre mit BPM, Elementen und Einschränkung, Themen-Rotation
+  (Drums · Bass · Arrangement · Mix · Melodie), Exports pro Woche.
 - **Was spiele ich?** – nennt den gehaltenen Akkord (auch Pad-Akkorde), seine Stufe in der Tonart
   (ii9 in Db major, V7/iii …), 2–3 Folgeakkorde mit Grund, und zeigt Zieltöne/Farbe/Durchgang für
   die Melodie auf der Klaviatur. Tonart automatisch oder festgelegt.
@@ -47,6 +50,7 @@ der Coach verweisen kann:
   4 saubere Loops in Folge = Live-Loop-Stufe 1.
 - **Pads** – Karte der 16 User-Chord-Pads mit Anleitung zum Speichern (inkl. Octave –).
 - **Arrangement** – Teile als Zeitleiste mit Takten und Uhrzeit bei BPM, Vorlagen, Faustregeln.
+  **Referenz nachbauen**: Song läuft, Tempo tippen, bei jedem Teilwechsel tippen → Vorlage.
 - **Song-Steckbrief** – Text für den Coach (Akkorde, Tonart, Stufen, Tempo, was fehlt).
 
 ## Software

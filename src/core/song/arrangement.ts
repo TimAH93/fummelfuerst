@@ -31,6 +31,7 @@ export const TEMPLATES: Template[] = [
   { id: 'ballad', name: 'Klavier-Ballade', bpm: 70, sections: [s('Intro', 2, 'intro'), s('A', 8, 'verse'), s('B', 8, 'chorus'), s('A', 8, 'verse'), s('Outro', 2, 'outro')] },
   { id: 'loopsong', name: 'Vom Loop zum Song', bpm: 90, sections: [s('Intro', 4, 'intro'), s('A', 8, 'verse'), s("A'", 8, 'verse'), s('B', 8, 'chorus'), s('A', 8, 'verse'), s('Outro', 4, 'outro')] },
   { id: 'pop', name: 'Pop: Strophe / Refrain', bpm: 100, sections: [s('Intro', 4, 'intro'), s('Strophe', 8, 'verse'), s('Pre', 4, 'pre'), s('Refrain', 8, 'chorus'), s('Strophe', 8, 'verse'), s('Pre', 4, 'pre'), s('Refrain', 8, 'chorus'), s('Bridge', 8, 'bridge'), s('Refrain', 8, 'chorus'), s('Outro', 4, 'outro')] },
+  { id: 'lofi', name: 'Lo-fi', bpm: 80, sections: [s('Intro', 4, 'intro'), s('A', 8, 'verse'), s('B', 8, 'chorus'), s('A', 8, 'verse'), s('Outro', 4, 'outro')] },
   { id: 'dnb', name: 'Drum & Bass', bpm: 174, sections: [s('Intro', 16, 'intro'), s('Build-up', 8, 'build'), s('Drop 1', 16, 'drop'), s('Break', 8, 'break'), s('Drop 2', 16, 'drop'), s('Outro', 8, 'outro')] },
 ];
 

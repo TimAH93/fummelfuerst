@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'preact/hooks';
-import { Drill, LearnerState, PadBank, emptyBank } from '../core';
+import { Drill, LearnerState, PadBank, SessionEntry, emptyBank } from '../core';
 import { downloadBytes } from './lib/download';
 import { onFile } from './lib/link';
 import { context } from './lib/session';
-import { DEFAULT_SETTINGS, Settings, loadPads, loadSettings, loadState, savePads, saveSettings, saveState } from './lib/store';
+import { DEFAULT_SETTINGS, Settings, loadPads, loadSessions, loadSettings, loadState, savePads, saveSessions, saveSettings, saveState } from './lib/store';
 import { Home } from './screens/Home';
 import { Practice } from './screens/Practice';
 import { Tuner } from './screens/Tuner';
@@ -15,22 +15,25 @@ import { Pads } from './screens/Pads';
 import { Arrangement } from './screens/Arrangement';
 import { Timing } from './screens/Timing';
 import { Hum } from './screens/Hum';
+import { Session } from './screens/Session';
 
 type Screen =
   | { name: 'home' } | { name: 'practice'; drill: Drill } | { name: 'tuner' } | { name: 'link' } | { name: 'brief' }
-  | { name: 'monitor' } | { name: 'recorder' } | { name: 'pads' } | { name: 'arrangement' } | { name: 'timing' } | { name: 'hum' };
+  | { name: 'monitor' } | { name: 'recorder' } | { name: 'pads' } | { name: 'arrangement'; reference?: boolean } | { name: 'timing' } | { name: 'hum' } | { name: 'session' };
 
 export function App() {
   const [state, setState] = useState<LearnerState | null>(null);
   const [settings, setSettings] = useState<Settings>(DEFAULT_SETTINGS);
   const [screen, setScreen] = useState<Screen>({ name: 'home' });
   const [pads, setPads] = useState<PadBank>(emptyBank);
+  const [sessions, setSessions] = useState<SessionEntry[]>([]);
 
   useEffect(() => {
-    void Promise.all([loadState(), loadSettings(), loadPads()]).then(([s, st, p]) => {
+    void Promise.all([loadState(), loadSettings(), loadPads(), loadSessions()]).then(([s, st, p, log]) => {
       setState(s);
       setSettings(st);
       setPads(p);
+      setSessions(log);
       resumeLink(st, (next) => {
         setSettings(next);
         void saveSettings(next);
@@ -54,6 +57,11 @@ export function App() {
     setPads(p);
     void savePads(p);
   };
+  const addSession = (e: SessionEntry) => {
+    const next = [...sessions, e];
+    setSessions(next);
+    void saveSessions(next);
+  };
   const home = () => setScreen({ name: 'home' });
 
   switch (screen.name) {
@@ -69,7 +77,9 @@ export function App() {
     case 'pads':
       return <Pads pads={pads} onPads={updatePads} settings={settings} onExit={home} />;
     case 'arrangement':
-      return <Arrangement onExit={home} />;
+      return <Arrangement onExit={home} reference={screen.reference} />;
+    case 'session':
+      return <Session sessions={sessions} onDone={addSession} onArrangement={(reference) => setScreen({ name: 'arrangement', reference })} onExit={home} />;
     case 'timing':
       return <Timing settings={settings} onSettings={updateSettings} onExit={home} />;
     case 'hum':
@@ -84,6 +94,7 @@ export function App() {
       return <Home state={state} settings={settings} onSettings={updateSettings}
         onStart={(drill) => setScreen({ name: 'practice', drill })} onTuner={() => setScreen({ name: 'tuner' })} onLink={() => setScreen({ name: 'link' })} onBrief={() => setScreen({ name: 'brief' })} onMonitor={() => setScreen({ name: 'monitor' })}
         onRecorder={() => setScreen({ name: 'recorder' })} onPads={() => setScreen({ name: 'pads' })} onArrangement={() => setScreen({ name: 'arrangement' })}
-        onTiming={() => setScreen({ name: 'timing' })} onHum={() => setScreen({ name: 'hum' })} />;
+        onTiming={() => setScreen({ name: 'timing' })} onHum={() => setScreen({ name: 'hum' })}
+        sessions={sessions} onSession={() => setScreen({ name: 'session' })} />;
   }
 }
