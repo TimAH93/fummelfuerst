@@ -273,6 +273,8 @@ textarea.field-input { resize: vertical; }
 .next .chip-why { font-size: 16px; color: var(--muted); }
 .next .chip { position: relative; cursor: pointer; }
 .next .chip.on { border-color: var(--off); }
+.next .chip.on.hit { border-color: var(--ok); }
+.monitor .context .ok { color: var(--ok); }
 .chip-play { position: absolute; top: 6px; right: 6px; min-height: 32px; min-width: 32px; padding: 0 8px; border-radius: 999px; border: 1px solid var(--line); background: var(--bg); color: var(--muted); font-size: 14px; }
 .trail { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 6px; }
 .trail-chip { display: flex; flex-direction: column; align-items: center; padding: 6px 12px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface); min-width: 70px; }
