@@ -11,6 +11,7 @@ import { FoundChord, Settings, loadFound, loadPlayLog, saveFound, savePlayLog } 
 import { downloadBytes } from '../lib/download';
 import { playChord } from '../lib/synth';
 import { useWakeLock } from '../lib/wakeLock';
+import { useKeyRange } from '../lib/keyRange';
 
 interface Props {
   settings: Settings;
@@ -25,8 +26,6 @@ interface Props {
 
 type Mode = 'overview' | 'chords' | 'melody';
 const MODES: [Mode, string][] = [['overview', 'Überblick'], ['chords', 'Akkorde'], ['melody', 'Melodie']];
-const PIANO_LOW = 48;
-const PIANO_HIGH = 84;
 const OVER_ROOT = ['1', 'b2', '2', 'b3', '3', '4', 'b5', '5', 'b6', '6', 'b7', '7'];
 
 /**
@@ -106,9 +105,10 @@ export function ChordMonitor({ settings, onSettings, pads, onPads, onTrain, onEx
 
   const guide = mode === 'melody' && c ? melodyGuide(key, c) : null;
   const melody = mode === 'melody' ? melodyNotes(jam, midi.held) : [];
+  const [pianoLow, pianoHigh] = useKeyRange([...midi.held, ...pickMidis, ...(shown?.midis ?? [])]);
   const dots: PianoMarks['dots'] = {};
   if (guide) {
-    for (let m = PIANO_LOW; m <= PIANO_HIGH; m++) {
+    for (let m = pianoLow; m <= pianoHigh; m++) {
       const pc = toPc(m);
       const tone = guide.tones.find((t) => t.pc === pc);
       const kind: DotKind | null = tone ? tone.weight : guide.avoid.includes(pc) ? 'avoid' : guide.scalePcs.includes(pc) ? 'safe' : null;
@@ -195,7 +195,7 @@ export function ChordMonitor({ settings, onSettings, pads, onPads, onTrain, onEx
         </div>
         <p class="meta" data-testid="chord-notes">{padNo !== null ? `Pad ${padNo + 1}  ·  ` : ''}{heldLine || (pick && pickNamed && !live ? chordTones(pickNamed).map((n, i) => `${showNote(n, style)} (${showDegree(degreeToString(pickNamed.type.formula[i]))})`).join('  ·  ') : shown ? shown.midis.map((m) => noteOf(toPc(m))).join('  ·  ') : '')}</p>
 
-        <Piano marks={{ held: midi.held, right: shown && !midi.held.length ? shown.midis : pick ? pickOnKeys : melody, pick: pickMidis, dots }} noteNames={style} />
+        <Piano low={pianoLow} high={pianoHigh} marks={{ held: midi.held, right: shown && !midi.held.length ? shown.midis : pick ? pickOnKeys : melody, pick: pickMidis, dots }} noteNames={style} />
 
         {mode === 'overview' && (
           <div class="found" data-testid="found">
