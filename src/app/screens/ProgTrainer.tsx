@@ -8,7 +8,11 @@ import { MetronomeHandle, beep, startMetronome } from '../lib/metronome';
 import { useMidi } from '../lib/midi';
 import { keyName, showChord } from '../lib/names';
 import { Settings } from '../lib/store';
+import { playProgression, stopPlayback } from '../lib/synth';
 import { useWakeLock } from '../lib/wakeLock';
+
+/** The progression previewed last, so a new one is played once on entry and the same one is not repeated. */
+let lastPreview = '';
 
 interface Props {
   chords: ProgChord[];
@@ -30,10 +34,23 @@ export function ProgTrainer({ chords, bpm: startBpm, settings, onExit }: Props) 
   const [running, setRunning] = useState(false);
   const [beat, setBeat] = useState<{ bar: number; beat: number; countIn: boolean } | null>(null);
   const [targetText, setTargetText] = useState(String(state.config.targetBpm));
+  const [preview, setPreview] = useState<number | null>(null);
   const metro = useRef<MetronomeHandle | null>(null);
   const stateRef = useRef(state);
   stateRef.current = state;
   const barCount = useRef(0);
+  const signature = chords.map((c) => `${c.rootPc}${c.typeId}`).join();
+
+  // Hear the progression once before the first run of it.
+  const hear = () => {
+    lastPreview = signature;
+    const voicings = chords.map(suggestVoicing);
+    void playProgression(voicings, Math.max(60, state.bpm), 4, 1, (i) => setPreview(i >= 0 ? i : null)).catch(() => {});
+  };
+  useEffect(() => {
+    if (chords.length && lastPreview !== signature) hear();
+    return () => stopPlayback();
+  }, [signature]);
 
   const fit = analyzeProgression(chords)[0];
   const key: Key | null = fit ? { tonic: fit.tonic, mode: fit.mode } : null;
@@ -60,6 +77,8 @@ export function ProgTrainer({ chords, bpm: startBpm, settings, onExit }: Props) 
     }, countIn);
   };
   const start = () => {
+    stopPlayback();
+    setPreview(null);
     const targetBpm = Math.max(state.bpm, Number(targetText) || state.config.targetBpm);
     setState(startTrainer({ ...state.config, startBpm: state.bpm, targetBpm }));
     setRunning(true);
@@ -89,7 +108,7 @@ export function ProgTrainer({ chords, bpm: startBpm, settings, onExit }: Props) 
 
       <div class="trail" data-testid="trainer-chain">
         {chords.map((c, i) => (
-          <span class={`trail-chip${running && i === state.index ? ' on' : ''}${state.hits[i] ? ' hit' : ''}`}>
+          <span class={`trail-chip${(running && i === state.index) || (!running && preview === i) ? ' on' : ''}${state.hits[i] ? ' hit' : ''}`}>
             <span class="trail-name">{state.hits[i] ? '✓ ' : ''}{nameOf(c)}</span>
             <span class="trail-roman">{romanOf(c)}</span>
           </span>
@@ -108,7 +127,11 @@ export function ProgTrainer({ chords, bpm: startBpm, settings, onExit }: Props) 
               <input class="field-input" inputMode="numeric" value={targetText} onInput={(e) => setTargetText((e.target as HTMLInputElement).value.replace(/\D/g, ''))} data-testid="target" /></label>
           </div>
           <p class="meta">Saubere Runde = +{state.config.stepBpm} BPM. Am Ziel kommen Rhythmus-Varianten: {VARIATIONS.map((v) => v.name).join(' · ')}.</p>
-          <button class="primary" onClick={start} disabled={midi.devices.length === 0 || chords.length === 0} data-testid="trainer-start">▶ Los · ein Takt Vorzähler</button>
+          {preview !== null && <Piano marks={{ pick: suggestVoicing(chords[preview]) }} noteNames={style} />}
+          <div class="row wrap center">
+            <button class="secondary" onClick={() => (preview !== null ? (stopPlayback(), setPreview(null)) : hear())} disabled={chords.length === 0} data-testid="trainer-hear">{preview !== null ? '■ Stopp' : '▶ Folge anhören'}</button>
+            <button class="primary" onClick={start} disabled={midi.devices.length === 0 || chords.length === 0} data-testid="trainer-start">▶ Los · ein Takt Vorzähler</button>
+          </div>
           {midi.devices.length === 0 && <p class="meta">Kein Keyboard – am FLkey anschließen oder koppeln</p>}
         </section>
       )}
