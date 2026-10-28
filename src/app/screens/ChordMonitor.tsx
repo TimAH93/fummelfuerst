@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'preact/hooks';
 import {
-  EMPTY_JAM, INVERSION_NAMES, Key, KeyMode, MAJOR_TONICS, MINOR_TONICS, PadBank, autoKey, chord, chordFunction, degreeSemitones,
-  degreeToString, identifyHeld, jamStep, keyScale, melodyGuide, melodyNoteRole, melodyNotes, nextChords, notePc, padFor, parseNote, pcToNote,
-  spellInKey, toPc,
+  EMPTY_JAM, INVERSION_NAMES, Key, KeyMode, MAJOR_TONICS, MINOR_TONICS, PadBank, PlayEntry, autoKey, chord, chordFunction, degreeSemitones,
+  degreeToString, habits, identifyHeld, jamStep, keyScale, logChord, logCsv, melodyGuide, melodyNoteRole, melodyNotes, nextChords, notePc, nudges,
+  padFor, parseNote, pcToNote, spellInKey, suggestVoicing, toPc,
 } from '../../core';
 import { DotKind, Piano, PianoMarks } from '../components/Piano';
 import { keyName, showChord, showDegree, showNote } from '../lib/names';
 import { useMidi } from '../lib/midi';
-import { FoundChord, Settings, loadFound, saveFound } from '../lib/store';
+import { FoundChord, Settings, loadFound, loadPlayLog, saveFound, savePlayLog } from '../lib/store';
+import { downloadBytes } from '../lib/download';
+import { playChord } from '../lib/synth';
 import { useWakeLock } from '../lib/wakeLock';
 
 interface Props {
@@ -39,9 +41,22 @@ export function ChordMonitor({ settings, onSettings, pads, onPads, onExit }: Pro
   const [found, setFound] = useState<FoundChord[]>([]);
   const [shown, setShown] = useState<FoundChord | null>(null);
   const [note, setNote] = useState('');
+  const [playLog, setPlayLog] = useState<PlayEntry[]>([]);
+  const [showHabits, setShowHabits] = useState(false);
   const midi = useMidi((settled) => setJam((j) => jamStep(j, settled)), 3);
   useEffect(() => setAuto((k) => autoKey(jam.history, k)), [jam.history]);
   useEffect(() => void loadFound().then(setFound), []);
+  useEffect(() => void loadPlayLog().then(setPlayLog), []);
+  // Every chord that lands in the jam history is a habit.
+  useEffect(() => {
+    const last = jam.history[jam.history.length - 1];
+    if (!last) return;
+    setPlayLog((log) => {
+      const next = logChord(log, last, Date.now());
+      if (next !== log) void savePlayLog(next);
+      return next;
+    });
+  }, [jam.history.length]);
   useEffect(() => { if (midi.held.length) setShown(null); }, [midi.held.length]);
 
   const style = settings.noteNames;
@@ -167,6 +182,42 @@ export function ChordMonitor({ settings, onSettings, pads, onPads, onExit }: Pro
 
         {mode === 'overview' && (
           <div class="found" data-testid="found">
+            <div class="row wrap center">
+              <button class={showHabits ? 'pill on' : 'pill'} onClick={() => setShowHabits(!showHabits)} aria-expanded={showHabits} data-testid="habits-toggle">Dein Spiel · {playLog.length} Akkorde</button>
+            </div>
+            {showHabits && (() => {
+              const h = habits(playLog);
+              return (
+                <div class="habits" data-testid="habits">
+                  {h.total > 0 && (
+                    <div class="habits-cols">
+                      <div><span class="next-label">Oft gespielt</span>{h.chords.slice(0, 5).map((x) => <div class="habit-row"><b>{showDegree(x.item)}</b><span>{x.n}×</span></div>)}</div>
+                      <div><span class="next-label">Häufige Wechsel</span>{h.changes.slice(0, 4).map((x) => <div class="habit-row"><b>{showDegree(x.item)}</b><span>{x.n}×</span></div>)}</div>
+                      <div><span class="next-label">Rahmen</span>
+                        <div class="habit-row"><b>{h.key ? keyName(h.key.tonic, h.key.mode, style) : '–'}</b><span>Tonart</span></div>
+                        <div class="habit-row"><b>{h.genre?.name ?? '–'}</b><span>klingt nach</span></div>
+                      </div>
+                    </div>
+                  )}
+                  <div class="nudges">
+                    {nudges(playLog).map((n) => (
+                      <div class="nudge">
+                        <span>{showDegree(n.text)}</span>
+                        {n.chords && n.chords.length > 0 && (
+                          <span class="row">
+                            <button class="pill" onClick={() => { const v = suggestVoicing(n.chords![0]); setShown({ at: 0, midis: v }); void playChord(v).catch(() => {}); }}>▶ Anhören</button>
+                          </span>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                  <div class="row wrap center">
+                    <button class="quiet small" onClick={() => downloadBytes(`fummelfuerst-spiel-${new Date().toISOString().slice(0, 10)}.csv`, 'text/csv', new TextEncoder().encode(logCsv(playLog)))} disabled={playLog.length === 0}>CSV exportieren</button>
+                    <span class="meta">für SQLite oder eine Tabelle</span>
+                  </div>
+                </div>
+              );
+            })()}
             <div class="row wrap center">
               <button class="secondary" onClick={keep} disabled={!live} data-testid="keep">★ Merken</button>
               {note && <span class="verdict small ok">{note}</span>}

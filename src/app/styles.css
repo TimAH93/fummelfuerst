@@ -290,6 +290,30 @@ textarea.field-input { resize: vertical; }
 .found-name { background: transparent; border: none; font-size: 20px; font-weight: 700; padding: 8px 14px; }
 .found-act { background: transparent; border: none; border-left: 1px solid var(--line); color: var(--muted); font-size: 16px; padding: 0 12px; }
 
+/* ── Habits ───────────────────────────────────────────── */
+.habits { display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 1100px; padding: 14px 18px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); }
+.habits-cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+.habit-row { display: flex; justify-content: space-between; gap: 10px; font-size: 17px; padding: 3px 0; border-bottom: 1px solid var(--line); }
+.habit-row span { color: var(--muted); }
+.nudges { display: flex; flex-direction: column; gap: 8px; }
+.nudge { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-size: 18px; padding: 10px 12px; border-radius: 10px; background: var(--bg); border-left: 4px solid var(--accent); }
+
+/* ── Lexicon ──────────────────────────────────────────── */
+.lexicon { gap: 14px; }
+.lex-section { display: flex; flex-direction: column; gap: 10px; }
+.lex-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 10px; }
+.lex-card { display: flex; flex-direction: column; gap: 6px; padding: 12px 14px; border-radius: 14px; background: var(--surface); border: 2px solid var(--line); }
+.lex-name { font-size: 26px; font-weight: 700; }
+.lex-sound { font-size: 17px; }
+.lex-romans { font-size: 15px; color: var(--muted); }
+.lex-chain { gap: 6px; }
+.lex-chip { padding: 4px 10px; border-radius: 999px; border: 1px solid var(--line); font-size: 16px; font-weight: 700; }
+.lex-chip.on { border-color: var(--ok); color: var(--ok); }
+.lex-actions { gap: 6px; }
+.lex-actions .pill { min-height: 40px; font-size: 16px; padding: 0 12px; }
+.lexicon .piano { max-height: 22vh; max-width: 1000px; margin: 0 auto; }
+.verdict.center { text-align: center; }
+
 /* ── Recorder ─────────────────────────────────────────── */
 .field.inline { flex-direction: row; align-items: center; gap: 8px; max-width: none; }
 .field.inline .field-input { width: 90px; font-size: 20px; padding: 8px 10px; text-align: center; }

@@ -1,4 +1,4 @@
-import { Arrangement, Attempt, KeyMode, LearnerState, PadBank, Part, SessionEntry, Stuck, TrackId, emptyBank, emptyState, parseState } from '../../core';
+import { Arrangement, Attempt, KeyMode, LearnerState, PadBank, Part, PlayEntry, SessionEntry, Stuck, TrackId, emptyBank, emptyState, parseState } from '../../core';
 
 /** Local persistence: one IndexedDB database, a key-value store plus an append-only attempt log. */
 const DB_NAME = 'fummelfuerst';
@@ -153,3 +153,14 @@ export async function loadFound(): Promise<FoundChord[]> {
 }
 
 export const saveFound = (list: FoundChord[]): Promise<IDBValidKey> => tx('kv', 'readwrite', (st) => st.put(list.slice(-40), 'found'));
+
+/** Every chord recognised on the jam screen – the playing habits. */
+export async function loadPlayLog(): Promise<PlayEntry[]> {
+  try {
+    return (await tx<PlayEntry[] | undefined>('kv', 'readonly', (s) => s.get('playlog'))) ?? [];
+  } catch {
+    return [];
+  }
+}
+
+export const savePlayLog = (log: PlayEntry[]): Promise<IDBValidKey> => tx('kv', 'readwrite', (st) => st.put(log, 'playlog'));

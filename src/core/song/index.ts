@@ -7,3 +7,5 @@ export * from './timing';
 export * from './session';
 export * from './reference';
 export * from './milestones';
+export * from './lexicon';
+export * from './habits';

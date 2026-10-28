@@ -89,6 +89,7 @@ const NUMERALS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII'];
 const SUFFIX: Record<string, string> = {
   maj: '', min: '', dim: '°', aug: '+', maj7: 'maj7', m7: '7', dom7: '7', dim7: '°7', m7b5: 'ø7',
   maj9: 'maj9', m9: '9', dom9: '9', dom7s9: '7#9', dom13: '13',
+  sus2: 'sus2', sus4: 'sus4', add9: 'add9', madd9: 'add9', six: '6', m6: '6', sixnine: '6/9', m11: '11', dom7sus4: '7sus4', dom7b9: '7b9', maj7s11: 'maj7#11', mMaj7: 'mMaj7',
 };
 
 export function numeralIn(key: Scale, mode: KeyMode, c: ProgChord): Numeral {

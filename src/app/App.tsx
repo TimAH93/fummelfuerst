@@ -17,11 +17,12 @@ import { Timing } from './screens/Timing';
 import { Hum } from './screens/Hum';
 import { Session } from './screens/Session';
 import { Guitar } from './screens/Guitar';
+import { Lexicon } from './screens/Lexicon';
 import { Celebrate } from './components/Celebrate';
 
 type Screen =
   | { name: 'home' } | { name: 'practice'; drill: Drill } | { name: 'tuner' } | { name: 'link' } | { name: 'brief' }
-  | { name: 'monitor' } | { name: 'recorder' } | { name: 'pads' } | { name: 'arrangement'; reference?: boolean } | { name: 'timing' } | { name: 'hum' } | { name: 'session' } | { name: 'guitar' };
+  | { name: 'monitor' } | { name: 'recorder' } | { name: 'pads' } | { name: 'arrangement'; reference?: boolean } | { name: 'timing' } | { name: 'hum' } | { name: 'session' } | { name: 'guitar' } | { name: 'lexicon' };
 
 export function App() {
   const [state, setState] = useState<LearnerState | null>(null);
@@ -95,6 +96,8 @@ export function App() {
       return <Pads pads={pads} onPads={updatePads} settings={settings} onExit={home} />;
     case 'arrangement':
       return <Arrangement onExit={home} reference={screen.reference} />;
+    case 'lexicon':
+      return <Lexicon settings={settings} onSettings={updateSettings} pads={pads} onPads={updatePads} onExit={home} />;
     case 'guitar':
       return <Guitar pads={pads} settings={settings} onExit={home} />;
     case 'session':
@@ -114,6 +117,6 @@ export function App() {
         onStart={(drill) => setScreen({ name: 'practice', drill })} onTuner={() => setScreen({ name: 'tuner' })} onLink={() => setScreen({ name: 'link' })} onBrief={() => setScreen({ name: 'brief' })} onMonitor={() => setScreen({ name: 'monitor' })}
         onRecorder={() => setScreen({ name: 'recorder' })} onPads={() => setScreen({ name: 'pads' })} onArrangement={() => setScreen({ name: 'arrangement' })}
         onTiming={() => setScreen({ name: 'timing' })} onHum={() => setScreen({ name: 'hum' })}
-        sessions={sessions} onSession={() => setScreen({ name: 'session' })} songs={songs} onSong={addSong} onGuitar={() => setScreen({ name: 'guitar' })} />;
+        sessions={sessions} onSession={() => setScreen({ name: 'session' })} songs={songs} onSong={addSong} onGuitar={() => setScreen({ name: 'guitar' })} onLexicon={() => setScreen({ name: 'lexicon' })} />;
   }
 }
