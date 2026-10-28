@@ -1,5 +1,5 @@
 import { useState } from 'preact/hooks';
-import { Drill, LearnerState, TRACKS, TrackId, drillProgress, hasSlipped, recommendDrill } from '../../core';
+import { Drill, LearnerState, SessionEntry, TRACKS, TrackId, drillProgress, hasSlipped, recommendDrill, suggestTopic, weekExports } from '../../core';
 import { Progress } from '../components/Progress';
 import { curriculum } from '../lib/session';
 import { Settings } from '../lib/store';
@@ -19,6 +19,8 @@ interface Props {
   onArrangement: () => void;
   onTiming: () => void;
   onHum: () => void;
+  sessions: SessionEntry[];
+  onSession: () => void;
 }
 
 function Tile({ name, sub, onClick }: { name: string; sub: string; onClick: () => void }) {
@@ -31,8 +33,9 @@ function Tile({ name, sub, onClick }: { name: string; sub: string; onClick: () =
 }
 
 /** Three areas, in the order the day usually goes: jam, build the song, practise. */
-export function Home({ state, settings, onSettings, onStart, onTuner, onLink, onBrief, onMonitor, onRecorder, onPads, onArrangement, onTiming, onHum }: Props) {
+export function Home({ state, settings, onSettings, onStart, onTuner, onLink, onBrief, onMonitor, onRecorder, onPads, onArrangement, onTiming, onHum, sessions, onSession }: Props) {
   const link = useLink();
+  const exports = weekExports(sessions, Date.now());
   const [pickTrack, setPickTrack] = useState(false);
   const drill = recommendDrill(state, curriculum, settings.track);
   const path = curriculum.filter((d) => d.track === settings.track);
@@ -56,6 +59,16 @@ export function Home({ state, settings, onSettings, onStart, onTuner, onLink, on
       </header>
 
       <div class="home-grid">
+        <section class="area">
+          <h2 class="area-title">Heute</h2>
+          <div class="tiles">
+            <button class="tile wide" onClick={onSession} aria-label="Session">
+              <span class="tile-name">Session planen</span>
+              <span class="tile-sub">Thema dran: {suggestTopic(sessions)} · {exports} Export{exports === 1 ? '' : 's'} in 7 Tagen · Ziel 1 pro Woche</span>
+            </button>
+          </div>
+        </section>
+
         <section class="area">
           <h2 class="area-title">Jammen</h2>
           <div class="tiles">

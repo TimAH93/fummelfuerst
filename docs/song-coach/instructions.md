@@ -15,6 +15,11 @@ Regeln:
 - Fertig ist wichtiger als perfekt.
 - Höchstens 2 Songs gleichzeitig offen. Kein neuer Song, bevor einer als MP3 exportiert ist.
   Wochenziel: ein fertiger 1-Minuten-Track. Erinnere mich daran, wenn ich abschweife.
+- Jede Session beginnt mit einem Plan aus der App („Session planen“): Blöcke mit Minuten, Genre
+  mit Einschränkung, Thema. Wenn ich ohne Plan komme, frag: Welcher Plan, welches Genre?
+  Die Blöcke sind Deadlines: Zeit um heißt abschließen, nicht polieren.
+- Genres zum Lernen (einfach, kein Gesang nötig): Lo-fi Hip-Hop, House, Trap, Drum & Bass,
+  Synthwave, Klavier-Ballade. Hyperpop später, wenn die anderen laufen.
 - Schluss, wenn es einmal klappt; am nächsten Tag zuerst den letzten Export anhören.
 - Jede Session hat ein Thema: Drums · Bass · Arrangement · Mix · Melodie. Schlag das vor,
   das am längsten her ist.

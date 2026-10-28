@@ -31,6 +31,15 @@ Adaptive guitar improvisation trainer: hear → understand → locate → play �
   the way keyboard players voice them – root in the left hand, colour tones without the root in the
   right. Checked by function: guide tones (3rd, 7th) and colour (9, #9, 13) must be there, the plain
   fifth may be left out. The reveal shows a jazz guitar grip with the root in the bass.
+- **Session planen** – the day's plan as deadlines: five plans (3 beats · finish one track ·
+  reference + track · impro + beat · quick) with blocks in minutes and a one-line "done" each, a
+  genre with tempo, elements and the one constraint that keeps it quick, and a topic that rotates
+  through drums · bass · arrangement · mix · melody (the one that waited longest is suggested).
+  A big countdown per block, three clicks when time is up, exports logged per session and
+  counted per week on the home screen. Core: `song/session.ts`.
+- **Reference map** (in Arrangement) – transcribe a form instead of a solo: tap the tempo while
+  the reference plays, tap at every section change, and the taps become sections with bar counts
+  (snapped to multiples of four when close) as the plan to build on. Core: `song/reference.ts`.
 - **"Was spiele ich?"** – jam screen for FLkey pad chords (the device itself does not name them):
   the held chord with each tone's role (Dbmaj9: Db 1 · F 3 · Ab 5 · C 7 · Eb 9), its function in
   the key (ii9 in Db major · "bereitet die V vor"; secondary dominants read as V7/iii), two or

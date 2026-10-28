@@ -53,16 +53,30 @@ steht, und was fehlt. Kurz gehalten; die Quellen stehen unten.
 | Singen → Noten | „Summen“ ✓ |
 | Einspielen statt zeichnen | Pads, Aufnehmen, Score Log ✓ |
 | Live-Loop-Leiter Stufe 1 | „Im Takt“ ✓ |
-| Referenz-Songs | Coach fragt danach, **baut sie aber nicht nach** |
-| Deadlines, Output | **fehlt**: 4 Songs angefangen, 0 exportiert |
+| Referenz-Songs | Referenz-Karte im Arrangement-Planer ✓ |
+| Deadlines, Output | Session-Planer mit Countdown, Export-Zähler ✓ (3 Songs exportiert) |
 | Vokabular-Notizbuch | **fehlt** |
 | Verschränktes Üben | Drills sind geblockt (ein Drill bis er sitzt) |
-| Rotation Drums/Bass/Arrangement/Mix | **fehlt** als Regel |
+| Rotation Drums/Bass/Arrangement/Mix | Themen-Rotation im Session-Planer ✓ |
+
+## Genres zum Lernen
+
+Einfach zu bauen, kein Gesang nötig, jedes lehrt einen Producing-Handgriff:
+
+| Genre | BPM | Lehrt |
+|---|---|---|
+| Lo-fi Hip-Hop | 70–90 | Akkorde + Drums + Bass, Swing; deine Neo-Soul-Pads passen direkt |
+| House | 120–126 | 8-Takte-Regel, Filter auf/zu, Spannung ohne Melodie |
+| Trap | 130–150 | 808, Hat-Rolls (Note Repeat), Half-Time |
+| Drum & Bass | 170–176 | Break-Programmierung, Riser → Drop |
+| Synthwave | 100–115 | Arpeggios, Pads, Hall |
+| Klavier-Ballade | 60–80 | Form aus wenig Material, Intro/Ende |
+| Hyperpop | 150–170 | alles zusammen; später, braucht Vocals |
 
 ## Was wir ändern
 
 1. **Fertig-Regel:** höchstens 2 Songs gleichzeitig offen. Kein neuer Song, bevor einer als MP3
-   exportiert ist. Reihenfolge jetzt: 01 Klavierballade (Ende + Export, ~20 min) → 04 Drop.
+   exportiert ist. Stand: `board.md`.
 2. **Wochenrhythmus:** ein fertiger 1-Minuten-Track pro Woche. Feste Einschränkungen: Presets,
    höchstens 5 Akkorde, eine Minute, Export am Ende der Woche. Stand im `board.md`.
 3. **Referenz nachbauen, 15 Minuten pro Genre:** ein Song, Teilwechsel alle 8 Takte markieren,

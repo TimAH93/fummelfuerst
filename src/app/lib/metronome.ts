@@ -67,3 +67,11 @@ export async function startMetronome(bpm: number, onBeat: BeatListener, countInB
     },
   };
 }
+
+/** Three quick clicks – a block of the session is over. */
+export async function beep(): Promise<void> {
+  ctx ??= new AudioContext();
+  await ctx.resume();
+  const t = ctx.currentTime + 0.02;
+  [0, 0.18, 0.36].forEach((d, i) => click(ctx!, t + d, i === 2));
+}
