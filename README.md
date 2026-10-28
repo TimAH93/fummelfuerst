@@ -40,6 +40,12 @@ Adaptive guitar improvisation trainer: hear → understand → locate → play �
 - **Reference map** (in Arrangement) – transcribe a form instead of a solo: tap the tempo while
   the reference plays, tap at every section change, and the taps become sections with bar counts
   (snapped to multiples of four when close) as the plan to build on. Core: `song/reference.ts`.
+- **Gitarre** – the loop's chords as strummable grips (root in the bass, open position first,
+  the fifth may go; the full colour falls back to the next simpler type and says so), a capo
+  planner that picks the fret where the shapes are easiest (Dbmaj9 · C7#9 · Fm9 · Ebm9 · Ab13 →
+  capo 1, C shapes), songbook chord boxes with degree labels, and the scale to play over the
+  loop on the fretboard, frets counted from the capo, with a tapped chord's 3rd and 7th lit.
+  Core: `guitar/capo.ts`.
 - **"Was spiele ich?"** – jam screen for FLkey pad chords (the device itself does not name them):
   the held chord with each tone's role (Dbmaj9: Db 1 · F 3 · Ab 5 · C 7 · Eb 9), its function in
   the key (ii9 in Db major · "bereitet die V vor"; secondary dominants read as V7/iii), two or

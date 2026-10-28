@@ -40,6 +40,16 @@ Die Handgriffe, die bisher gebremst haben. Nur das, was wir wirklich gebraucht h
 - **Scale Mode:** Shift + Scale halten, Grundton drücken, Pad 1 Minor / 2 Major / 7 Minor Pentatonic, Scale einschalten.
 - **Pot Mode „Plugin“:** die 8 Regler steuern FLEX-Macros.
 
+## Gitarre loopen (Yeti X)
+
+1. **Eingang:** Options → Audio Settings → Device *FL Studio ASIO*; Input = Yeti X.
+2. **Mixer (F9):** einen Insert wählen, oben rechts bei **IN** den Yeti-Kanal wählen, das **Disk-Symbol** (Arm) einschalten.
+3. **Loop-Bereich:** in der Playlist mit Ctrl + Ziehen z. B. 4 oder 8 Takte markieren. Metronom an.
+4. **Aufnehmen:** Record-Knopf (Rechtsklick: *Audio* an, *Loop recording* an), Play, einmal die Akkorde durchspielen, Stopp. Der Audio-Clip liegt in der Playlist.
+5. **Drüberspielen:** Loop läuft (SONG, Loop-Bereich), Gitarre bleibt im Mixer hörbar. App „Gitarre“ zeigt Griffe, Capo und die Scale.
+
+Capo: Griffe und Bünde in der App sind **ab Capo** gezählt. Capo auf Bund 1 + C-Formen = die Db-Akkorde.
+
 ## Fertig machen
 
 - **Export:** File → Export → **MP3 file** (Ctrl + R). Playlist-Ende mit dem Song-Ende abgleichen.
