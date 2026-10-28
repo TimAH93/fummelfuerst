@@ -112,10 +112,13 @@ export interface SessionEntry {
   exported: number;
 }
 
+/** A bare "+1 Song" outside a session: counts for the songs, not for the topic rotation. */
+export const exportOnly = (at: number, count = 1): SessionEntry => ({ at, planId: 'export-only', topic: TOPICS[0], blocksDone: 0, blocks: 0, exported: count });
+
 /** The topic that has waited longest – never-used ones first, in list order. */
 export function suggestTopic(log: SessionEntry[]): Topic {
   const last = new Map<Topic, number>();
-  for (const e of log) last.set(e.topic, Math.max(last.get(e.topic) ?? 0, e.at));
+  for (const e of log) if (e.blocks > 0) last.set(e.topic, Math.max(last.get(e.topic) ?? 0, e.at));
   return [...TOPICS].sort((a, b) => (last.get(a) ?? -1) - (last.get(b) ?? -1) || TOPICS.indexOf(a) - TOPICS.indexOf(b))[0];
 }
 

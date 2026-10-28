@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'preact/hooks';
-import { Drill, LearnerState, PadBank, SessionEntry, emptyBank } from '../core';
+import { Drill, LearnerState, PadBank, SessionEntry, crossed, emptyBank, exportOnly, rankFor, totalSongs } from '../core';
 import { downloadBytes } from './lib/download';
 import { onFile } from './lib/link';
 import { context } from './lib/session';
@@ -16,6 +16,7 @@ import { Arrangement } from './screens/Arrangement';
 import { Timing } from './screens/Timing';
 import { Hum } from './screens/Hum';
 import { Session } from './screens/Session';
+import { Celebrate } from './components/Celebrate';
 
 type Screen =
   | { name: 'home' } | { name: 'practice'; drill: Drill } | { name: 'tuner' } | { name: 'link' } | { name: 'brief' }
@@ -27,6 +28,7 @@ export function App() {
   const [screen, setScreen] = useState<Screen>({ name: 'home' });
   const [pads, setPads] = useState<PadBank>(emptyBank);
   const [sessions, setSessions] = useState<SessionEntry[]>([]);
+  const [celebrate, setCelebrate] = useState<number | null>(null);
 
   useEffect(() => {
     void Promise.all([loadState(), loadSettings(), loadPads(), loadSessions()]).then(([s, st, p, log]) => {
@@ -42,6 +44,10 @@ export function App() {
     // PC side of a pairing: files the tablet sends (recorded progressions as MIDI) land in Downloads.
     return onFile((name, mime, data) => downloadBytes(name, mime, data));
   }, []);
+
+  const songs = totalSongs(sessions, settings.songsBase ?? 0);
+  // The rank colours the whole app a little; the stylesheet keys on this attribute.
+  useEffect(() => { document.documentElement.dataset.level = String(rankFor(songs).level); }, [songs]);
 
   if (!state) return <main class="screen" />;
 
@@ -61,8 +67,18 @@ export function App() {
     const next = [...sessions, e];
     setSessions(next);
     void saveSessions(next);
+    const after = totalSongs(next, settings.songsBase ?? 0);
+    const fresh = crossed(songs, after).filter((m) => !(settings.celebrated ?? []).includes(m));
+    if (fresh.length) {
+      const top = fresh[fresh.length - 1];
+      updateSettings({ ...settings, celebrated: [...(settings.celebrated ?? []), ...fresh] });
+      setCelebrate(top);
+    }
   };
+  const addSong = () => addSession(exportOnly(Date.now()));
   const home = () => setScreen({ name: 'home' });
+
+  if (celebrate !== null) return <Celebrate songs={celebrate} rank={rankFor(celebrate)} onClose={() => setCelebrate(null)} />;
 
   switch (screen.name) {
     case 'practice':
@@ -95,6 +111,6 @@ export function App() {
         onStart={(drill) => setScreen({ name: 'practice', drill })} onTuner={() => setScreen({ name: 'tuner' })} onLink={() => setScreen({ name: 'link' })} onBrief={() => setScreen({ name: 'brief' })} onMonitor={() => setScreen({ name: 'monitor' })}
         onRecorder={() => setScreen({ name: 'recorder' })} onPads={() => setScreen({ name: 'pads' })} onArrangement={() => setScreen({ name: 'arrangement' })}
         onTiming={() => setScreen({ name: 'timing' })} onHum={() => setScreen({ name: 'hum' })}
-        sessions={sessions} onSession={() => setScreen({ name: 'session' })} />;
+        sessions={sessions} onSession={() => setScreen({ name: 'session' })} songs={songs} onSong={addSong} />;
   }
 }

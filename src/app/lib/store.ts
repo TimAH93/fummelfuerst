@@ -16,6 +16,10 @@ export interface Settings {
   jamKey?: { tonic: string; mode: KeyMode } | null;
   /** Tempo the recorder snaps chord lengths to. */
   recBpm?: number;
+  /** Songs finished before the app counted them. */
+  songsBase?: number;
+  /** Milestones already celebrated, so a card shows once. */
+  celebrated?: number[];
 }
 
 export const DEFAULT_SETTINGS: Settings = { track: 'fretboard', noteNames: 'international', a4: 440 };
