@@ -10,6 +10,7 @@ import { keyName, showChord } from '../lib/names';
 import { Settings } from '../lib/store';
 import { playProgression, stopPlayback } from '../lib/synth';
 import { useWakeLock } from '../lib/wakeLock';
+import { useKeyRange } from '../lib/keyRange';
 
 /** The progression previewed last, so a new one is played once on entry and the same one is not repeated. */
 let lastPreview = '';
@@ -91,6 +92,7 @@ export function ProgTrainer({ chords, bpm: startBpm, settings, onExit }: Props) 
   const current = chords[state.index];
   const coming = nextChord(state);
   const target = suggestVoicing(current);
+  const [pianoLow, pianoHigh] = useKeyRange([...midi.held, ...target]);
   const hit = state.hits[state.index];
   const variation = VARIATIONS[state.variation];
   const atTarget = state.bpm >= state.config.targetBpm;
@@ -144,7 +146,7 @@ export function ProgTrainer({ chords, bpm: startBpm, settings, onExit }: Props) 
           </div>
           <div class={`target ${hit ? 'ok' : ''}`} data-testid="trainer-now">{hit ? '✓ ' : ''}{nameOf(current)}</div>
           <div class="context">danach <b>{nameOf(coming)}</b>{atTarget ? ` · ${variation.name}: ${variation.hint}` : ''}</div>
-          <Piano marks={{ held: midi.held, pick: target, right: hit ? midi.held : [] }} noteNames={style} />
+          <Piano low={pianoLow} high={pianoHigh} marks={{ held: midi.held, pick: target, right: hit ? midi.held : [] }} noteNames={style} />
           {atTarget && (
             <div class="rhythm" data-testid="rhythm">
               {subdivisions.map((b) => <span class={`rhythm-dot${variation.beats.includes(b) ? ' on' : ''}${Number.isInteger(b) ? ' main' : ''}`}>{Number.isInteger(b) ? b : '+'}</span>)}

@@ -28,6 +28,7 @@ import { promptFor, revealFor } from '../lib/prompts';
 import { catalog, context, curriculum, rng } from '../lib/session';
 import { Settings, logAttempt } from '../lib/store';
 import { useWakeLock } from '../lib/wakeLock';
+import { useKeyRange } from '../lib/keyRange';
 
 interface Props {
   drill: Drill;
@@ -127,6 +128,7 @@ export function Practice({ drill, state, settings, onState, onDrill, onExit }: P
   // Every tone of the asked chord counts as right (a voicing may leave the fifth out or double a tone).
   const keysParams = exercise.params as { root?: Note; typeId?: string };
   const chordPcsNow = isKeys && keysParams.root && keysParams.typeId ? chordPcs(chord(keysParams.root, keysParams.typeId)) : [];
+  const [pianoLow, pianoHigh] = useKeyRange([...midi.held, ...tapped, ...played, ...keysSolution]);
   const pianoMarks: PianoMarks =
     phase === 'ask'
       ? { held: [...new Set([...midi.held, ...tapped])] }
@@ -169,7 +171,7 @@ export function Practice({ drill, state, settings, onState, onDrill, onExit }: P
 
           {isKeys && (
             <section class={phase === 'ask' ? 'keys' : 'keys done'}>
-              <Piano marks={pianoMarks} noteNames={style}
+              <Piano low={pianoLow} high={pianoHigh} marks={pianoMarks} noteNames={style}
                 onToggle={phase === 'ask' ? (m) => setTapped(tapped.includes(m) ? tapped.filter((x) => x !== m) : [...tapped, m]) : undefined} />
               <p class="meta">
                 {midi.devices.length ? `🎹 ${midi.devices.join(', ')}` : 'Kein Keyboard – Tasten antippen oder auf der Startseite koppeln'}

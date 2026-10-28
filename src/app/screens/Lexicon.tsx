@@ -10,6 +10,7 @@ import { keyName, showChord } from '../lib/names';
 import { FoundChord, Settings, loadFound, saveFound } from '../lib/store';
 import { playChord, playProgression, stopPlayback } from '../lib/synth';
 import { useWakeLock } from '../lib/wakeLock';
+import { useKeyRange } from '../lib/keyRange';
 import { useLink } from './Link';
 
 interface Props {
@@ -44,6 +45,7 @@ export function Lexicon({ settings, onSettings, pads, onPads, onTrain, onExit }:
   const named = (c: ProgChord) => chord(spellInKey(keyScale(key), c.rootPc).note, c.typeId);
   const label = (c: ProgChord) => showChord(named(c), style);
   const tonics = key.mode === 'major' ? MAJOR_TONICS : MINOR_TONICS;
+  const [pianoLow, pianoHigh] = useKeyRange(shown);
 
   const hear = (c: ProgChord) => { const v = suggestVoicing(c); setShown(v); void playChord(v).catch(() => {}); };
   const keep = (c: ProgChord) => {
@@ -155,7 +157,7 @@ export function Lexicon({ settings, onSettings, pads, onPads, onTrain, onExit }:
       </section>
 
       {note && <p class="verdict small ok center" data-testid="lex-note">{note}</p>}
-      <Piano marks={{ held: shown }} noteNames={style} />
+      <Piano low={pianoLow} high={pianoHigh} marks={{ held: shown }} noteNames={style} />
     </main>
   );
 }

@@ -3,6 +3,7 @@ import { Piano } from '../components/Piano';
 import { LinkState, formatCode, hostLink, joinLink, linkState, newCode, onLink, stopLink } from '../lib/link';
 import { useMidi } from '../lib/midi';
 import { Settings } from '../lib/store';
+import { useKeyRange } from '../lib/keyRange';
 
 interface Props {
   settings: Settings;
@@ -34,6 +35,7 @@ export function resumeLink(settings: Settings, onSettings: (s: Settings) => void
 export function Link({ settings, onSettings, onExit }: Props) {
   const link = useLink();
   const midi = useMidi();
+  const [linkLow, linkHigh] = useKeyRange(midi.held);
   const [typed, setTyped] = useState('');
   const [isPc, setIsPc] = useState(false);
 
@@ -100,7 +102,7 @@ export function Link({ settings, onSettings, onExit }: Props) {
               ? `🎹 ${midi.devices.join(', ')}`
               : 'Kein Keyboard sichtbar. Läuft FL Studio? Dann FL Studio kurz schließen oder in FL Studio einen MIDI-Ausgang auf loopMIDI legen.'}
           </p>
-          <Piano marks={{ held: midi.held }} />
+          <Piano low={linkLow} high={linkHigh} marks={{ held: midi.held }} noteNames={settings.noteNames} />
           <p class="meta">Dieses Fenster offen lassen – gespielt wird ab jetzt am Tablet.</p>
           <button class="secondary" onClick={disconnect}>Trennen</button>
         </section>
