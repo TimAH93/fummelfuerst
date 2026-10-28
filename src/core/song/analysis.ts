@@ -74,8 +74,15 @@ export function spellInKey(key: Scale, pc: PitchClass): { note: Note; step: numb
   if (above >= 0) candidates.push({ note: { letter: notes[above].letter as Letter, acc: notes[above].acc - 1 }, step: above, acc: -1 });
   const below = notes.findIndex((n) => notePc(n) === toPc(pc - 1));
   if (below >= 0) candidates.push({ note: { letter: notes[below].letter as Letter, acc: notes[below].acc + 1 }, step: below, acc: 1 });
-  // Lowered first on a tie (♭VII, ♭VI, ♭III are the usual names); fewer accidentals win.
-  return candidates.sort((a, b) => Math.abs(a.note.acc) - Math.abs(b.note.acc))[0];
+  if (candidates.length === 1 || Math.abs(candidates[0].note.acc) !== Math.abs(candidates[1].note.acc)) {
+    return candidates.sort((a, b) => Math.abs(a.note.acc) - Math.abs(b.note.acc))[0];
+  }
+  // A tie between lowered and raised: major keys lower (♭II ♭III ♭VI ♭VII) except the tritone
+  // (♯IV, not ♭V); minor keys raise (♯III ♯IV ♯VI ♯VII) except the Neapolitan ♭II.
+  const [lowered, raised] = candidates;
+  const minor = key.type.id === 'naturalMinor';
+  if (minor) return raised.step === 0 ? lowered : raised;
+  return [0, 3, 4].includes(lowered.step) ? raised : lowered;
 }
 
 const NUMERALS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII'];

@@ -42,6 +42,9 @@ describe('chord function in a key', () => {
     expect(chordFunction(DB, one('G7')).roman).toBe('♯IV7');
     expect(chordFunction(key('C'), one('Bb')).roman).toBe('♭VII'); // lowered still wins on a tie
     expect(chordFunction(key('C'), one('F#dim')).roman).toBe('♯iv°');
+    expect(chordFunction(key('C'), one('Db')).roman).toBe('♭II');
+    expect(chordFunction(key('A', 'naturalMinor'), one('G#dim')).roman).toBe('♯vii°');
+    expect(chordFunction(key('A', 'naturalMinor'), one('Bb')).roman).toBe('♭II');
   });
 });
 
