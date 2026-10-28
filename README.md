@@ -50,6 +50,11 @@ Adaptive guitar improvisation trainer: hear → understand → locate → play �
   most played chords, the recurring changes, the key and the lexicon genre the playing leans to,
   and nudges: a colour from that genre never played, a continuation after the most-played change
   not yet tried, a key to leave. CSV export for a database later. Core: `song/habits.ts`.
+- **Folge üben** – progression trainer (`song/trainer.ts`): a progression (from the jam trail,
+  the lexicon or the pads) at a slow click with a one-bar count-in, one bar per chord; the chord to
+  play lies amber on the keys and turns green when hit, the next one is announced. A clean round
+  adds 4 BPM up to the target; at the target, rhythm variations take over (Ganze, Halbe, Push,
+  Viertel, Off-Beat, Arpeggio) and the last clean one finishes the exercise.
 - **Gitarre** – the loop's chords as strummable grips (root in the bass, open position first,
   the fifth may go; the full colour falls back to the next simpler type and says so), a capo
   planner that picks the fret where the shapes are easiest (Dbmaj9 · C7#9 · Fm9 · Ebm9 · Ab13 →

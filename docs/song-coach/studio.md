@@ -51,6 +51,8 @@ der Coach verweisen kann:
 - **Lexikon** – Akkorde und Folgen nach Genre in der gewählten Tonart, zum Anhören auf dem Tablet,
   auf die Pads legen oder als MIDI. **Dein Spiel** (im Jam-Screen): was oft gespielt wird, Wechsel,
   Tonart, Genre-Tendenz und Vorschläge; CSV-Export.
+- **Folge üben** – Akkordfolge mit Click, langsam → schneller, Tasten leuchten vor, Treffer grün,
+  am Zieltempo Rhythmus-Varianten (Live-Loop-Stufe 1 und 2 in einem).
 - **Gitarre** – Akkorde (z. B. von den Pads) als Griffe mit Tab, Capo-Rechner (Capo 1 → C-Formen
   für die Db-Akkorde), Scale zum Drüberspielen ab Capo gezählt, Zieltöne pro Akkord.
 - **Pads** – Karte der 16 User-Chord-Pads mit Anleitung zum Speichern (inkl. Octave –).

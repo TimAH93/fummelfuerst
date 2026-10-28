@@ -17,6 +17,7 @@ interface Props {
   onSettings: (s: Settings) => void;
   pads: PadBank;
   onPads: (b: PadBank) => void;
+  onTrain: (chords: ProgChord[], bpm: number) => void;
   onExit: () => void;
 }
 
@@ -24,7 +25,7 @@ interface Props {
  * Lexicon: chords worth knowing and the progressions behind whole genres, in a key of choice,
  * to hear on the tablet, see on the keys, keep, or put on the pads.
  */
-export function Lexicon({ settings, onSettings, pads, onPads, onExit }: Props) {
+export function Lexicon({ settings, onSettings, pads, onPads, onTrain, onExit }: Props) {
   useWakeLock();
   const link = useLink();
   const [genreId, setGenreId] = useState(LEXICON[0].id);
@@ -142,6 +143,7 @@ export function Lexicon({ settings, onSettings, pads, onPads, onExit }: Props) {
                 <span class="lex-sound">{p.sound}</span>
                 <div class="row wrap lex-actions">
                   <button class="pill" onClick={() => (playingIdx?.name === p.name ? stopPlayback() : hearProg(p))} data-testid={`play-${p.name}`}>{playingIdx?.name === p.name ? '■ Stopp' : '▶ Anhören'}</button>
+                  <button class="pill" onClick={() => { stopPlayback(); onTrain(cs, Math.max(40, Math.round(p.bpm * 0.6))); }}>Üben</button>
                   <button class="pill" onClick={() => progToPads(p)}>Auf Pads 1–{cs.length}</button>
                   <button class="pill" onClick={() => progMidi(p, false)}>MIDI</button>
                   <button class="pill" onClick={() => progMidi(p, true)} disabled={link.status !== 'connected' || link.role !== 'host'}>An PC</button>

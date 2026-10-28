@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'preact/hooks';
 import {
-  EMPTY_JAM, INVERSION_NAMES, Key, KeyMode, MAJOR_TONICS, MINOR_TONICS, PadBank, PlayEntry, ProgChord, autoKey, chord, chordFunction, chordTones,
+  EMPTY_JAM, INVERSION_NAMES, loopOf, Key, KeyMode, MAJOR_TONICS, MINOR_TONICS, PadBank, PlayEntry, ProgChord, autoKey, chord, chordFunction, chordTones,
   chordType, degreeSemitones, degreeToString, habits, identifyHeld, jamStep, keyScale, logChord, logCsv, melodyGuide, melodyNoteRole, melodyNotes,
   nextChords, notePc, nudges, padFor, parseNote, pcToNote, spellInKey, suggestVoicing, toPc,
 } from '../../core';
@@ -18,6 +18,8 @@ interface Props {
   /** What is on the FLkey pads, so the screen can say "Pad 3" and put a found chord on a free pad. */
   pads: PadBank;
   onPads: (b: PadBank) => void;
+  /** Practise the progression played so far with the click. */
+  onTrain: (chords: ProgChord[]) => void;
   onExit: () => void;
 }
 
@@ -33,7 +35,7 @@ const OVER_ROOT = ['1', 'b2', '2', 'b3', '3', '4', 'b5', '5', 'b6', '6', 'b7', '
  * what tends to come next. Melodie: which tones sit on the chord. The last two lean on a sticky
  * chord that survives the pad being released.
  */
-export function ChordMonitor({ settings, onSettings, pads, onPads, onExit }: Props) {
+export function ChordMonitor({ settings, onSettings, pads, onPads, onTrain, onExit }: Props) {
   useWakeLock();
   const [jam, setJam] = useState(EMPTY_JAM);
   const [auto, setAuto] = useState<Key | null>(null);
@@ -59,7 +61,8 @@ export function ChordMonitor({ settings, onSettings, pads, onPads, onExit }: Pro
       return next;
     });
   }, [jam.history.length]);
-  useEffect(() => { if (midi.held.length) { setShown(null); setPick(null); } }, [midi.held.length]);
+  // A kept chord shown from memory steps aside when keys are pressed; a picked suggestion stays until unpicked.
+  useEffect(() => { if (midi.held.length) setShown(null); }, [midi.held.length]);
 
   const style = settings.noteNames;
   const mode: Mode = settings.jamMode ?? 'overview';
@@ -96,6 +99,10 @@ export function ChordMonitor({ settings, onSettings, pads, onPads, onExit }: Pro
   const pickStep = pick && key ? STEPS[spellInKey(keyScale(key), pick.rootPc).step] : '';
   const big = live ? nameOf(midi.held) : pickNamed ? showChord(pickNamed, style) : shown ? nameOf(shown.midis) : mode !== 'overview' && stickyNamed ? showChord(stickyNamed, style) : heldSorted.length ? heldSorted.map((m) => noteOf(toPc(m))).join(' ') : ' ';
   const romanOf = (pc: ProgChord) => (key ? chordFunction(key, pc).roman : '');
+  // Did the keys just played make the picked chord? Same root, every tone inside it, at least a triad.
+  const pickPcs = pick ? new Set(chordType(pick.typeId).formula.map((d) => toPc(pick.rootPc + degreeSemitones(d)))) : null;
+  const pickHit = !!(pick && pickPcs && live && live.rootPc === pick.rootPc && [...new Set(midi.held.map(toPc))].every((pc) => pickPcs.has(pc)));
+  const pickOnKeys = pick && pickPcs ? midi.held.filter((m) => pickPcs.has(toPc(m))) : [];
 
   const guide = mode === 'melody' && c ? melodyGuide(key, c) : null;
   const melody = mode === 'melody' ? melodyNotes(jam, midi.held) : [];
@@ -179,7 +186,8 @@ export function ChordMonitor({ settings, onSettings, pads, onPads, onExit }: Pro
       <section class="focus">
         <div class="target" data-testid="chord-name">{big}</div>
         <div class="context" data-testid="chord-function">
-          {pick && !live && pickNamed ? <><b>{pickFn?.roman ?? ''}</b>{pickFn && key ? ` = ${pickStep} Stufe von ${keyName(key.tonic, key.mode, style)}, ${chordType(pick.typeId).name} · ${pickFn.role}` : ''}</>
+          {pick && pickNamed && pickHit ? <span class="ok">✓ {showChord(pickNamed, style)} getroffen</span>
+            : pick && !live && pickNamed ? <><b>{pickFn?.roman ?? ''}</b>{pickFn && key ? ` = ${pickStep} Stufe von ${keyName(key.tonic, key.mode, style)}, ${chordType(pick.typeId).name} · ${pickFn.role}` : ''}</>
             : mode === 'chords' && fn && key && (live || c) ? <><b>{fn.roman}</b> in {keyName(key.tonic, key.mode, style)} · {fn.role}</>
             : inversionLine ? inversionLine
             : midi.held.length || shown ? ' '
@@ -187,7 +195,7 @@ export function ChordMonitor({ settings, onSettings, pads, onPads, onExit }: Pro
         </div>
         <p class="meta" data-testid="chord-notes">{padNo !== null ? `Pad ${padNo + 1}  ·  ` : ''}{heldLine || (pick && pickNamed && !live ? chordTones(pickNamed).map((n, i) => `${showNote(n, style)} (${showDegree(degreeToString(pickNamed.type.formula[i]))})`).join('  ·  ') : shown ? shown.midis.map((m) => noteOf(toPc(m))).join('  ·  ') : '')}</p>
 
-        <Piano marks={{ held: midi.held, right: shown && !midi.held.length ? shown.midis : melody, pick: !midi.held.length ? pickMidis : [], dots }} noteNames={style} />
+        <Piano marks={{ held: midi.held, right: shown && !midi.held.length ? shown.midis : pick ? pickOnKeys : melody, pick: pickMidis, dots }} noteNames={style} />
 
         {mode === 'overview' && (
           <div class="found" data-testid="found">
@@ -259,13 +267,13 @@ export function ChordMonitor({ settings, onSettings, pads, onPads, onExit }: Pro
         {mode === 'chords' && (
           next.length > 0 ? (
             <div class="next" data-testid="next-chords">
-              <span class="next-label">Danach passt · antippen zeigt die Tasten</span>
+              <span class="next-label">Danach passt · antippen zeigt die Tasten{pick ? ' · nochmal antippen blendet aus' : ''}</span>
               <div class="chips">
                 {next.map((s) => {
                   const on = pick !== null && pick.rootPc === s.chord.rootPc && pick.typeId === s.chord.typeId;
                   return (
-                    <div class={on ? 'chip on' : 'chip'} role="button" tabIndex={0} onClick={() => setPick(on ? null : s.chord)} aria-pressed={on}>
-                      <span class="chip-name">{showChord(chord(s.root, s.typeId), style)}</span>
+                    <div class={on ? (pickHit ? 'chip on hit' : 'chip on') : 'chip'} role="button" tabIndex={0} onClick={() => setPick(on ? null : s.chord)} aria-pressed={on}>
+                      <span class="chip-name">{on && pickHit ? '✓ ' : ''}{showChord(chord(s.root, s.typeId), style)}</span>
                       <span class="chip-roman">{s.roman}</span>
                       <span class="chip-why">{s.why}</span>
                       <button class="chip-play" onClick={(e) => { e.stopPropagation(); setPick(s.chord); void playChord(suggestVoicing(s.chord)).catch(() => {}); }} aria-label={`${showChord(chord(s.root, s.typeId), style)} anhören`}>▶</button>
@@ -280,6 +288,9 @@ export function ChordMonitor({ settings, onSettings, pads, onPads, onExit }: Pro
         {mode === 'chords' && jam.history.length > 0 && (
           <div class="next" data-testid="trail">
             <span class="next-label">Bisher gespielt</span>
+            <div class="row center">
+              <button class="pill" onClick={() => { const h = jam.history; const l = loopOf(h); onTrain(l ? h.slice(0, l.period) : h.slice(-8)); }} data-testid="train-trail">▶ Diese Folge üben</button>
+            </div>
             <div class="trail">
               {jam.history.slice(-8).map((pc, i, arr) => {
                 const on = pick !== null && pick.rootPc === pc.rootPc && pick.typeId === pc.typeId;

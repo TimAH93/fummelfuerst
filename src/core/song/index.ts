@@ -9,3 +9,4 @@ export * from './reference';
 export * from './milestones';
 export * from './lexicon';
 export * from './habits';
+export * from './trainer';
