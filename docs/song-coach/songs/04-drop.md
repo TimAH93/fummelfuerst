@@ -17,7 +17,7 @@
 | Outro | 33–36 | Akkorde ausgehalten, werden leiser |
 
 ## Stand
-- [ ] MIDI importieren, Sounds zuweisen
-- [ ] Filter-Automation im Intro und Build-up (Akkorde)
+- [x] MIDI importieren, Sounds zuweisen (Supersaw Nation, Cicada, 808 Crushed, Grv Kick 19, 909 Clap, Bracke CH 2, 808 Snare)
+- [x] MP3 exportiert (erste Fassung)
+- [ ] Nächste Fassung: Filter-Automation im Intro und Build-up (Akkorde)
 - [ ] Sidechain (Kick → Chords/808)
-- [ ] MP3 exportieren
