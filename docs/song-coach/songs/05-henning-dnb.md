@@ -1,0 +1,32 @@
+# Song 05 – Henning DnB (vereinfacht)
+
+Aus Hennings Projekt_1 (Score-Log-Rumspielen + gebautes B♭m-Gerüst + DnB-Beat) die guten Ideen
+herausgezogen und vereinfacht. Nach A minor verschoben: fast nur weiße Tasten.
+
+## Hennings Ideen, die drin sind
+- **Grundton + None** (A2 + B3): der Klang, zu dem Henning immer wieder zurückkam → Intro und Outro.
+- **Absteigender Bass A – G – F – E (– E♭ – D) unter liegendem G** → der Break.
+- **i – ♭VII – v – ♭VI** (Hennings B♭m – A♭ – Fm – G♭) → hier **Am – G – Em – F**.
+- **Hennings Two-Step** (Kick 1, „und“ von 1, 3½, kurz vor der nächsten 1; Snare 2 und 4) auf 172 BPM.
+
+## Vereinfacht
+- Akkorde **gehalten**, 2 Takte pro Akkord, statt Achtel-/Sechzehntel-Wechsel.
+- Der Bass spielt den Grundton **im Rhythmus der Kick**, damit die Hände nicht springen.
+- Hi-Hats in Achteln statt Sechzehnteln.
+
+## Datei
+- `05-henning-dnb.mid` – 172 BPM, 3 Tracks: Pad, Bass, Drums (GM/FPC: Kick C2, Snare D2, Hat G♭2)
+
+## Aufbau (52 Takte ≈ 73 s)
+| Teil | Takte | Was passiert |
+|---|---|---|
+| Intro | 1–8 | A + B allein, ab Takt 5 die Akkorde leise, Hats |
+| Main 1 | 9–24 | Am – G – Em – F, Bass + Two-Step |
+| Break | 25–32 | Hennings Basslinie A – G – F – E unter G, E♭ – D führt zurück |
+| Main 2 | 33–48 | wie Main 1, lauter |
+| Outro | 49–52 | A + B klingt aus |
+
+## Stand
+- [ ] Sounds: Pad (FLEX, Liquid-DnB-Pack), Bass (Reese/Sub), Drums (FPC)
+- [ ] Riser vor Main 1 und Main 2
+- [ ] MP3 exportieren
