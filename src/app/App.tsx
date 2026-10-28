@@ -13,10 +13,12 @@ import { ChordMonitor } from './screens/ChordMonitor';
 import { Recorder } from './screens/Recorder';
 import { Pads } from './screens/Pads';
 import { Arrangement } from './screens/Arrangement';
+import { Timing } from './screens/Timing';
+import { Hum } from './screens/Hum';
 
 type Screen =
   | { name: 'home' } | { name: 'practice'; drill: Drill } | { name: 'tuner' } | { name: 'link' } | { name: 'brief' }
-  | { name: 'monitor' } | { name: 'recorder' } | { name: 'pads' } | { name: 'arrangement' };
+  | { name: 'monitor' } | { name: 'recorder' } | { name: 'pads' } | { name: 'arrangement' } | { name: 'timing' } | { name: 'hum' };
 
 export function App() {
   const [state, setState] = useState<LearnerState | null>(null);
@@ -68,6 +70,10 @@ export function App() {
       return <Pads pads={pads} onPads={updatePads} settings={settings} onExit={home} />;
     case 'arrangement':
       return <Arrangement onExit={home} />;
+    case 'timing':
+      return <Timing settings={settings} onSettings={updateSettings} onExit={home} />;
+    case 'hum':
+      return <Hum settings={settings} onSettings={updateSettings} onExit={home} />;
     case 'brief':
       return <SongBrief onExit={home} />;
     case 'link':
@@ -77,6 +83,7 @@ export function App() {
     default:
       return <Home state={state} settings={settings} onSettings={updateSettings}
         onStart={(drill) => setScreen({ name: 'practice', drill })} onTuner={() => setScreen({ name: 'tuner' })} onLink={() => setScreen({ name: 'link' })} onBrief={() => setScreen({ name: 'brief' })} onMonitor={() => setScreen({ name: 'monitor' })}
-        onRecorder={() => setScreen({ name: 'recorder' })} onPads={() => setScreen({ name: 'pads' })} onArrangement={() => setScreen({ name: 'arrangement' })} />;
+        onRecorder={() => setScreen({ name: 'recorder' })} onPads={() => setScreen({ name: 'pads' })} onArrangement={() => setScreen({ name: 'arrangement' })}
+        onTiming={() => setScreen({ name: 'timing' })} onHum={() => setScreen({ name: 'hum' })} />;
   }
 }

@@ -1,3 +1,4 @@
+import { MidiEvent, writeMidi } from '../listen/melody';
 import { chordType } from '../theory/chord';
 import { Midi } from '../theory/pitch';
 import { noteName, pcToNote } from '../theory/spelling';
@@ -89,47 +90,17 @@ export function progressionText(chords: ProgChord[], key?: Key | null): string {
 
 export const totalBeats = (chords: RecordedChord[]): number => chords.reduce((a, c) => a + (c.beats ?? DEFAULT_BEATS), 0);
 
-const TPQ = 96;
-
-function vlq(n: number): number[] {
-  const out = [n & 0x7f];
-  while ((n >>= 7)) out.unshift((n & 0x7f) | 0x80);
-  return out;
-}
-
 /**
- * Standard MIDI file (format 0, 96 ticks per quarter) with the chords as played, one after the
- * other, each held for its length. FL Studio reads it straight into a piano roll.
+ * Standard MIDI file with the chords as played, one after the other, each held for its length.
+ * FL Studio reads it straight into a piano roll.
  */
 export function progressionMidi(chords: RecordedChord[], bpm: number, name = 'Akkordfolge'): Uint8Array {
-  const events: [tick: number, status: number, a: number, b: number][] = [];
-  let tick = 0;
+  const events: MidiEvent[] = [];
+  let beat = 0;
   for (const c of chords) {
-    const len = (c.beats ?? DEFAULT_BEATS) * TPQ;
-    const midis = [...new Set(c.midis)].sort((a, b) => a - b);
-    midis.forEach((m, i) => {
-      events.push([tick + i * 3, 0x90, m, 90]);
-      events.push([tick + len - 4, 0x80, m, 0]);
-    });
-    tick += len;
+    const beats = c.beats ?? DEFAULT_BEATS;
+    [...new Set(c.midis)].sort((a, b) => a - b).forEach((m, i) => events.push({ midi: m, startBeat: beat + i / 32, beats: beats - i / 32 }));
+    beat += beats;
   }
-  events.sort((a, b) => a[0] - b[0] || (a[1] === 0x80 ? -1 : 1));
-  const usPerQuarter = Math.round(60e6 / bpm);
-  const title = Array.from(new TextEncoder().encode(name));
-  const body: number[] = [
-    0, 0xff, 0x51, 3, (usPerQuarter >> 16) & 255, (usPerQuarter >> 8) & 255, usPerQuarter & 255,
-    0, 0xff, 0x58, 4, 4, 2, 24, 8,
-    0, 0xff, 0x03, ...vlq(title.length), ...title,
-  ];
-  let last = 0;
-  for (const [t, status, a, b] of events) {
-    body.push(...vlq(t - last), status, a, b);
-    last = t;
-  }
-  body.push(0, 0xff, 0x2f, 0);
-  const be32 = (n: number) => [(n >>> 24) & 255, (n >> 16) & 255, (n >> 8) & 255, n & 255];
-  return Uint8Array.from([
-    0x4d, 0x54, 0x68, 0x64, 0, 0, 0, 6, 0, 0, 0, 1, (TPQ >> 8) & 255, TPQ & 255,
-    0x4d, 0x54, 0x72, 0x6b, ...be32(body.length), ...body,
-  ]);
+  return writeMidi(events, bpm, name);
 }

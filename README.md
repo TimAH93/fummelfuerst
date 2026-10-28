@@ -54,6 +54,14 @@ Adaptive guitar improvisation trainer: hear → understand → locate → play �
   at the tempo (templates: Build-up & Drop, two drops, piano ballad, loop → song, pop, DnB), a big
   total length, and rules of thumb (nothing longer than 16 bars without a change, a build-up needs
   its drop, an outro, under a minute). The plan copies as text for the song file.
+- **Im Takt wechseln** – timing trainer, step 1 of the live-looping ladder: a Web Audio click with a
+  one-bar count-in, every pad press judged against the bar line (genau within ±80 ms, früh / spät,
+  daneben), hits, streak and mean offset, and "Stufe 1 geschafft" after four clean loops in a row.
+  Onsets are the first key of a press, so legato pad changes count from the right moment.
+- **Idee summen** – idea recorder: hum or whistle into the tablet (optional click with count-in); the
+  monophonic tracker turns frames into notes with ends, the line is snapped to 16ths, shown on a
+  small piano roll with a key guess, shifted by octaves if needed, and saved as MIDI (or sent to the
+  paired PC). Pure parts: `listen/melody.ts` (tracker, quantiser, key guess, SMF writer).
 - **Song brief** – for getting from a loop to a song with a Claude "Song-Coach" project:
   type or record the loop's chords from the keyboard; the app detects the key (all 24 keys
   ranked; relative-key ambiguity is shown, borrowed chords like ♭VII flagged), adds tempo,
@@ -77,7 +85,7 @@ npm run typecheck
 ## What is here
 
 ```
-src/app/             UI (Preact): screens/ Home · Practice · Tuner · ChordMonitor (jam) · Recorder · Pads · Arrangement · SongBrief · Link, components/, lib/
+src/app/             UI (Preact): screens/ Home · Practice · Tuner · ChordMonitor (jam) · Recorder · Pads · Arrangement · Timing · Hum · SongBrief · Link, components/, lib/
 src/core/            pure TypeScript, no DOM – checked with lib ES2022 only
   theory/   pitch · spelling · interval · scale · chord · harmony
   guitar/   tuning · fretboard

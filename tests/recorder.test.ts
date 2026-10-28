@@ -1,4 +1,5 @@
 import { describe, expect, it } from './expect';
+import { readMidi } from './midiRead';
 import {
   EMPTY_RECORDING, Recording, cycleBeats, finishRecording, loopOf, parseNote, parseProgression, progressionMidi, progressionText,
   recordStep, snapBeats, totalBeats,
@@ -71,35 +72,6 @@ describe('loops', () => {
   });
 });
 
-/** Just enough of a Standard MIDI File reader to check what we wrote. */
-function readMidi(bytes: Uint8Array) {
-  const dv = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
-  const tpq = dv.getUint16(12);
-  let i = 22;
-  let tick = 0;
-  const notes: { tick: number; midi: number; on: boolean }[] = [];
-  let tempo = 0;
-  let name = '';
-  const vlq = () => { let n = 0; let b; do { b = bytes[i++]; n = (n << 7) | (b & 0x7f); } while (b & 0x80); return n; };
-  while (i < bytes.length) {
-    tick += vlq();
-    const status = bytes[i++];
-    if (status === 0xff) {
-      const type = bytes[i++];
-      const len = vlq();
-      if (type === 0x51) tempo = (bytes[i] << 16) | (bytes[i + 1] << 8) | bytes[i + 2];
-      if (type === 0x03) name = new TextDecoder().decode(bytes.slice(i, i + len));
-      i += len;
-      if (type === 0x2f) break;
-    } else {
-      const midi = bytes[i++];
-      const vel = bytes[i++];
-      notes.push({ tick, midi, on: (status & 0xf0) === 0x90 && vel > 0 });
-    }
-  }
-  return { tpq, tempo, name, notes };
-}
-
 describe('MIDI export', () => {
   it('writes the voicings one after the other at the tempo', () => {
     let r: Recording = EMPTY_RECORDING;
@@ -115,6 +87,7 @@ describe('MIDI export', () => {
     const ons = m.notes.filter((n) => n.on);
     expect(ons.length).toBe(PAD1.length + PAD4.length + PAD5.length);
     expect(ons.filter((n) => n.tick < 96 * 4).map((n) => n.midi)).toEqual(PAD1); // bar 1: Dbmaj9
+    expect(ons.slice(0, 5).map((n) => n.tick)).toEqual([0, 3, 6, 9, 12]); // a light roll upwards
     expect(ons.filter((n) => n.tick >= 96 * 4 && n.tick < 96 * 6).map((n) => n.midi)).toEqual(PAD4); // beats 5–6
     expect(ons.filter((n) => n.tick >= 96 * 6).map((n) => n.midi)).toEqual(PAD5); // beats 7–8
     const lastOff = Math.max(...m.notes.filter((n) => !n.on).map((n) => n.tick));

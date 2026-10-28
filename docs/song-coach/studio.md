@@ -42,6 +42,9 @@ der Coach verweisen kann:
   die Melodie auf der Klaviatur. Tonart automatisch oder festgelegt.
 - **Aufnehmen** – Akkordfolge vom Keyboard als Chord-Sheet mit Längen; MIDI-Export (auch direkt an
   den PC), Text, oder in den Song-Steckbrief.
+- **Summen** – Idee ins Tablet summen/pfeifen → Noten auf dem Raster, Tonart-Tipp, MIDI-Export.
+- **Im Takt** – Click mit Vorzähler, jeder Pad-Wechsel wird gegen die Eins bewertet (±80 ms);
+  4 saubere Loops in Folge = Live-Loop-Stufe 1.
 - **Pads** – Karte der 16 User-Chord-Pads mit Anleitung zum Speichern (inkl. Octave –).
 - **Arrangement** – Teile als Zeitleiste mit Takten und Uhrzeit bei BPM, Vorlagen, Faustregeln.
 - **Song-Steckbrief** – Text für den Coach (Akkorde, Tonart, Stufen, Tempo, was fehlt).
