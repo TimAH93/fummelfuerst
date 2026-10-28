@@ -332,7 +332,10 @@ textarea.field-input { resize: vertical; }
 .plan-row .meta { font-size: 16px; }
 .plan-no { font-size: 20px; color: var(--muted); text-align: center; }
 .plan-name { font-size: 20px; font-weight: 700; }
-.countdown { font-size: clamp(96px, 20vw, 240px); font-weight: 800; line-height: 1; letter-spacing: -0.03em; }
+.countdown { font-size: clamp(80px, 15vw, 190px); font-weight: 800; line-height: 1; letter-spacing: -0.03em; }
+.session .focus .plan-list { max-width: 700px; }
+.session .focus .plan-row { padding: 6px 12px; }
+.session .focus .plan-name { font-size: 17px; }
 .countdown.over { color: var(--off); }
 .genre-card { display: flex; flex-direction: column; gap: 6px; max-width: 900px; width: 100%; margin: 0 auto; padding: 14px 18px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); }
 .genre-card ul { margin: 0; padding-left: 1.2em; font-size: 18px; line-height: 1.45; }
