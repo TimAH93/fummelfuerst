@@ -169,7 +169,7 @@ export function Practice({ drill, state, settings, onState, onDrill, onExit }: P
 
           {isKeys && (
             <section class={phase === 'ask' ? 'keys' : 'keys done'}>
-              <Piano marks={pianoMarks}
+              <Piano marks={pianoMarks} noteNames={style}
                 onToggle={phase === 'ask' ? (m) => setTapped(tapped.includes(m) ? tapped.filter((x) => x !== m) : [...tapped, m]) : undefined} />
               <p class="meta">
                 {midi.devices.length ? `🎹 ${midi.devices.join(', ')}` : 'Kein Keyboard – Tasten antippen oder auf der Startseite koppeln'}

@@ -105,7 +105,7 @@ export function ChordMonitor({ settings, onSettings, pads, onExit }: Props) {
         </div>
         <p class="meta" data-testid="chord-notes">{padNo !== null ? `Pad ${padNo + 1}  ·  ` : ''}{tones.join('  ·  ')}</p>
 
-        <Piano marks={{ held: jam.chordMidis.filter((m) => midi.held.includes(m)), right: melody, dots }} />
+        <Piano marks={{ held: jam.chordMidis.filter((m) => midi.held.includes(m)), right: melody, dots }} noteNames={style} />
 
         <div class={`hint ${melodyRole ? (melodyRole.kind === 'target' || melodyRole.kind === 'colour' ? 'ok' : melodyRole.kind === 'avoid' || melodyRole.kind === 'outside' ? 'off' : '') : ''}`} data-testid="melody-line">
           {melodyRole ? `${melodyName} = ${melodyRole.degree} über ${symbol}: ${melodyRole.text}`

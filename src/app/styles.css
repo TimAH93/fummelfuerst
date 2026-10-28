@@ -203,7 +203,9 @@ button:disabled { opacity: 0.4; cursor: default; }
 .piano .held { fill: var(--accent); }
 .piano .right { fill: var(--ok); }
 .piano .wrong { fill: var(--off); }
-.piano .key-label { fill: #55555c; font-size: 16px; pointer-events: none; }
+.piano .key-label { fill: #55555c; font-size: 15px; pointer-events: none; }
+.piano .black-label { fill: #8a8a92; font-size: 11px; }
+.piano .black-label.on { fill: var(--bg); font-weight: 700; }
 
 /* ── Link ─────────────────────────────────────────────── */
 .choice { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }

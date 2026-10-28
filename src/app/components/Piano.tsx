@@ -1,3 +1,7 @@
+import { pcToNote, toPc } from '../../core';
+import { showNote } from '../lib/names';
+import { NoteNames } from '../lib/store';
+
 const BLACK = new Set([1, 3, 6, 8, 10]);
 
 export type DotKind = 'target' | 'colour' | 'stable' | 'safe' | 'avoid';
@@ -14,7 +18,7 @@ export interface PianoMarks {
  * Keyboard C3–C6 (the 37 keys of an FLkey 37). Tapping toggles a key when `onToggle` is set,
  * so the drill also works without a MIDI keyboard.
  */
-export function Piano({ low = 48, high = 84, marks, onToggle }: { low?: number; high?: number; marks: PianoMarks; onToggle?: (m: number) => void }) {
+export function Piano({ low = 48, high = 84, marks, onToggle, noteNames = 'international' }: { low?: number; high?: number; marks: PianoMarks; onToggle?: (m: number) => void; noteNames?: NoteNames }) {
   const whites: number[] = [];
   for (let m = low; m <= high; m++) if (!BLACK.has(m % 12)) whites.push(m);
   const W = 40;
@@ -38,12 +42,17 @@ export function Piano({ low = 48, high = 84, marks, onToggle }: { low?: number; 
         <rect class={`key white ${cls(m)}`} x={whiteX(m) + 1} y={0} width={W - 2} height={H} rx={5}
           data-midi={m} onClick={onToggle && (() => onToggle(m))} />
       ))}
-      {whites.filter((m) => m % 12 === 0).map((m) => (
-        <text class="key-label" x={whiteX(m) + W / 2} y={H - 12} text-anchor="middle">C{Math.floor(m / 12) - 1}</text>
+      {whites.map((m) => (
+        <text class="key-label" x={whiteX(m) + W / 2} y={H - 12} text-anchor="middle">
+          {showNote(pcToNote(toPc(m), 'flat'), noteNames)}{m % 12 === 0 ? Math.floor(m / 12) - 1 : ''}
+        </text>
       ))}
       {blacks.map((m) => (
         <rect class={`key black ${cls(m)}`} x={blackX(m)} y={0} width={W * 0.64} height={H * 0.6} rx={4}
           data-midi={m} onClick={onToggle && (() => onToggle(m))} />
+      ))}
+      {blacks.map((m) => (
+        <text class={`key-label black-label${cls(m) ? ' on' : ''}`} x={blackX(m) + W * 0.32} y={18} text-anchor="middle">{showNote(pcToNote(toPc(m), 'flat'), noteNames)}</text>
       ))}
       {dots.map((d) => {
         const { cx, cy } = dot(d.m);
