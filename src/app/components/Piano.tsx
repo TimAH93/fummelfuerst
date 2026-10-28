@@ -52,7 +52,7 @@ export function Piano({ low = 48, high = 84, marks, onToggle, noteNames = 'inter
           data-midi={m} onClick={onToggle && (() => onToggle(m))} />
       ))}
       {blacks.map((m) => (
-        <text class="key-label black-label" x={blackX(m) + W * 0.32} y={18} text-anchor="middle">{showNote(pcToNote(toPc(m), 'flat'), noteNames)}</text>
+        <text class={`key-label black-label${cls(m) ? ' on' : ''}`} x={blackX(m) + W * 0.32} y={18} text-anchor="middle">{showNote(pcToNote(toPc(m), 'flat'), noteNames)}</text>
       ))}
       {dots.map((d) => {
         const { cx, cy } = dot(d.m);
