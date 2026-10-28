@@ -4,6 +4,8 @@ import {
   IntervalHuntParams,
   KeysChordParams,
   KeysChordSolution,
+  KeysVoicingParams,
+  KeysVoicingSolution,
   IntervalHuntSolution,
   MelodyChordParams,
   MelodyChordSolution,
@@ -97,6 +99,20 @@ export function promptFor(ex: Exercise, help: HelpLevel, style: NoteNames): Prom
         hint: full ? `Töne ${tones.join(' – ')} · Bass: ${tones[p.inversion]}` : undefined,
       };
     }
+    case 'keys-voicing': {
+      const p = ex.params as KeysVoicingParams;
+      const s = ex.solution as KeysVoicingSolution;
+      const c = chord(p.root, p.typeId);
+      const tone = (label: string) => {
+        const [n, d] = label.split(':');
+        return `${showNote(parseNote(n), style)} (${d})`;
+      };
+      return {
+        main: showChord(c, style),
+        sub: 'Links Grundton · rechts ohne Grundton',
+        hint: full ? `Brauchst: ${s.required.map(tone).join(' · ')} · Quinte darf fehlen` : undefined,
+      };
+    }
     case 'melody-chord': {
       const p = ex.params as MelodyChordParams;
       return {
@@ -171,6 +187,25 @@ export function revealFor(ex: Exercise, style: NoteNames): Reveal {
       return {
         lines: [tones, `Gitarre: Saiten ${strings(t, s.guitar.strings)} (${s.guitar.tab})`],
         board: { dots: s.guitar.positions.map((q) => ({ ...q, label: label(q), kind: 'answer' as const })), strings: s.guitar.strings },
+      };
+    }
+    case 'keys-voicing': {
+      const p = ex.params as KeysVoicingParams;
+      const s = ex.solution as KeysVoicingSolution;
+      const c = chord(p.root, p.typeId);
+      const bass = showNote(p.root, style);
+      const rh = s.rightHand.map((l) => {
+        const [n, d] = l.split(':');
+        return `${showNote(parseNote(n), style)}${d === '1' ? '' : ` (${d})`}`;
+      });
+      if (!s.guitar) return { lines: [`${bass} | ${rh.join(' ')}`] };
+      const label = (pos: { string: number; fret: number }) => {
+        const d = functionInChord(c, toPc(pitchAt(t, pos)));
+        return d ? (d.acc === 0 ? '' : d.acc < 0 ? '♭' : '♯') + d.number : '';
+      };
+      return {
+        lines: [`${bass} | ${rh.join(' ')}`, `Gitarre: ${s.guitar.tab}`],
+        board: { dots: s.guitar.positions.map((q) => ({ ...q, label: label(q), kind: 'answer' as const })) },
       };
     }
     case 'melody-chord': {

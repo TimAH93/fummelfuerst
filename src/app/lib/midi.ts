@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
-import { busState, setDevices, setHeld, subscribe } from './noteBus';
+import { BusState, busState, setDevices, setHeld, subscribe } from './noteBus';
 
 export type MidiStatus = 'unsupported' | 'pending' | 'denied' | 'no-device' | 'ready';
 
@@ -75,14 +75,17 @@ export function useMidi(onChord?: (midis: number[]) => void, min = 3, settleMs =
     ensureLocalMidi();
     statusListeners.add(setStatus);
     setStatus(localStatus);
-    const off = subscribe((s) => {
+    const onBus = (s: BusState) => {
       setBus(s);
       window.clearTimeout(timer.current);
       if (s.held.length >= min) {
         const snapshot = s.held;
         timer.current = window.setTimeout(() => callback.current?.(snapshot), settleMs);
       }
-    });
+    };
+    const off = subscribe(onBus);
+    // A chord already held when the screen opens (pad held while switching screens) counts too.
+    onBus(busState());
     return () => {
       off();
       statusListeners.delete(setStatus);

@@ -7,10 +7,47 @@ und als Kontext für den Song-Coach (Claude-Projekt, siehe README.md in diesem O
 
 - Gitarre seit ~10 Jahren, immer wieder: Westerngitarre (aktuell keine E-Gitarre, auch keine geplant), früher drei E-Gitarren, vor allem Riffs.
 - Möchte auch selbst singen.
-- Notennamen international: B (nicht H), Bb (nicht B).
+- Notennamen und Musikbegriffe **englisch**: B (nicht H), Bb (nicht B), F minor, C major,
+  natural/harmonic minor, minor pentatonic, root position, 1st inversion … Sonst Deutsch.
 - Theorie-Unterricht gehabt: Skalen, Tonleitern, Noten. Nie in einer Band, noch nie einen Song fertig gemacht.
 - DAW-Anfänger. Problem: Ich komme vom Loop nicht zum ganzen Song.
 - Stil: offen, viele Richtungen. Der Coach leitet ihn aus Referenz-Songs ab.
+  Gerade besonders: **Neo-Soul / jazzige Klavier-Harmonik** (Septakkorde, Nonen, Swing) und
+  emotionale Klavierstücke; später Beats Richtung Kanye / J Dilla.
+
+## Ziele
+
+1. **Musik bauen:** eigene Ideen in FL Studio zu fertigen Songs machen – auch moderne Genres
+   (Hyperpop, Build-up & Drop). Klavier ist Werkzeug zum Ideenfinden, kein Selbstzweck:
+   keine Stücke nachspielen.
+2. **Musik verstehen:** Theorie vom Hören zum Namen lernen (z. B. ii – V – I), so viel, wie der Track braucht.
+3. **Live loopen:** mit dem FLkey ein Stück live schichten – Akkorde einspielen, Loop läuft weiter,
+   Bass, Melodie, Drums drüber, mit den Reglern live arrangieren. Stufenleiter:
+   1. Akkordfolge 4× ohne Stocken im Takt (Metronom)
+   2. Akkorde aufnehmen, frei drüber improvisieren
+   3. Akkorde → Bass → Melodie schichten, ohne Stopp (Loop Recording + Blend Notes, ein Kanal pro Instrument)
+   4. Drums auf den Pads (FPC) dazu
+   5. Live arrangieren mit den Reglern (Channel Volume): rein, raus, Pause, Drop
+
+Zeit: mehr als 3–4 Sessions pro Woche möglich. Akkorde kommen über die User-Chord-Pads, nicht über
+Fingersätze auf den Tasten.
+
+## Fummelfürst-App (Tablet)
+
+Eigene PWA, die mit dem FLkey (direkt per USB oder vom PC gekoppelt) mitliest. Werkzeuge, auf die
+der Coach verweisen kann:
+
+- **Was spiele ich?** – nennt den gehaltenen Akkord (auch Pad-Akkorde), seine Stufe in der Tonart
+  (ii9 in Db major, V7/iii …), 2–3 Folgeakkorde mit Grund, und zeigt Zieltöne/Farbe/Durchgang für
+  die Melodie auf der Klaviatur. Tonart automatisch oder festgelegt.
+- **Aufnehmen** – Akkordfolge vom Keyboard als Chord-Sheet mit Längen; MIDI-Export (auch direkt an
+  den PC), Text, oder in den Song-Steckbrief.
+- **Summen** – Idee ins Tablet summen/pfeifen → Noten auf dem Raster, Tonart-Tipp, MIDI-Export.
+- **Im Takt** – Click mit Vorzähler, jeder Pad-Wechsel wird gegen die Eins bewertet (±80 ms);
+  4 saubere Loops in Folge = Live-Loop-Stufe 1.
+- **Pads** – Karte der 16 User-Chord-Pads mit Anleitung zum Speichern (inkl. Octave –).
+- **Arrangement** – Teile als Zeitleiste mit Takten und Uhrzeit bei BPM, Vorlagen, Faustregeln.
+- **Song-Steckbrief** – Text für den Coach (Akkorde, Tonart, Stufen, Tempo, was fehlt).
 
 ## Software
 

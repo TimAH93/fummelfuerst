@@ -18,12 +18,33 @@ export interface LinkState {
   error?: string;
 }
 
-type Message = { type: 'held'; held: number[] } | { type: 'devices'; devices: string[] };
+type Message =
+  | { type: 'held'; held: number[] }
+  | { type: 'devices'; devices: string[] }
+  /** Tablet → PC: a file to save next to FL Studio (a recorded progression as MIDI). */
+  | { type: 'file'; name: string; mime: string; data: ArrayBuffer };
 
 let state: LinkState = { role: null, code: null, status: 'idle' };
 const listeners = new Set<(s: LinkState) => void>();
 let peer: Peer | null = null;
 let cleanup: (() => void) | null = null;
+/** The PC's connection while hosting, for sending files back. */
+let hostConn: DataConnection | null = null;
+let fileListener: ((name: string, mime: string, data: ArrayBuffer) => void) | null = null;
+
+/** PC side: what to do with a file the tablet sends (the Link screen downloads it). */
+export function onFile(l: typeof fileListener): () => void {
+  fileListener = l;
+  return () => { if (fileListener === l) fileListener = null; };
+}
+
+/** Tablet side: send a file to the paired PC. False when nothing is connected. */
+export function sendFile(name: string, mime: string, data: Uint8Array): boolean {
+  if (!hostConn?.open) return false;
+  const copy = new Uint8Array(data);
+  hostConn.send({ type: 'file', name, mime, data: copy.buffer } satisfies Message);
+  return true;
+}
 
 const set = (patch: Partial<LinkState>) => {
   state = { ...state, ...patch };
@@ -50,6 +71,7 @@ function peerOptions(): PeerOptions {
 export function stopLink(): void {
   cleanup?.();
   cleanup = null;
+  hostConn = null;
   peer?.destroy();
   peer = null;
   setHeld('remote', []);
@@ -65,13 +87,14 @@ export function hostLink(code: string, onCodeTaken?: (fresh: string) => void): v
   peer = p;
   p.on('open', () => set({ status: 'waiting', error: undefined }));
   p.on('connection', (conn) => {
-    conn.on('open', () => set({ status: 'connected' }));
+    conn.on('open', () => { hostConn = conn; set({ status: 'connected' }); });
     conn.on('data', (raw) => {
       const msg = raw as Message;
       if (msg.type === 'held') setHeld('remote', msg.held);
       if (msg.type === 'devices') setDevices('remote', msg.devices.map((d) => `${d} (PC)`));
     });
     conn.on('close', () => {
+      if (hostConn === conn) hostConn = null;
       setHeld('remote', []);
       setDevices('remote', []);
       if (peer === p) set({ status: 'waiting' });
@@ -108,6 +131,10 @@ export function joinLink(code: string): void {
       const s = busState();
       send({ type: 'devices', devices: s.bySource.local.devices });
       send({ type: 'held', held: s.bySource.local.held });
+    });
+    conn.on('data', (raw) => {
+      const msg = raw as Message;
+      if (msg.type === 'file') fileListener?.(msg.name, msg.mime, msg.data instanceof ArrayBuffer ? msg.data : new Uint8Array(msg.data as ArrayLike<number>).buffer);
     });
     conn.on('close', () => {
       if (peer !== p) return;

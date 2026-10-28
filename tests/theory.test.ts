@@ -102,7 +102,7 @@ describe('chords', () => {
   it('C major triad = C E G', () => expect(chordToneNames(chord('C', 'maj'))).toEqual(['C', 'E', 'G']));
   it('A minor triad = A C E', () => expect(chordToneNames(chord('A', 'min'))).toEqual(['A', 'C', 'E']));
   it('diminished triad = 1 b3 b5', () => expect(chordFormulaString(CHORD_TYPES.find((t) => t.id === 'dim')!)).toBe('1 b3 b5'));
-  it('builds all nine v0.1 chord types on C', () => {
+  it('builds every chord type on C, spelled by degree', () => {
     const got = Object.fromEntries(CHORD_TYPES.map((t) => [t.id, chordToneNames(chord('C', t.id)).join(' ')]));
     expect(got).toEqual({
       maj: 'C E G',
@@ -114,6 +114,11 @@ describe('chords', () => {
       dom7: 'C E G Bb',
       dim7: 'C Eb Gb Bbb',
       m7b5: 'C Eb Gb Bb',
+      maj9: 'C E G B D',
+      m9: 'C Eb G Bb D',
+      dom9: 'C E G Bb D',
+      dom7s9: 'C E G Bb D#', // the #9 is D#, not Eb
+      dom13: 'C E G Bb D A',
     });
   });
   it('parses chord symbols', () => {
@@ -122,6 +127,8 @@ describe('chords', () => {
     expect(parseChord('Bbmaj7').type.id).toBe('maj7');
     expect(parseChord('F#m7b5').type.id).toBe('m7b5');
     expect(parseChord('Bø7').type.id).toBe('m7b5');
+    expect(['Dbmaj9', 'Fm9', 'G9', 'C7#9', 'Ab13'].map((c) => parseChord(c).type.id)).toEqual(['maj9', 'm9', 'dom9', 'dom7s9', 'dom13']);
+    expect(chordToneNames(parseChord('Fm9')).join(' ')).toBe('F Ab C Eb G');
     expect(() => parseChord('Cwhatever')).toThrow();
   });
   it('identifies chords from pitch-class sets in any order', () => {

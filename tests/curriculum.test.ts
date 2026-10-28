@@ -50,7 +50,7 @@ describe('curriculum', () => {
       expect(d.skills.length <= 12).toBe(true);
       expect(d.skills.every((s) => known.has(s))).toBe(true);
     }
-    expect(TRACKS.map((t) => curriculum.filter((d) => d.track === t.id).length)).toEqual([12, 42, 32, 14, 8]);
+    expect(TRACKS.map((t) => curriculum.filter((d) => d.track === t.id).length)).toEqual([12, 42, 32, 14, 8, 9]);
   });
   it('starts each track with the most basic drill', () => {
     expect(recommendDrill(emptyState(), curriculum, 'fretboard')!.title).toBe('Saite 6: Stammtöne');

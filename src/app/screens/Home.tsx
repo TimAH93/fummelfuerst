@@ -12,9 +12,15 @@ interface Props {
   onTuner: () => void;
   onLink: () => void;
   onBrief: () => void;
+  onMonitor: () => void;
+  onRecorder: () => void;
+  onPads: () => void;
+  onArrangement: () => void;
+  onTiming: () => void;
+  onHum: () => void;
 }
 
-export function Home({ state, settings, onSettings, onStart, onTuner, onLink, onBrief }: Props) {
+export function Home({ state, settings, onSettings, onStart, onTuner, onLink, onBrief, onMonitor, onRecorder, onPads, onArrangement, onTiming, onHum }: Props) {
   const link = useLink();
   const drill = recommendDrill(state, curriculum, settings.track);
   const path = curriculum.filter((d) => d.track === settings.track);
@@ -32,7 +38,13 @@ export function Home({ state, settings, onSettings, onStart, onTuner, onLink, on
             </button>
           ))}
         </nav>
-        <div class="row">
+        <div class="row wrap tools">
+          <button class="quiet" onClick={onMonitor}>Was spiele ich?</button>
+          <button class="quiet" onClick={onRecorder}>Aufnehmen</button>
+          <button class="quiet" onClick={onHum}>Summen</button>
+          <button class="quiet" onClick={onTiming}>Im Takt</button>
+          <button class="quiet" onClick={onPads}>Pads</button>
+          <button class="quiet" onClick={onArrangement}>Arrangement</button>
           <button class="quiet" onClick={onBrief}>Song-Steckbrief</button>
           <button class="quiet" onClick={onTuner}>Stimmgerät</button>
         </div>

@@ -27,6 +27,41 @@ Adaptive guitar improvisation trainer: hear → understand → locate → play �
   The public PeerJS broker only introduces the devices; notes then go directly over WebRTC.
   The pairing is remembered and resumes after a reload. On Windows, if FL Studio holds the
   MIDI port exclusively, route FL's MIDI output to a loopMIDI port and let Chrome read that.
+- **Neo-soul chords** – a sixth track: seventh and ninth chords (maj7 … m9, 9, 13, 7#9) played
+  the way keyboard players voice them – root in the left hand, colour tones without the root in the
+  right. Checked by function: guide tones (3rd, 7th) and colour (9, #9, 13) must be there, the plain
+  fifth may be left out. The reveal shows a jazz guitar grip with the root in the bass.
+- **"Was spiele ich?"** – jam screen for FLkey pad chords (the device itself does not name them):
+  the held chord with each tone's role (Dbmaj9: Db 1 · F 3 · Ab 5 · C 7 · Eb 9), its function in
+  the key (ii9 in Db major · "bereitet die V vor"; secondary dominants read as V7/iii), two or
+  three chords that tend to come next with the reason in a few words, and a melody guide on the
+  keyboard: 3rd and 7th as targets, extensions as colour, scale tones as safe passing notes, the
+  avoid note ringed. A melody key played over the chord is named live ("Bb = 11 über Fm9:
+  Durchgang"). The chord stays after the pad is released; the key is read from the chords played
+  (sticky, so Db major / F minor loops do not flicker) or locked by hand.
+- **Akkordfolge aufnehmen** – progression recorder: play the pads in order with FL's metronome
+  running; each chord's length comes from the clock (snapped to 1 / 2 / 4 / 8 / 16 beats, tap a
+  chord to cycle it). The result is a chord sheet with key and numerals, a MIDI file with the
+  voicings as played (download, or "An PC senden" over the pairing so it lands next to FL Studio),
+  text for the song file, or the chords go straight into the song brief. Repeats fold, melody keys
+  on top are ignored, a chord built up slowly (Fm → Fm9) upgrades in place.
+- **Pad-Karte** – what is on the FLkey's 16 User Chord pads (the device never names them), with the
+  numeral in the key. Tap a pad for the recipe to store it: hold the pad, press the keys one at a
+  time, "Octave –" first for a bass below C3. Fill a pad from the keyboard or type a chord symbol and
+  take the suggested voicing (root C3–B3, right hand from C4, so no octave shifting is needed). The
+  jam screen says "Pad 3" when it recognises one.
+- **Arrangement** – planner from loop to song: sections as a timeline with bar numbers and the clock
+  at the tempo (templates: Build-up & Drop, two drops, piano ballad, loop → song, pop, DnB), a big
+  total length, and rules of thumb (nothing longer than 16 bars without a change, a build-up needs
+  its drop, an outro, under a minute). The plan copies as text for the song file.
+- **Im Takt wechseln** – timing trainer, step 1 of the live-looping ladder: a Web Audio click with a
+  one-bar count-in, every pad press judged against the bar line (genau within ±80 ms, früh / spät,
+  daneben), hits, streak and mean offset, and "Stufe 1 geschafft" after four clean loops in a row.
+  Onsets are the first key of a press, so legato pad changes count from the right moment.
+- **Idee summen** – idea recorder: hum or whistle into the tablet (optional click with count-in); the
+  monophonic tracker turns frames into notes with ends, the line is snapped to 16ths, shown on a
+  small piano roll with a key guess, shifted by octaves if needed, and saved as MIDI (or sent to the
+  paired PC). Pure parts: `listen/melody.ts` (tracker, quantiser, key guess, SMF writer).
 - **Song brief** – for getting from a loop to a song with a Claude "Song-Coach" project:
   type or record the loop's chords from the keyboard; the app detects the key (all 24 keys
   ranked; relative-key ambiguity is shown, borrowed chords like ♭VII flagged), adds tempo,
@@ -50,7 +85,7 @@ npm run typecheck
 ## What is here
 
 ```
-src/app/             UI (Preact): screens/ Home · Practice · Tuner, components/, lib/ (store, mic, prompts)
+src/app/             UI (Preact): screens/ Home · Practice · Tuner · ChordMonitor (jam) · Recorder · Pads · Arrangement · Timing · Hum · SongBrief · Link, components/, lib/
 src/core/            pure TypeScript, no DOM – checked with lib ES2022 only
   theory/   pitch · spelling · interval · scale · chord · harmony
   guitar/   tuning · fretboard

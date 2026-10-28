@@ -3,13 +3,14 @@ import {
   AnswerMode,
   Drill,
   Evaluation,
-  KeysChordSolution,
   LearnerState,
   MelodyChordParams,
   Response,
   SelfRating,
   applyAttempt,
+  Note,
   chord,
+  chordPcs,
   drillProgress,
   evaluate,
   getFamily,
@@ -39,7 +40,8 @@ interface Props {
 
 type Phase = 'ask' | 'revealed' | 'checked';
 
-const TAP_FAMILIES = ['melody-chord', 'keys-chord'];
+const KEY_FAMILIES = ['keys-chord', 'keys-voicing'];
+const TAP_FAMILIES = ['melody-chord', ...KEY_FAMILIES];
 const modeFor = (family: string): AnswerMode => (TAP_FAMILIES.includes(family) ? 'tap' : 'play');
 
 export function Practice({ drill, state, settings, onState, onDrill, onExit }: Props) {
@@ -56,7 +58,7 @@ export function Practice({ drill, state, settings, onState, onDrill, onExit }: P
   const [justPassed, setJustPassed] = useState(false);
   const [tapped, setTapped] = useState<number[]>([]);
   const [played, setPlayed] = useState<number[]>([]);
-  const isKeys = exercise.family === 'keys-chord';
+  const isKeys = KEY_FAMILIES.includes(exercise.family);
 
   useEffect(() => {
     setPhase('ask');
@@ -121,8 +123,10 @@ export function Practice({ drill, state, settings, onState, onDrill, onExit }: P
 
   const nextDrill = recommendDrill(state, curriculum, drill.track);
   const showBoard = phase === 'ask' ? prompt.board : reveal.board;
-  const keysSolution = isKeys ? (exercise.solution as KeysChordSolution).notes : [];
-  const chordPcsNow = isKeys ? keysSolution.map((m) => m % 12) : [];
+  const keysSolution = isKeys ? (exercise.solution as { notes: number[] }).notes : [];
+  // Every tone of the asked chord counts as right (a voicing may leave the fifth out or double a tone).
+  const keysParams = exercise.params as { root?: Note; typeId?: string };
+  const chordPcsNow = isKeys && keysParams.root && keysParams.typeId ? chordPcs(chord(keysParams.root, keysParams.typeId)) : [];
   const pianoMarks: PianoMarks =
     phase === 'ask'
       ? { held: [...new Set([...midi.held, ...tapped])] }
