@@ -48,6 +48,8 @@ der Coach verweisen kann:
 - **Summen** – Idee ins Tablet summen/pfeifen → Noten auf dem Raster, Tonart-Tipp, MIDI-Export.
 - **Im Takt** – Click mit Vorzähler, jeder Pad-Wechsel wird gegen die Eins bewertet (±80 ms);
   4 saubere Loops in Folge = Live-Loop-Stufe 1.
+- **Gitarre** – Akkorde (z. B. von den Pads) als Griffe mit Tab, Capo-Rechner (Capo 1 → C-Formen
+  für die Db-Akkorde), Scale zum Drüberspielen ab Capo gezählt, Zieltöne pro Akkord.
 - **Pads** – Karte der 16 User-Chord-Pads mit Anleitung zum Speichern (inkl. Octave –).
 - **Arrangement** – Teile als Zeitleiste mit Takten und Uhrzeit bei BPM, Vorlagen, Faustregeln.
   **Referenz nachbauen**: Song läuft, Tempo tippen, bei jedem Teilwechsel tippen → Vorlage.

@@ -24,6 +24,7 @@ interface Props {
   /** Songs finished so far, and a way to count one that happened outside a session. */
   songs: number;
   onSong: () => void;
+  onGuitar: () => void;
 }
 
 function Tile({ name, sub, onClick }: { name: string; sub: string; onClick: () => void }) {
@@ -36,7 +37,7 @@ function Tile({ name, sub, onClick }: { name: string; sub: string; onClick: () =
 }
 
 /** Three areas, in the order the day usually goes: jam, build the song, practise. */
-export function Home({ state, settings, onSettings, onStart, onTuner, onLink, onBrief, onMonitor, onRecorder, onPads, onArrangement, onTiming, onHum, sessions, onSession, songs, onSong }: Props) {
+export function Home({ state, settings, onSettings, onStart, onTuner, onLink, onBrief, onMonitor, onRecorder, onPads, onArrangement, onTiming, onHum, sessions, onSession, songs, onSong, onGuitar }: Props) {
   const link = useLink();
   const [showSongs, setShowSongs] = useState(false);
   const exports = weekExports(sessions, Date.now());
@@ -105,6 +106,7 @@ export function Home({ state, settings, onSettings, onStart, onTuner, onLink, on
           <div class="tiles">
             <Tile name="Was spiele ich?" sub="Akkord · Stufe · Melodie-Töne" onClick={onMonitor} />
             <Tile name="Im Takt" sub="Click, Wechsel auf die Eins" onClick={onTiming} />
+            <Tile name="Gitarre" sub="Griffe · Capo · Scale zum Loop" onClick={onGuitar} />
           </div>
         </section>
 

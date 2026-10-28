@@ -391,6 +391,29 @@ textarea.field-input { resize: vertical; }
 .ref-taps { display: flex; flex-wrap: wrap; gap: 8px; }
 .ref-tap { padding: 6px 12px; border-radius: 999px; background: var(--bg); border: 1px solid var(--line); font-size: 18px; }
 
+/* ── Guitar: grips and capo ───────────────────────────── */
+.guitar { gap: 14px; }
+.guitar-chords { flex: 1; min-width: 260px; max-width: 700px; }
+.guitar-line { font-size: clamp(18px, 2.2vw, 26px); margin: 0; }
+.guitar-line b { color: var(--accent); }
+.grips { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; width: 100%; max-width: 1200px; }
+.grip-card { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 10px 8px; background: var(--surface); border: 2px solid var(--line); border-radius: 14px; }
+.grip-card.on { border-color: var(--ok); }
+.grip-sound { font-size: 26px; font-weight: 700; }
+.grip-shape { font-size: 15px; color: var(--muted); min-height: 1.2em; }
+.grip-tab { font-size: 15px; color: var(--muted); font-family: ui-monospace, Menlo, monospace; }
+.grip { width: 120px; height: auto; }
+.grip-string { stroke: var(--muted); stroke-width: 1.5; }
+.grip-fret { stroke: var(--line); stroke-width: 1.5; }
+.grip-nut { stroke: var(--text); stroke-width: 5; }
+.grip-dot { fill: var(--text); }
+.grip-label { fill: var(--bg); font-size: 11px; font-weight: 800; }
+.grip-open { fill: none; stroke: var(--text); stroke-width: 2; }
+.grip-mark, .grip-base { fill: var(--muted); font-size: 14px; }
+.grip-openlabel { fill: var(--muted); font-size: 10px; }
+.solo { display: flex; flex-direction: column; gap: 8px; width: 100%; max-width: 1400px; }
+.solo .fretboard { max-height: 36vh; }
+
 /* ── Tuner ────────────────────────────────────────────── */
 .tuner-face { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3vh; text-align: center; }
 .tuner-face .target { font-size: clamp(120px, 22vw, 260px); }
