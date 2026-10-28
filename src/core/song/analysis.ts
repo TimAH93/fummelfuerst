@@ -60,20 +60,22 @@ export interface Key {
 
 export const keyScale = (k: Key): Scale => scale(k.tonic, k.mode);
 
-/** Spell a root inside a key: the scale's own letter when it is a scale tone, otherwise a lowered degree (♭VII, ♭VI …). */
+/**
+ * Spell a root inside a key: the scale's own letter when it is a scale tone, otherwise the
+ * neighbouring scale tone lowered or raised – whichever needs the fewer accidentals (G in
+ * Db major is ♯IV, not a double-flat ♭V).
+ */
 export function spellInKey(key: Scale, pc: PitchClass): { note: Note; step: number; acc: number } {
   const notes = scaleNotes(key);
   const exact = notes.findIndex((n) => notePc(n) === pc);
   if (exact >= 0) return { note: notes[exact], step: exact, acc: 0 };
-  // Chromatic: name it as the scale tone above, lowered (♭VII in major, ♭II …).
+  const candidates: { note: Note; step: number; acc: number }[] = [];
   const above = notes.findIndex((n) => notePc(n) === toPc(pc + 1));
-  if (above >= 0) {
-    const n = notes[above];
-    return { note: { letter: n.letter as Letter, acc: n.acc - 1 }, step: above, acc: -1 };
-  }
+  if (above >= 0) candidates.push({ note: { letter: notes[above].letter as Letter, acc: notes[above].acc - 1 }, step: above, acc: -1 });
   const below = notes.findIndex((n) => notePc(n) === toPc(pc - 1));
-  const n = notes[below];
-  return { note: { letter: n.letter as Letter, acc: n.acc + 1 }, step: below, acc: 1 };
+  if (below >= 0) candidates.push({ note: { letter: notes[below].letter as Letter, acc: notes[below].acc + 1 }, step: below, acc: 1 });
+  // Lowered first on a tie (♭VII, ♭VI, ♭III are the usual names); fewer accidentals win.
+  return candidates.sort((a, b) => Math.abs(a.note.acc) - Math.abs(b.note.acc))[0];
 }
 
 const NUMERALS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII'];

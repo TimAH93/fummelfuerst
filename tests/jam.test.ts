@@ -38,6 +38,10 @@ describe('chord function in a key', () => {
   it('spells the root for the key', () => {
     expect(chordFunction(key('E'), one('D#m7')).root).toEqual(parseNote('D#'));
     expect(chordFunction(DB, one('D#m7')).root).toEqual(parseNote('Eb'));
+    expect(chordFunction(DB, one('G7')).root).toEqual(parseNote('G')); // not A𝄫
+    expect(chordFunction(DB, one('G7')).roman).toBe('♯IV7');
+    expect(chordFunction(key('C'), one('Bb')).roman).toBe('♭VII'); // lowered still wins on a tie
+    expect(chordFunction(key('C'), one('F#dim')).roman).toBe('♯iv°');
   });
 });
 
