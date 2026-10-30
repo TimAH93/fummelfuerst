@@ -4,14 +4,17 @@
 
 ## Dateien
 - `07-f-dorian.mid` – Akkorde + Bass, 20 Takte ≈ 60 s
+- `07-f-dorian-melodie.mid` – dasselbe + Melodie (Handposition C D E♭ F G, kein E)
 
 ## Aufbau
-| Takte | Begleitung |
-|---|---|
-| 1–4 | gehalten |
-| 5–16 | Push: Anschlag auf 1 und „und“ von 2 (5+3 Achtel) |
-| 17–19 | wieder gehalten |
-| 20 | Fm9 mit C oben, Ende |
+| Takte | Melodie | Begleitung |
+|---|---|---|
+| 1–4 | – | gehalten |
+| 5–8 | Phrase 1 (ruhig) | Push: 1 und „und“ von 2 |
+| 9–12 | Phrase 2 (mehr Bewegung) | Push |
+| 13–16 | Phrase 3 (Antwort) | Push |
+| 17–19 | Phrase 1, Anfang | gehalten |
+| 20 | F, Ende | Fm9 |
 
 ## Voicings (Standard-Oktaven, in FL eine höher)
 | Akkord | Bass | rechte Hand |
@@ -24,6 +27,6 @@
 Rechte Hand bleibt unter A♭4 – Platz für die Melodie darüber.
 
 ## Stand
-- [ ] Melodie selbst finden (D über B♭13, E/D♭ über C7♭9 → auflösen nach A♭/G)
+- [ ] Melodie nachspielen, dann eigene finden (D über B♭13, E/D♭ über C7♭9 → auflösen nach A♭/G)
 - [ ] Sounds wählen
 - [ ] MP3 exportieren
