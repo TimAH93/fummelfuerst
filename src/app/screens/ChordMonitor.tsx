@@ -200,7 +200,7 @@ export function ChordMonitor({ settings, onSettings, pads, onPads, onPlay, onTra
             : mode === 'chords' && fn && key && (live || c) ? <><b>{fn.roman}</b> in {keyName(key.tonic, key.mode, style)} · {fn.role}</>
             : inversionLine ? inversionLine
             : midi.held.length || shown ? ' '
-            : midi.devices.length ? 'Taste, Akkord oder Pad drücken' : 'Kein Keyboard – am FLkey anschließen oder koppeln'}
+            : midi.devices.length ? 'Taste, Akkord oder Pad drücken' : 'Kein Keyboard – FLkey anschließen, koppeln oder FL Studio über loopMIDI schicken'}
         </div>
         <p class="meta" data-testid="chord-notes">{padNo !== null ? `Pad ${padNo + 1}  ·  ` : ''}{heldLine || (pick && pickNamed && !live ? chordTones(pickNamed).map((n, i) => `${showNote(n, style)} (${showDegree(degreeToString(pickNamed.type.formula[i]))})`).join('  ·  ') : shown ? shown.midis.map((m) => noteOf(toPc(m))).join('  ·  ') : '')}</p>
 

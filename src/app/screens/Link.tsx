@@ -69,6 +69,8 @@ export function Link({ settings, onSettings, onExit }: Props) {
             <button class="primary" onClick={host}>Tablet<br /><small>zeigt die Übungen</small></button>
             <button class="secondary" onClick={() => setIsPc(true)}>PC<br /><small>hat das Keyboard</small></button>
           </div>
+          <p class="meta">Keyboard hängt direkt an diesem Gerät? Dann brauchst du keine Kopplung.</p>
+          <button class="quiet" onClick={onExit}>Hier üben, ohne Kopplung</button>
           {isPc && (
             <form class="code-entry" onSubmit={(e) => { e.preventDefault(); join(); }}>
               <label for="code" class="meta">Code vom Tablet eingeben</label>
@@ -100,11 +102,14 @@ export function Link({ settings, onSettings, onExit }: Props) {
           <p class="meta">
             {midi.status === 'ready'
               ? `🎹 ${midi.devices.join(', ')}`
-              : 'Kein Keyboard sichtbar. Läuft FL Studio? Dann FL Studio kurz schließen oder in FL Studio einen MIDI-Ausgang auf loopMIDI legen.'}
+              : 'Kein Keyboard sichtbar. Läuft FL Studio? Dann schickt FL die Noten über loopMIDI an den Browser (MIDI Out auf denselben Port, Seite neu laden).'}
           </p>
           <Piano low={linkLow} high={linkHigh} marks={{ held: midi.held }} noteNames={settings.noteNames} />
-          <p class="meta">Dieses Fenster offen lassen – gespielt wird ab jetzt am Tablet.</p>
-          <button class="secondary" onClick={disconnect}>Trennen</button>
+          <p class="meta">Dieses Fenster offen lassen, dann kommt alles am Tablet an – oder direkt hier am PC üben.</p>
+          <div class="row wrap center">
+            <button class="primary" onClick={onExit}>Hier am PC üben</button>
+            <button class="secondary" onClick={disconnect}>Trennen</button>
+          </div>
         </section>
       )}
     </main>

@@ -470,6 +470,23 @@ and the backup keeps the only copy once the first save replaces it. `DB_VERSION`
 `exportAttempts()` returns every stored answer (Home: "Antworten exportieren" in the songs panel),
 so the model can later be re-fitted against real answers instead of simulated ones.
 
+## With FL Studio running (Windows)
+
+FL Studio opens the FLkey exclusively, so Chrome sees no keyboard while FL runs. Let FL forward
+the notes instead – then the app also shows the chords FL *plays back*, not only what you play:
+
+1. **loopMIDI** (free): create a port, e.g. "FL zu Browser".
+2. FL *Options → MIDI Settings → Output*: select that port, give it **Port 1**.
+3. Channel Rack: add **MIDI Out** (Port 1) and a **Layer**; select the instrument and MIDI Out,
+   then *Set children* on the Layer. Notes on the Layer sound and go to the browser.
+4. Put the chords on the Layer (cut from the instrument's piano roll, paste into the Layer's).
+   Keep the 808/bass off the Layer, or it counts into the chord.
+5. Reload the app in Chrome, open "Was spiele ich?", press play in FL. With the Layer selected,
+   live playing on the FLkey goes the same way.
+
+When playback stops mid-chord FL sends *All Notes Off*; the app clears the held notes on it.
+On the PC the app works on its own – pairing a tablet is optional ("Hier am PC üben").
+
 ## On the iPad / iPhone
 
 The app is published from `main` to GitHub Pages by `.github/workflows/pages.yml`
