@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'preact/hooks';
+import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import {
   AnswerMode,
   Drill,
@@ -25,6 +25,7 @@ import { useMidi } from '../lib/midi';
 import { Progress } from '../components/Progress';
 import { showChord } from '../lib/names';
 import { promptFor, revealFor } from '../lib/prompts';
+import { playNotes } from '../lib/synth';
 import { catalog, context, curriculum, rng } from '../lib/session';
 import { Settings, logAttempt } from '../lib/store';
 import { useWakeLock } from '../lib/wakeLock';
@@ -60,6 +61,8 @@ export function Practice({ drill, state, settings, onState, onDrill, onExit }: P
   const [tapped, setTapped] = useState<number[]>([]);
   const [played, setPlayed] = useState<number[]>([]);
   const isKeys = KEY_FAMILIES.includes(exercise.family);
+  // Sound prompts may only start after a tap (autoplay rules): armed by the first rating/Weiter, never on mount.
+  const armed = useRef(false);
 
   useEffect(() => {
     setPhase('ask');
@@ -73,6 +76,12 @@ export function Practice({ drill, state, settings, onState, onDrill, onExit }: P
   const style = settings.noteNames;
   const prompt = promptFor(exercise, helpLevel, style);
   const reveal = revealFor(exercise, style);
+  // Help level 3 hides the name while asking; the reveal shows it again.
+  const shownMain = prompt.hideName && phase !== 'ask' ? promptFor(exercise, 0, style).main : prompt.main;
+
+  useEffect(() => {
+    if (armed.current && prompt.sound) void playNotes(prompt.sound);
+  }, [exercise.id, round]);
   const progress = drillProgress(state, drill);
 
   const commit = (response: Response, ms: number) => {
@@ -91,6 +100,7 @@ export function Practice({ drill, state, settings, onState, onDrill, onExit }: P
   };
   const rate = (rating: SelfRating) => {
     commit({ kind: 'self', rating }, latency);
+    armed.current = true;
     setRound((r) => r + 1);
   };
   const submit = (response: Response) => {
@@ -108,7 +118,10 @@ export function Practice({ drill, state, settings, onState, onDrill, onExit }: P
   const midi = useMidi((midis) => {
     if (isKeys && phase === 'ask' && !justPassed) submitNotes(midis);
   });
-  const advance = () => setRound((r) => r + 1);
+  const advance = () => {
+    armed.current = true;
+    setRound((r) => r + 1);
+  };
 
   // Keyboard (tablet with keyboard, or a foot pedal that sends keys): space/enter, 1–3.
   useEffect(() => {
@@ -161,8 +174,11 @@ export function Practice({ drill, state, settings, onState, onDrill, onExit }: P
       ) : (
         <>
           <section class="question">
-            <div class="target">{prompt.main}</div>
+            <div class="target">{shownMain}</div>
             {prompt.sub && <div class="context">{prompt.sub}</div>}
+            {prompt.sound && (
+              <button class="quiet" aria-label="Nochmal hören" onClick={() => void playNotes(prompt.sound!)}>🔊 Nochmal</button>
+            )}
             {phase === 'ask' && prompt.hint && <div class="hint">{prompt.hint}</div>}
             {phase !== 'ask' && reveal.lines.length > 0 && (
               <div class="solution">{reveal.lines.map((l) => <div>{l}</div>)}</div>

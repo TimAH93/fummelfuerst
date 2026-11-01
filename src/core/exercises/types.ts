@@ -8,8 +8,34 @@ import { Rng } from './rng';
  */
 export type AnswerMode = 'tap' | 'play';
 
-/** Self-rating after the reveal: missed it / found it / knew it instantly. */
-export type SelfRating = 'miss' | 'found' | 'instant';
+/**
+ * Self-rating after the reveal: missed it / nearly had it ("≈ Fast": a neighbour, the wrong
+ * inversion, one fret off) / found it / knew it instantly. Only 'near' carries an error.
+ */
+export type SelfRating = 'miss' | 'near' | 'found' | 'instant';
+
+// ── Diagnosis ──
+
+/** What went wrong with a wrong answer, as far as a family can tell from params and response. */
+export type ErrorKind =
+  | 'wrong-string' | 'off-by-one' | 'octave' | 'direction'                                       // note-find, interval-hunt
+  | 'inversion' | 'wrong-set' | 'span' | 'missing-tone' | 'extra-tone' | 'wrong-type' | 'incomplete' // triad-build, keys-chord
+  | 'bass' | 'missing-guide' | 'missing-colour' | 'wrong-tone'                                    // keys-voicing
+  | 'missed-chord' | 'extra-chord'                                                                // melody-chord
+  | 'near' | 'other';
+
+/** A classified wrong answer: what the learner model credits, boosts and the UI explains. */
+export interface Diagnosis {
+  kind: ErrorKind;
+  /** Partial credit for the asked skill: 0 | 0.25 | 0.5. */
+  credit: number;
+  /** Skill the answer demonstrated instead ('keys:maj/inv:0' when inv:1 was asked); credited as an aside. */
+  aside?: string;
+  /** Confusable skills to boost in the next picks (ids outside the current pool are ignored). */
+  nudge?: string[];
+  /** Structured detail for the feedback line: { degree: '3' } | { inversion: 1 } | { frets: 1 } | { fn: '5' } | { string: 4 } | { note: 'E' }. */
+  detail?: Record<string, string | number>;
+}
 
 /** Answers a family can check on its own. */
 export type AutoResponse =
@@ -28,6 +54,8 @@ export interface Evaluation {
   hits?: number;
   wrong?: number;
   missed?: number;
+  /** Why a wrong answer was wrong; absent on correct answers and when no family rule matched. */
+  error?: Diagnosis;
 }
 
 /** Everything a generator may depend on besides the seed. Plain data, serialisable. */
@@ -92,6 +120,10 @@ export interface ExerciseFamily<P, S, F = Partial<P>> {
   solve(ex: Exercise<P, S>): AutoResponse;
   /** One-line English summary for logs and debugging, not UI copy. */
   describe(ex: Exercise<P, S>): string;
+  /** Classify a wrong auto-checked answer from params + response, never from `ex.solution`. */
+  diagnose?(ex: Exercise<P, S>, response: AutoResponse): Diagnosis | undefined;
+  /** Confusable skill ids for a self-rated "≈ Fast" (e.g. the semitone neighbours on the string). */
+  nearNeighbours?(ex: Exercise<P, S>): string[];
 }
 
 /** Shared rule for position answers: each given position is right or wrong. */

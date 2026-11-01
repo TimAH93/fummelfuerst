@@ -8,7 +8,9 @@
     "build": "vite build",
     "preview": "vite preview",
     "test": "tsx --test tests/*.test.ts",
-    "typecheck": "tsc --noEmit -p tsconfig.core.json && tsc --noEmit && tsc --noEmit -p tests"
+    "typecheck": "tsc --noEmit -p tsconfig.core.json && tsc --noEmit && tsc --noEmit -p tests",
+    "baseline": "tsx tests/sim/baseline.ts",
+    "calibrate": "tsx tests/sim/calibrate.ts"
   },
   "devDependencies": {
     "@preact/preset-vite": "^2.10.6",
