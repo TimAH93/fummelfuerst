@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
 import {
-  DEFAULT_TRAINER, Key, ProgChord, TrainerState, VARIATIONS, analyzeProgression, chord, chordFunction, keyScale, nextChord, nudgeBpm, onPlayed,
-  onSlot, pcToNote, spellInKey, startTrainer, suggestVoicing,
+  DEFAULT_TRAINER, Key, PadBank, PlayEvent, ProgChord, TrainerState, VARIATIONS, analyzeProgression, chord, chordFunction, keyScale, nextChord, nudgeBpm,
+  onPlayed, onSlot, padFor, pcToNote, spellInKey, startTrainer, suggestVoicing, trainerEvent,
 } from '../../core';
 import { Piano } from '../components/Piano';
 import { MetronomeHandle, beep, startMetronome } from '../lib/metronome';
@@ -19,6 +19,13 @@ interface Props {
   chords: ProgChord[];
   bpm?: number;
   settings: Settings;
+  /** Stored pads: a slot hit with a pad chord proves pad memory, not the skill. */
+  pads: PadBank;
+  /**
+   * One play event per slot the click leaves: a hit credits what was played, a miss lands lightly on the target –
+   * only when keys were played in that slot, since an empty slot means listening, not a miss.
+   */
+  onPlay: (ev: PlayEvent) => void;
   onExit: () => void;
 }
 
@@ -28,7 +35,7 @@ const BEATS_PER_BAR = 4;
  * Progression trainer: the click runs slowly, the chord to play lies amber on the keys with the
  * next one announced, a clean round speeds it up, the target tempo brings rhythm variations.
  */
-export function ProgTrainer({ chords, bpm: startBpm, settings, onExit }: Props) {
+export function ProgTrainer({ chords, bpm: startBpm, settings, pads, onPlay, onExit }: Props) {
   useWakeLock();
   const style = settings.noteNames;
   const [state, setState] = useState<TrainerState>(() => startTrainer({ chords, ...DEFAULT_TRAINER, startBpm: startBpm ?? DEFAULT_TRAINER.startBpm, targetBpm: Math.max((startBpm ?? DEFAULT_TRAINER.startBpm) + 24, DEFAULT_TRAINER.targetBpm) }));
@@ -40,6 +47,8 @@ export function ProgTrainer({ chords, bpm: startBpm, settings, onExit }: Props) 
   const stateRef = useRef(state);
   stateRef.current = state;
   const barCount = useRef(0);
+  /** A chord settled on the keys during the current slot; reset at every bar line. */
+  const playedInSlot = useRef(false);
   const signature = chords.map((c) => `${c.rootPc}${c.typeId}`).join();
 
   // Hear the progression once before the first run of it.
@@ -58,7 +67,11 @@ export function ProgTrainer({ chords, bpm: startBpm, settings, onExit }: Props) 
   const nameOf = (c: ProgChord) => showChord(chord(key ? spellInKey(keyScale(key), c.rootPc).note : pcToNote(c.rootPc, 'flat'), c.typeId), style);
   const romanOf = (c: ProgChord) => (key ? chordFunction(key, c).roman : '');
 
-  const midi = useMidi((settled) => { if (running) setState((s) => onPlayed(s, settled)); }, 3);
+  const midi = useMidi((settled) => {
+    if (!running) return;
+    playedInSlot.current = true;
+    setState((s) => onPlayed(s, settled));
+  }, 3);
 
   const stopClick = () => { metro.current?.stop(); metro.current = null; };
   const startClick = async (bpm: number, countIn: number) => {
@@ -68,8 +81,16 @@ export function ProgTrainer({ chords, bpm: startBpm, settings, onExit }: Props) 
       setBeat(b);
       if (b.countIn || b.beat !== 1) return;
       // A new bar: the first one is slot 0 of the round; each further bar moves the slot on.
+      const played = playedInSlot.current;
+      playedInSlot.current = false;
       if (barCount.current++ === 0) return;
       setState((s) => {
+        // The slot being left: judged from the state before onSlot, which resets hits and hitMidis at the wrap.
+        // A slot nobody played in is no evidence: the player is listening, finding the chord, or away.
+        if (!s.done) {
+          const midis = s.hits[s.index] ? s.hitMidis[s.index] : null;
+          if (midis !== null || played) onPlay(trainerEvent(chords[s.index], midis, s.bpm, Date.now(), midis !== null && padFor(pads, midis) !== null));
+        }
         const next = onSlot(s);
         if (next.lastRound) void beep().catch(() => {});
         if (next.bpm !== s.bpm || next.done) window.setTimeout(() => { if (next.done) stopClick(); else void startClick(next.bpm, 0); }, 0);

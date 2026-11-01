@@ -1,8 +1,8 @@
 import { FretPos, pcAt, positionsOf } from '../../guitar/fretboard';
-import { PitchClass } from '../../theory/pitch';
+import { PitchClass, toPc } from '../../theory/pitch';
 import { Note, noteName, notePc } from '../../theory/spelling';
 import { assertFocus, pcSkill, pickSpelling, stringNo } from '../common';
-import { ExerciseFamily, checkPositions } from '../types';
+import { Diagnosis, ExerciseFamily, checkPositions } from '../types';
 
 /** "Find F# on the A string." One correct location is enough. */
 export interface NoteFindParams {
@@ -20,6 +20,11 @@ export interface NoteFindFocus {
   pc?: PitchClass;
   string?: number;
 }
+
+/** Skill id of a pitch class on a string (guitarist's string number); nudges use the same template. */
+const noteSkill = (pc: PitchClass, string: number): string => `note:${pcSkill(pc)}/string:${string}`;
+
+const other = (): Diagnosis => ({ kind: 'other', credit: 0 });
 
 export const noteFind: ExerciseFamily<NoteFindParams, NoteFindSolution, NoteFindFocus> = {
   id: 'note-find',
@@ -41,7 +46,7 @@ export const noteFind: ExerciseFamily<NoteFindParams, NoteFindSolution, NoteFind
     return {
       params: { note, string },
       solution: { positions: positionsOf(tuning, pc, onString) },
-      skills: [`note:${pcSkill(pc)}/string:${stringNo(tuning, string)}`],
+      skills: [noteSkill(pc, stringNo(tuning, string))],
     };
   },
 
@@ -50,7 +55,7 @@ export const noteFind: ExerciseFamily<NoteFindParams, NoteFindSolution, NoteFind
     return strings.flatMap((string) =>
       Array.from({ length: 12 }, (_, pc) => pc)
         .filter((pc) => positionsOf(tuning, pc, { ...range, strings: [string] }).length > 0)
-        .map((pc) => ({ skill: `note:${pcSkill(pc)}/string:${stringNo(tuning, string)}`, focus: { pc, string } })),
+        .map((pc) => ({ skill: noteSkill(pc, stringNo(tuning, string)), focus: { pc, string } })),
     );
   },
 
@@ -69,6 +74,43 @@ export const noteFind: ExerciseFamily<NoteFindParams, NoteFindSolution, NoteFind
   },
 
   solve: (ex) => ({ kind: 'positions', positions: ex.solution.positions }),
+
+  // ── Diagnosis ──
+
+  /**
+   * The first wrong position decides (a hit next to it does not make the answer right):
+   * right pitch class on another string, one fret off on the right string, or the right note
+   * outside the fret range. Anything else is 'other'.
+   */
+  diagnose(ex, r) {
+    if (r.kind !== 'positions') return other();
+    const { tuning, range } = ex.context;
+    const { string } = ex.params;
+    const pc = notePc(ex.params.note);
+    const isRight = (p: FretPos): boolean =>
+      p.string === string && p.fret >= range.minFret && p.fret <= range.maxFret && pcAt(tuning, p) === pc;
+    const wrong = r.positions.find((p) => !isRight(p));
+    if (!wrong) return other();
+    const played = pcAt(tuning, wrong);
+    const asked = stringNo(tuning, string);
+    if (wrong.string === string && played === pc) return { kind: 'octave', credit: 0.5 };
+    if (wrong.string === string && (played === toPc(pc + 1) || played === toPc(pc - 1))) {
+      const frets = played === toPc(pc + 1) ? 1 : -1;
+      return { kind: 'off-by-one', credit: 0.25, nudge: [noteSkill(played, asked)], detail: { frets } };
+    }
+    if (played === pc) {
+      const playedNo = stringNo(tuning, wrong.string);
+      return { kind: 'wrong-string', credit: 0.5, nudge: [noteSkill(pc, asked), noteSkill(pc, playedNo)], detail: { string: playedNo } };
+    }
+    return other();
+  },
+
+  /** "≈ Fast": the two semitone neighbours on the same string. */
+  nearNeighbours(ex) {
+    const pc = notePc(ex.params.note);
+    const string = stringNo(ex.context.tuning, ex.params.string);
+    return [noteSkill(toPc(pc - 1), string), noteSkill(toPc(pc + 1), string)];
+  },
 
   describe: (ex) => `find ${noteName(ex.params.note)} on string ${stringNo(ex.context.tuning, ex.params.string)}`,
 };

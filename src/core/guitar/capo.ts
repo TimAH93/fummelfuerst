@@ -1,6 +1,6 @@
 import { drillSpellings } from '../exercises/common';
 import { Key, ProgChord } from '../song/analysis';
-import { Chord, chord, chordPcs, chordTones } from '../theory/chord';
+import { Chord, SIMPLER_TYPE, chord, chordPcs, chordTones } from '../theory/chord';
 import { degreeSemitones, degreeToString } from '../theory/interval';
 import { PitchClass, toPc } from '../theory/pitch';
 import { notePc } from '../theory/spelling';
@@ -24,9 +24,6 @@ export function simplestChord(pc: PitchClass, typeId: string): Chord {
 }
 
 export const transposeChord = (c: Chord, semitones: number): Chord => simplestChord(toPc(notePc(c.root) + semitones), c.type.id);
-
-/** When the full chord has no easy grip, this is the next simpler sound with the same colour. */
-const SIMPLER: Record<string, string> = { maj9: 'maj7', m9: 'm7', dom9: 'dom7', dom13: 'dom7', dom7s9: 'dom7', m7b5: 'dim', dim7: 'dim' };
 
 export interface Grip {
   /** What the shape is at the nut (Cmaj9 when the capo makes it sound as Dbmaj9). */
@@ -84,7 +81,7 @@ export function gripFor(t: Tuning, c: Chord, wanted: Chord = c, simplified = fal
       .sort((a, b) => a.cost - b.cost)[0];
   const found = search(4, 4) ?? search(9, 4) ?? search(9, 3);
   if (found) return describe(t, found.v, c, wanted, c, simplified);
-  const simpler = SIMPLER[c.type.id];
+  const simpler = SIMPLER_TYPE[c.type.id];
   return simpler ? gripFor(t, chord(c.root, simpler), wanted, true) : null;
 }
 

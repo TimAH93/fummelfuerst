@@ -1,0 +1,6124 @@
+{
+ "driver": "v1",
+ "seeds": [
+  1,
+  2,
+  3,
+  4,
+  5
+ ],
+ "scenarios": [
+  {
+   "persona": "quick",
+   "track": "fretboard",
+   "days": 28
+  },
+  {
+   "persona": "steady",
+   "track": "fretboard",
+   "days": 28
+  },
+  {
+   "persona": "steady",
+   "track": "intervals",
+   "days": 28
+  },
+  {
+   "persona": "slow",
+   "track": "fretboard",
+   "days": 28
+  },
+  {
+   "persona": "stuck",
+   "track": "intervals",
+   "days": 56
+  },
+  {
+   "persona": "foundOnly",
+   "track": "fretboard",
+   "days": 42
+  },
+  {
+   "persona": "optimist",
+   "track": "fretboard",
+   "days": 28
+  },
+  {
+   "persona": "forgetful",
+   "track": "fretboard",
+   "days": 28
+  },
+  {
+   "persona": "returning",
+   "track": "fretboard",
+   "days": 42
+  },
+  {
+   "persona": "gbWeak",
+   "track": "intervals",
+   "days": 56
+  },
+  {
+   "persona": "noodler",
+   "track": "keys",
+   "days": 28
+  }
+ ],
+ "rows": [
+  {
+   "persona": "quick",
+   "track": "fretboard",
+   "days": 28,
+   "answers": 285,
+   "sessions": 17,
+   "passed": 3,
+   "firstDrill": {
+    "id": "fretboard/6/naturals",
+    "passedIn": 5,
+    "answers": 74,
+    "sessions": 5
+   },
+   "falsePassRate": 0,
+   "retention7": 0.7860952884054646,
+   "retention21": 0.6335770163564937,
+   "overScheduled": 0.4158759589739896,
+   "underScheduled": 0,
+   "weakShare": 3.6371403969057234,
+   "calibrationK": 0.19416200699935612,
+   "calibrationR": 0.08266915334414013,
+   "helpFinal": 2.8285714285714283,
+   "reviewShare": 0,
+   "returnSlips": null,
+   "warmupPicks": null,
+   "meanTrueK": 0.9753027410682948
+  },
+  {
+   "persona": "steady",
+   "track": "fretboard",
+   "days": 28,
+   "answers": 285,
+   "sessions": 17,
+   "passed": 1,
+   "firstDrill": {
+    "id": "fretboard/6/naturals",
+    "passedIn": 5,
+    "answers": 129,
+    "sessions": 8
+   },
+   "falsePassRate": 0,
+   "retention7": 0.7450503188587732,
+   "retention21": 0.579500619570877,
+   "overScheduled": 0.22681064580987914,
+   "underScheduled": null,
+   "weakShare": 2.444264896650976,
+   "calibrationK": 0.16668720840874365,
+   "calibrationR": 0.03740686606425099,
+   "helpFinal": 2.6,
+   "reviewShare": 0,
+   "returnSlips": null,
+   "warmupPicks": null,
+   "meanTrueK": 0.9253255870528383
+  },
+  {
+   "persona": "steady",
+   "track": "intervals",
+   "days": 28,
+   "answers": 285,
+   "sessions": 17,
+   "passed": 5,
+   "firstDrill": {
+    "id": "intervals/5/up/adjacent",
+    "passedIn": 5,
+    "answers": 69,
+    "sessions": 5
+   },
+   "falsePassRate": 0.782608695652174,
+   "retention7": 0.5101223478912563,
+   "retention21": 0.34439128302167415,
+   "overScheduled": 0.2597104959074085,
+   "underScheduled": 1,
+   "weakShare": 0.9476929453965062,
+   "calibrationK": 0.17370221000797376,
+   "calibrationR": 0.27057738545677623,
+   "helpFinal": 1.8,
+   "reviewShare": 0,
+   "returnSlips": null,
+   "warmupPicks": null,
+   "meanTrueK": 0.926730258020241
+  },
+  {
+   "persona": "slow",
+   "track": "fretboard",
+   "days": 28,
+   "answers": 285,
+   "sessions": 17,
+   "passed": 0,
+   "firstDrill": {
+    "id": "fretboard/6/naturals",
+    "passedIn": 1,
+    "answers": 313,
+    "sessions": 20
+   },
+   "falsePassRate": 0,
+   "retention7": 0.7328952700537787,
+   "retention21": 0.5609144863104627,
+   "overScheduled": 0.049415144615575335,
+   "underScheduled": 0,
+   "weakShare": 1.406688115880566,
+   "calibrationK": 0.1952845749656908,
+   "calibrationR": 0.02653741808806457,
+   "helpFinal": 1.9714285714285715,
+   "reviewShare": 0,
+   "returnSlips": null,
+   "warmupPicks": null,
+   "meanTrueK": 0.8246950237259346
+  },
+  {
+   "persona": "stuck",
+   "track": "intervals",
+   "days": 56,
+   "answers": 613,
+   "sessions": 38,
+   "passed": 0,
+   "firstDrill": {
+    "id": "intervals/5/up/adjacent",
+    "passedIn": 0,
+    "answers": null,
+    "sessions": null
+   },
+   "falsePassRate": null,
+   "retention7": null,
+   "retention21": null,
+   "overScheduled": 0,
+   "underScheduled": null,
+   "weakShare": 1,
+   "calibrationK": 0.1906385371135813,
+   "calibrationR": 0.014860999580213882,
+   "helpFinal": 0,
+   "reviewShare": 0,
+   "returnSlips": null,
+   "warmupPicks": null,
+   "meanTrueK": 0.5
+  },
+  {
+   "persona": "foundOnly",
+   "track": "fretboard",
+   "days": 42,
+   "answers": 412,
+   "sessions": 25,
+   "passed": 0,
+   "firstDrill": {
+    "id": "fretboard/6/naturals",
+    "passedIn": 0,
+    "answers": null,
+    "sessions": null
+   },
+   "falsePassRate": null,
+   "retention7": null,
+   "retention21": null,
+   "overScheduled": 0.6875411076606701,
+   "underScheduled": null,
+   "weakShare": null,
+   "calibrationK": 0.5010081336722456,
+   "calibrationR": 0.0006775985616586362,
+   "helpFinal": 0,
+   "reviewShare": 0,
+   "returnSlips": null,
+   "warmupPicks": null,
+   "meanTrueK": 0.9995571112682914
+  },
+  {
+   "persona": "optimist",
+   "track": "fretboard",
+   "days": 28,
+   "answers": 285,
+   "sessions": 17,
+   "passed": 1,
+   "firstDrill": {
+    "id": "fretboard/6/naturals",
+    "passedIn": 5,
+    "answers": 132,
+    "sessions": 8
+   },
+   "falsePassRate": 0.1111111111111111,
+   "retention7": 0.7090365687913256,
+   "retention21": 0.5414426897884643,
+   "overScheduled": 0.19411664472527002,
+   "underScheduled": 0.5,
+   "weakShare": 2.02006449300061,
+   "calibrationK": 0.16115415240218567,
+   "calibrationR": 0.04959724969266439,
+   "helpFinal": 2.314285714285714,
+   "reviewShare": 0,
+   "returnSlips": null,
+   "warmupPicks": null,
+   "meanTrueK": 0.924000409872091
+  },
+  {
+   "persona": "forgetful",
+   "track": "fretboard",
+   "days": 28,
+   "answers": 285,
+   "sessions": 17,
+   "passed": 1,
+   "firstDrill": {
+    "id": "fretboard/6/naturals",
+    "passedIn": 5,
+    "answers": 135,
+    "sessions": 9
+   },
+   "falsePassRate": 0.25,
+   "retention7": 0.6624685716900965,
+   "retention21": 0.47396732343679027,
+   "overScheduled": 0.20668512128640576,
+   "underScheduled": 0.3333333333333333,
+   "weakShare": 1.9155809299819304,
+   "calibrationK": 0.2067786406172029,
+   "calibrationR": 0.05599063452742621,
+   "helpFinal": 2.4857142857142858,
+   "reviewShare": 0,
+   "returnSlips": null,
+   "warmupPicks": null,
+   "meanTrueK": 0.8613304965502497
+  },
+  {
+   "persona": "returning",
+   "track": "fretboard",
+   "days": 42,
+   "answers": 265,
+   "sessions": 16,
+   "passed": 2,
+   "firstDrill": {
+    "id": "fretboard/6/naturals",
+    "passedIn": 5,
+    "answers": 129,
+    "sessions": 9
+   },
+   "falsePassRate": 0,
+   "retention7": 0.8111250107852944,
+   "retention21": 0.6755837421010155,
+   "overScheduled": 0.2280524137006426,
+   "underScheduled": null,
+   "weakShare": 2.28731258374406,
+   "calibrationK": 0.1766992293754523,
+   "calibrationR": 0.03711492604360646,
+   "helpFinal": 2.657142857142857,
+   "reviewShare": 0,
+   "returnSlips": 0,
+   "warmupPicks": 0,
+   "meanTrueK": 0.8679904457889395
+  },
+  {
+   "persona": "gbWeak",
+   "track": "intervals",
+   "days": 56,
+   "answers": 613,
+   "sessions": 38,
+   "passed": 8,
+   "firstDrill": {
+    "id": "intervals/5/up/adjacent",
+    "passedIn": 5,
+    "answers": 69,
+    "sessions": 5
+   },
+   "falsePassRate": 0.6666666666666666,
+   "retention7": 0.4959043848551504,
+   "retention21": 0.3401906289570418,
+   "overScheduled": 0.21492519177036407,
+   "underScheduled": 1,
+   "weakShare": 0.6457704889377696,
+   "calibrationK": 0.1246413568577425,
+   "calibrationR": 0.39249712085942945,
+   "helpFinal": 3,
+   "reviewShare": 0,
+   "returnSlips": null,
+   "warmupPicks": null,
+   "meanTrueK": 0.944504334619815
+  },
+  {
+   "persona": "noodler",
+   "track": "keys",
+   "days": 28,
+   "answers": 267,
+   "sessions": 17,
+   "passed": 7,
+   "firstDrill": {
+    "id": "keys/maj/0",
+    "passedIn": 5,
+    "answers": 21,
+    "sessions": 2
+   },
+   "falsePassRate": 0.5833333333333334,
+   "retention7": 0.6064218379841262,
+   "retention21": 0.4506241719416553,
+   "overScheduled": 0.46823063616485106,
+   "underScheduled": null,
+   "weakShare": 3.4438701026348904,
+   "calibrationK": 0.15752021248743833,
+   "calibrationR": 0.06531200962057122,
+   "helpFinal": 3,
+   "reviewShare": 0,
+   "returnSlips": null,
+   "warmupPicks": null,
+   "meanTrueK": 0.9765889829395918
+  }
+ ],
+ "runs": [
+  {
+   "driver": "v1",
+   "persona": "quick",
+   "track": "fretboard",
+   "days": 28,
+   "seed": 1,
+   "answers": 482,
+   "sessions": 30,
+   "passed": [
+    "fretboard/6/naturals",
+    "fretboard/6/all",
+    "fretboard/5/naturals",
+    "fretboard/5/all",
+    "fretboard/4/naturals"
+   ],
+   "timeToPass": {
+    "fretboard/6/naturals": {
+     "answers": 76,
+     "sessions": 5,
+     "days": 4
+    },
+    "fretboard/6/all": {
+     "answers": 84,
+     "sessions": 7,
+     "days": 8
+    },
+    "fretboard/5/naturals": {
+     "answers": 96,
+     "sessions": 7,
+     "days": 7
+    },
+    "fretboard/5/all": {
+     "answers": 59,
+     "sessions": 4,
+     "days": 2
+    },
+    "fretboard/4/naturals": {
+     "answers": 101,
+     "sessions": 8,
+     "days": 7
+    }
+   },
+   "retention7": 0.7567432931636907,
+   "retention21": 0.5878045289476809,
+   "retentionByDrill": {
+    "fretboard/6/naturals": {
+     "kAtPass": 0.9906306725822868,
+     "r7": 0.6802616062492238,
+     "r21": 0.4944951814109375
+    },
+    "fretboard/6/all": {
+     "kAtPass": 0.9931311447544888,
+     "r7": 0.8367415277967837,
+     "r21": 0.6982119145657507
+    },
+    "fretboard/5/naturals": {
+     "kAtPass": 0.9984476205676899,
+     "r7": 0.7764389093781482,
+     "r21": 0.6160301451108346
+    },
+    "fretboard/5/all": {
+     "kAtPass": 0.9935120458972349,
+     "r7": 0.7629246556953198,
+     "r21": 0.5932933970358057
+    },
+    "fretboard/4/naturals": {
+     "kAtPass": 0.9985968240319968,
+     "r7": 0.7273497666989782,
+     "r21": 0.536992006615076
+    }
+   },
+   "falsePasses": [],
+   "falsePassRate": 0,
+   "overScheduled": 0.4170124481327801,
+   "underScheduled": 0,
+   "weakShare": 7.095558799981172,
+   "calibration": {
+    "knowledge": 0.16454026218733092,
+    "recall": 0.10966939491392391
+   },
+   "helpByDay": [
+    0,
+    0.42857142857142855,
+    0.7142857142857143,
+    1.8571428571428572,
+    1.8571428571428572,
+    1.7142857142857142,
+    null,
+    2,
+    2.2857142857142856,
+    2.4285714285714284,
+    2.7142857142857144,
+    2.7142857142857144,
+    2.5714285714285716,
+    2.5714285714285716,
+    null,
+    2.7142857142857144,
+    2.857142857142857,
+    2.857142857142857,
+    null,
+    2.7142857142857144,
+    2.5714285714285716,
+    2.7142857142857144,
+    2.857142857142857,
+    2.857142857142857,
+    2.857142857142857,
+    3,
+    null,
+    null
+   ],
+   "returnSlips": null,
+   "rePass": null,
+   "reviewShare": 0,
+   "warmupPicks": null,
+   "trueSkills": {
+    "seen": 36,
+    "meanK": 0.9934870612765372
+   },
+   "jamChords": 0
+  },
+  {
+   "driver": "v1",
+   "persona": "quick",
+   "track": "fretboard",
+   "days": 28,
+   "seed": 2,
+   "answers": 211,
+   "sessions": 13,
+   "passed": [
+    "fretboard/6/naturals",
+    "fretboard/6/all"
+   ],
+   "timeToPass": {
+    "fretboard/6/naturals": {
+     "answers": 65,
+     "sessions": 5,
+     "days": 13
+    },
+    "fretboard/6/all": {
+     "answers": 96,
+     "sessions": 6,
+     "days": 6
+    }
+   },
+   "retention7": 0.7545818077802665,
+   "retention21": 0.6167260429295884,
+   "retentionByDrill": {
+    "fretboard/6/naturals": {
+     "kAtPass": 0.9857194028845082,
+     "r7": 0.6847612964604065,
+     "r21": 0.5601498490569277
+    },
+    "fretboard/6/all": {
+     "kAtPass": 0.9953366220218879,
+     "r7": 0.8244023191001265,
+     "r21": 0.6733022368022493
+    }
+   },
+   "falsePasses": [],
+   "falsePassRate": 0,
+   "overScheduled": 0.3791469194312796,
+   "underScheduled": null,
+   "weakShare": 1.984442927460211,
+   "calibration": {
+    "knowledge": 0.23500233853981498,
+    "recall": 0.0908379552126421
+   },
+   "helpByDay": [
+    0,
+    0.7142857142857143,
+    null,
+    null,
+    1.5714285714285714,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    1.8571428571428572,
+    2.142857142857143,
+    null,
+    2.2857142857142856,
+    2.5714285714285716,
+    2.857142857142857,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    2.4285714285714284,
+    null,
+    2.142857142857143,
+    null
+   ],
+   "returnSlips": null,
+   "rePass": null,
+   "reviewShare": 0,
+   "warmupPicks": null,
+   "trueSkills": {
+    "seen": 19,
+    "meanK": 0.9858985960287923
+   },
+   "jamChords": 0
+  },
+  {
+   "driver": "v1",
+   "persona": "quick",
+   "track": "fretboard",
+   "days": 28,
+   "seed": 3,
+   "answers": 303,
+   "sessions": 18,
+   "passed": [
+    "fretboard/6/naturals",
+    "fretboard/6/all",
+    "fretboard/5/naturals"
+   ],
+   "timeToPass": {
+    "fretboard/6/naturals": {
+     "answers": 67,
+     "sessions": 4,
+     "days": 3
+    },
+    "fretboard/6/all": {
+     "answers": 78,
+     "sessions": 5,
+     "days": 12
+    },
+    "fretboard/5/naturals": {
+     "answers": 77,
+     "sessions": 5,
+     "days": 11
+    }
+   },
+   "retention7": 0.7543440418774888,
+   "retention21": 0.5807778835988717,
+   "retentionByDrill": {
+    "fretboard/6/naturals": {
+     "kAtPass": 0.9841768376102479,
+     "r7": 0.643058880324981,
+     "r21": 0.460569070058005
+    },
+    "fretboard/6/all": {
+     "kAtPass": 0.9916039836112174,
+     "r7": 0.8505536410025435,
+     "r21": 0.701985098196804
+    },
+    "fretboard/5/naturals": {
+     "kAtPass": 0.9955828735974508,
+     "r7": 0.769419604304942,
+     "r21": 0.579779482541806
+    }
+   },
+   "falsePasses": [],
+   "falsePassRate": 0,
+   "overScheduled": 0.43234323432343236,
+   "underScheduled": null,
+   "weakShare": 3.3993610223642166,
+   "calibration": {
+    "knowledge": 0.1817925817684082,
+    "recall": 0.09888578436958814
+   },
+   "helpByDay": [
+    0,
+    1,
+    1.7142857142857142,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    1.7142857142857142,
+    null,
+    null,
+    2.4285714285714284,
+    2.7142857142857144,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    2.4285714285714284,
+    2.5714285714285716,
+    3,
+    null,
+    3,
+    3,
+    3
+   ],
+   "returnSlips": null,
+   "rePass": null,
+   "reviewShare": 0,
+   "warmupPicks": null,
+   "trueSkills": {
+    "seen": 24,
+    "meanK": 0.9944742604823952
+   },
+   "jamChords": 0
+  },
+  {
+   "driver": "v1",
+   "persona": "quick",
+   "track": "fretboard",
+   "days": 28,
+   "seed": 4,
+   "answers": 204,
+   "sessions": 12,
+   "passed": [
+    "fretboard/6/naturals",
+    "fretboard/6/all"
+   ],
+   "timeToPass": {
+    "fretboard/6/naturals": {
+     "answers": 90,
+     "sessions": 6,
+     "days": 13
+    },
+    "fretboard/6/all": {
+     "answers": 108,
+     "sessions": 7,
+     "days": 10
+    }
+   },
+   "retention7": 0.8561796805422852,
+   "retention21": 0.7221011351018409,
+   "retentionByDrill": {
+    "fretboard/6/naturals": {
+     "kAtPass": 0.9958213573437199,
+     "r7": 0.8485664547635112,
+     "r21": 0.6985650675519437
+    },
+    "fretboard/6/all": {
+     "kAtPass": 0.9986783201894035,
+     "r7": 0.8637929063210592,
+     "r21": 0.745637202651738
+    }
+   },
+   "falsePasses": [],
+   "falsePassRate": 0,
+   "overScheduled": 0.5,
+   "underScheduled": null,
+   "weakShare": 1.7999999999999998,
+   "calibration": {
+    "knowledge": 0.197738904461363,
+    "recall": 0.012037919712977635
+   },
+   "helpByDay": [
+    0,
+    0.42857142857142855,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    0.8571428571428571,
+    1.7142857142857142,
+    null,
+    null,
+    2.4285714285714284,
+    2.5714285714285716,
+    null,
+    2.7142857142857144,
+    null,
+    null,
+    2.7142857142857144,
+    null,
+    null,
+    3,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "returnSlips": null,
+   "rePass": null,
+   "reviewShare": 0,
+   "warmupPicks": null,
+   "trueSkills": {
+    "seen": 18,
+    "meanK": 0.9282855467929356
+   },
+   "jamChords": 0
+  },
+  {
+   "driver": "v1",
+   "persona": "quick",
+   "track": "fretboard",
+   "days": 28,
+   "seed": 5,
+   "answers": 285,
+   "sessions": 17,
+   "passed": [
+    "fretboard/6/naturals",
+    "fretboard/6/all",
+    "fretboard/5/naturals"
+   ],
+   "timeToPass": {
+    "fretboard/6/naturals": {
+     "answers": 74,
+     "sessions": 5,
+     "days": 4
+    },
+    "fretboard/6/all": {
+     "answers": 89,
+     "sessions": 6,
+     "days": 5
+    },
+    "fretboard/5/naturals": {
+     "answers": 103,
+     "sessions": 8,
+     "days": 21
+    }
+   },
+   "retention7": 0.8086276186635916,
+   "retention21": 0.6604754912044862,
+   "retentionByDrill": {
+    "fretboard/6/naturals": {
+     "kAtPass": 0.9912160871506732,
+     "r7": 0.6932155213938473,
+     "r21": 0.5101242221706223
+    },
+    "fretboard/6/all": {
+     "kAtPass": 0.9958130192022785,
+     "r7": 0.8278028999950671,
+     "r21": 0.6740301415898581
+    },
+    "fretboard/5/naturals": {
+     "kAtPass": 0.9984669157012332,
+     "r7": 0.9048644346018604,
+     "r21": 0.7972721098529781
+    }
+   },
+   "falsePasses": [],
+   "falsePassRate": 0,
+   "overScheduled": 0.3508771929824561,
+   "underScheduled": null,
+   "weakShare": 3.9063392347230175,
+   "calibration": {
+    "knowledge": 0.19173594803986363,
+    "recall": 0.10191471251156889
+   },
+   "helpByDay": [
+    0.14285714285714285,
+    1.1428571428571428,
+    1.7142857142857142,
+    2,
+    2.4285714285714284,
+    null,
+    2.5714285714285716,
+    2.7142857142857144,
+    2.4285714285714284,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    2,
+    2,
+    2.142857142857143,
+    2.7142857142857144,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    3
+   ],
+   "returnSlips": null,
+   "rePass": null,
+   "reviewShare": 0,
+   "warmupPicks": null,
+   "trueSkills": {
+    "seen": 24,
+    "meanK": 0.9743682407608142
+   },
+   "jamChords": 0
+  },
+  {
+   "driver": "v1",
+   "persona": "steady",
+   "track": "fretboard",
+   "days": 28,
+   "seed": 1,
+   "answers": 482,
+   "sessions": 30,
+   "passed": [
+    "fretboard/6/naturals",
+    "fretboard/6/all",
+    "fretboard/5/naturals"
+   ],
+   "timeToPass": {
+    "fretboard/6/naturals": {
+     "answers": 129,
+     "sessions": 9,
+     "days": 9
+    },
+    "fretboard/6/all": {
+     "answers": 135,
+     "sessions": 9,
+     "days": 9
+    },
+    "fretboard/5/naturals": {
+     "answers": 123,
+     "sessions": 9,
+     "days": 7
+    }
+   },
+   "retention7": 0.7392704370788654,
+   "retention21": 0.5757804931068327,
+   "retentionByDrill": {
+    "fretboard/6/naturals": {
+     "kAtPass": 0.9609240030374172,
+     "r7": 0.743673743270653,
+     "r21": 0.5846328998385316
+    },
+    "fretboard/6/all": {
+     "kAtPass": 0.9768727088075223,
+     "r7": 0.817338528625176,
+     "r21": 0.6653990083418536
+    },
+    "fretboard/5/naturals": {
+     "kAtPass": 0.9806638165549589,
+     "r7": 0.6567990393407673,
+     "r21": 0.47730957114011285
+    }
+   },
+   "falsePasses": [],
+   "falsePassRate": 0,
+   "overScheduled": 0.23651452282157676,
+   "underScheduled": null,
+   "weakShare": 4.092894684172477,
+   "calibration": {
+    "knowledge": 0.16579607822112816,
+    "recall": 0.07288359823080877
+   },
+   "helpByDay": [
+    0,
+    0,
+    0.2857142857142857,
+    0.7142857142857143,
+    1,
+    1.2857142857142858,
+    null,
+    2,
+    2,
+    2.142857142857143,
+    2.4285714285714284,
+    2.7142857142857144,
+    2.7142857142857144,
+    2.857142857142857,
+    null,
+    2.857142857142857,
+    2.2857142857142856,
+    1.7142857142857142,
+    null,
+    1.7142857142857142,
+    2,
+    2.4285714285714284,
+    2.5714285714285716,
+    2.5714285714285716,
+    2.7142857142857144,
+    2.857142857142857,
+    null,
+    null
+   ],
+   "returnSlips": null,
+   "rePass": null,
+   "reviewShare": 0,
+   "warmupPicks": null,
+   "trueSkills": {
+    "seen": 24,
+    "meanK": 0.9733098796006671
+   },
+   "jamChords": 0
+  },
+  {
+   "driver": "v1",
+   "persona": "steady",
+   "track": "fretboard",
+   "days": 28,
+   "seed": 2,
+   "answers": 211,
+   "sessions": 13,
+   "passed": [
+    "fretboard/6/naturals"
+   ],
+   "timeToPass": {
+    "fretboard/6/naturals": {
+     "answers": 184,
+     "sessions": 12,
+     "days": 27
+    }
+   },
+   "retention7": 0.8623234707469746,
+   "retention21": 0.7300216604500485,
+   "retentionByDrill": {
+    "fretboard/6/naturals": {
+     "kAtPass": 0.9909458129900636,
+     "r7": 0.8623234707469746,
+     "r21": 0.7300216604500485
+    }
+   },
+   "falsePasses": [],
+   "falsePassRate": 0,
+   "overScheduled": 0.2938388625592417,
+   "underScheduled": null,
+   "weakShare": 2.057160472331717,
+   "calibration": {
+    "knowledge": 0.17608289413294637,
+    "recall": 0.014340746572415424
+   },
+   "helpByDay": [
+    0,
+    0,
+    null,
+    null,
+    0.7142857142857143,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    1,
+    1.7142857142857142,
+    null,
+    1.8571428571428572,
+    2.2857142857142856,
+    2.142857142857143,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    2.2857142857142856,
+    null,
+    2.7142857142857144,
+    null
+   ],
+   "returnSlips": null,
+   "rePass": null,
+   "reviewShare": 0,
+   "warmupPicks": null,
+   "trueSkills": {
+    "seen": 12,
+    "meanK": 0.8191681666204479
+   },
+   "jamChords": 0
+  },
+  {
+   "driver": "v1",
+   "persona": "steady",
+   "track": "fretboard",
+   "days": 28,
+   "seed": 3,
+   "answers": 303,
+   "sessions": 18,
+   "passed": [
+    "fretboard/6/naturals",
+    "fretboard/6/all"
+   ],
+   "timeToPass": {
+    "fretboard/6/naturals": {
+     "answers": 135,
+     "sessions": 8,
+     "days": 14
+    },
+    "fretboard/6/all": {
+     "answers": 110,
+     "sessions": 8,
+     "days": 13
+    }
+   },
+   "retention7": 0.7541611484458657,
+   "retention21": 0.5907833633912423,
+   "retentionByDrill": {
+    "fretboard/6/naturals": {
+     "kAtPass": 0.9692286942218139,
+     "r7": 0.7113448045990655,
+     "r21": 0.5272758986467843
+    },
+    "fretboard/6/all": {
+     "kAtPass": 0.9520824346545601,
+     "r7": 0.7969774922926659,
+     "r21": 0.6542908281357004
+    }
+   },
+   "falsePasses": [],
+   "falsePassRate": 0,
+   "overScheduled": 0.19141914191419143,
+   "underScheduled": null,
+   "weakShare": 2.2561876928755136,
+   "calibration": {
+    "knowledge": 0.20036610684016315,
+    "recall": 0.06678996353006203
+   },
+   "helpByDay": [
+    0,
+    0.2857142857142857,
+    1,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    1.2857142857142858,
+    null,
+    null,
+    2.142857142857143,
+    2.7142857142857144,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    2.7142857142857144,
+    2.2857142857142856,
+    2.5714285714285716,
+    null,
+    2.5714285714285716,
+    1.8571428571428572,
+    1.8571428571428572
+   ],
+   "returnSlips": null,
+   "rePass": null,
+   "reviewShare": 0,
+   "warmupPicks": null,
+   "trueSkills": {
+    "seen": 19,
+    "meanK": 0.9270301562155048
+   },
+   "jamChords": 0
+  },
+  {
+   "driver": "v1",
+   "persona": "steady",
+   "track": "fretboard",
+   "days": 28,
+   "seed": 4,
+   "answers": 204,
+   "sessions": 12,
+   "passed": [
+    "fretboard/6/naturals"
+   ],
+   "timeToPass": {
+    "fretboard/6/naturals": {
+     "answers": 114,
+     "sessions": 7,
+     "days": 14
+    }
+   },
+   "retention7": 0.7364196946054706,
+   "retention21": 0.5536445608474408,
+   "retentionByDrill": {
+    "fretboard/6/naturals": {
+     "kAtPass": 0.9488321294693488,
+     "r7": 0.7364196946054706,
+     "r21": 0.5536445608474408
+    }
+   },
+   "falsePasses": [],
+   "falsePassRate": 0,
+   "overScheduled": 0.16666666666666666,
+   "underScheduled": null,
+   "weakShare": 2.073063753926257,
+   "calibration": {
+    "knowledge": 0.16079818987288555,
+    "recall": 0.012895721403106167
+   },
+   "helpByDay": [
+    0,
+    0,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    0.42857142857142855,
+    0.7142857142857143,
+    null,
+    null,
+    1.4285714285714286,
+    2,
+    null,
+    2.142857142857143,
+    null,
+    null,
+    2.142857142857143,
+    null,
+    null,
+    2.5714285714285716,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "returnSlips": null,
+   "rePass": null,
+   "reviewShare": 0,
+   "warmupPicks": null,
+   "trueSkills": {
+    "seen": 12,
+    "meanK": 0.926840003237608
+   },
+   "jamChords": 0
+  },
+  {
+   "driver": "v1",
+   "persona": "steady",
+   "track": "fretboard",
+   "days": 28,
+   "seed": 5,
+   "answers": 285,
+   "sessions": 17,
+   "passed": [
+    "fretboard/6/naturals"
+   ],
+   "timeToPass": {
+    "fretboard/6/naturals": {
+     "answers": 125,
+     "sessions": 8,
+     "days": 5
+    }
+   },
+   "retention7": 0.6330768434166896,
+   "retention21": 0.4472730200588203,
+   "retentionByDrill": {
+    "fretboard/6/naturals": {
+     "kAtPass": 0.9557694811480971,
+     "r7": 0.6330768434166896,
+     "r21": 0.4472730200588203
+    }
+   },
+   "falsePasses": [],
+   "falsePassRate": 0,
+   "overScheduled": 0.24561403508771928,
+   "underScheduled": null,
+   "weakShare": 1.7420178799489154,
+   "calibration": {
+    "knowledge": 0.13039277297659502,
+    "recall": 0.02012430058486257
+   },
+   "helpByDay": [
+    0,
+    0,
+    0.7142857142857143,
+    1.5714285714285714,
+    2.2857142857142856,
+    null,
+    2.4285714285714284,
+    2.4285714285714284,
+    2.4285714285714284,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    2.857142857142857,
+    3,
+    3,
+    3,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    3
+   ],
+   "returnSlips": null,
+   "rePass": null,
+   "reviewShare": 0,
+   "warmupPicks": null,
+   "trueSkills": {
+    "seen": 12,
+    "meanK": 0.9802797295899636
+   },
+   "jamChords": 0
+  },
+  {
+   "driver": "v1",
+   "persona": "steady",
+   "track": "intervals",
+   "days": 28,
+   "seed": 1,
+   "answers": 482,
+   "sessions": 30,
+   "passed": [
+    "intervals/5/up/adjacent",
+    "intervals/5/up/adjacent-gb",
+    "intervals/5/up/skip",
+    "intervals/5/down/adjacent",
+    "intervals/5/down/adjacent-gb",
+    "intervals/5/down/skip"
+   ],
+   "timeToPass": {
+    "intervals/5/up/adjacent": {
+     "answers": 54,
+     "sessions": 4,
+     "days": 4
+    },
+    "intervals/5/up/adjacent-gb": {
+     "answers": 27,
+     "sessions": 3,
+     "days": 2
+    },
+    "intervals/5/up/skip": {
+     "answers": 68,
+     "sessions": 5,
+     "days": 6
+    },
+    "intervals/5/down/adjacent": {
+     "answers": 107,
+     "sessions": 8,
+     "days": 8
+    },
+    "intervals/5/down/adjacent-gb": {
+     "answers": 35,
+     "sessions": 3,
+     "days": 1
+    },
+    "intervals/5/down/skip": {
+     "answers": 101,
+     "sessions": 7,
+     "days": 7
+    }
+   },
+   "retention7": 0.47842740450364074,
+   "retention21": 0.3247560615655674,
+   "retentionByDrill": {
+    "intervals/5/up/adjacent": {
+     "kAtPass": 0.9059177646525667,
+     "r7": 0.40818335834055736,
+     "r21": 0.25603499006400066
+    },
+    "intervals/5/up/adjacent-gb": {
+     "kAtPass": 0.9967322146275746,
+     "r7": 0.24297276055070424,
+     "r21": 0.14314442103778693
+    },
+    "intervals/5/up/skip": {
+     "kAtPass": 0.9628902880807866,
+     "r7": 0.5719845400324695,
+     "r21": 0.38018730751373253
+    },
+    "intervals/5/down/adjacent": {
+     "kAtPass": 0.9909474790265029,
+     "r7": 0.766151080091654,
+     "r21": 0.612109153673
+    },
+    "intervals/5/down/adjacent-gb": {
+     "kAtPass": 0.9996333100319033,
+     "r7": 0.4035846228094854,
+     "r21": 0.24680498079492705
+    },
+    "intervals/5/down/skip": {
+     "kAtPass": 0.9937887676234004,
+     "r7": 0.4776880651969743,
+     "r21": 0.3102555163099574
+    }
+   },
+   "falsePasses": [
+    "intervals/5/up/adjacent",
+    "intervals/5/up/adjacent-gb",
+    "intervals/5/up/skip",
+    "intervals/5/down/adjacent-gb",
+    "intervals/5/down/skip"
+   ],
+   "falsePassRate": 0.8333333333333334,
+   "overScheduled": 0.3070539419087137,
+   "underScheduled": 1,
+   "weakShare": 0.674533761241846,
+   "calibration": {
+    "knowledge": 0.13760622851082807,
+    "recall": 0.3489493873751838
+   },
+   "helpByDay": [
+    1,
+    0,
+    3,
+    3,
+    1,
+    1,
+    null,
+    3,
+    2,
+    2,
+    1,
+    3,
+    3,
+    3,
+    null,
+    1,
+    1,
+    3,
+    null,
+    1,
+    3,
+    1,
+    2,
+    2,
+    2,
+    2,
+    null,
+    null
+   ],
+   "returnSlips": null,
+   "rePass": null,
+   "reviewShare": 0,
+   "warmupPicks": null,
+   "trueSkills": {
+    "seen": 22,
+    "meanK": 0.9685395669671725
+   },
+   "jamChords": 0
+  },
+  {
+   "driver": "v1",
+   "persona": "steady",
+   "track": "intervals",
+   "days": 28,
+   "seed": 2,
+   "answers": 211,
+   "sessions": 13,
+   "passed": [
+    "intervals/5/up/adjacent",
+    "intervals/5/up/adjacent-gb",
+    "intervals/5/up/skip"
+   ],
+   "timeToPass": {
+    "intervals/5/up/adjacent": {
+     "answers": 69,
+     "sessions": 5,
+     "days": 13
+    },
+    "intervals/5/up/adjacent-gb": {
+     "answers": 61,
+     "sessions": 5,
+     "days": 5
+    },
+    "intervals/5/up/skip": {
+     "answers": 74,
+     "sessions": 5,
+     "days": 11
+    }
+   },
+   "retention7": 0.597605493938038,
+   "retention21": 0.4088107861445136,
+   "retentionByDrill": {
+    "intervals/5/up/adjacent": {
+     "kAtPass": 0.9639132768439056,
+     "r7": 0.695250128525944,
+     "r21": 0.49997832838372375
+    },
+    "intervals/5/up/adjacent-gb": {
+     "kAtPass": 0.9999970140970053,
+     "r7": 0.5030840878644566,
+     "r21": 0.31857296636131427
+    },
+    "intervals/5/up/skip": {
+     "kAtPass": 0.9636656535138033,
+     "r7": 0.5944822654237132,
+     "r21": 0.4078810636885028
+    }
+   },
+   "falsePasses": [
+    "intervals/5/up/adjacent-gb",
+    "intervals/5/up/skip"
+   ],
+   "falsePassRate": 0.6666666666666666,
+   "overScheduled": 0.3222748815165877,
+   "underScheduled": null,
+   "weakShare": 1.6223352045885087,
+   "calibration": {
+    "knowledge": 0.22103776379904916,
+    "recall": 0.15400612969111363
+   },
+   "helpByDay": [
+    1,
+    1,
+    null,
+    null,
+    3,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    3,
+    3,
+    null,
+    3,
+    2,
+    0,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    0,
+    null,
+    2,
+    null
+   ],
+   "returnSlips": null,
+   "rePass": null,
+   "reviewShare": 0,
+   "warmupPicks": null,
+   "trueSkills": {
+    "seen": 13,
+    "meanK": 0.8589258682898873
+   },
+   "jamChords": 0
+  },
+  {
+   "driver": "v1",
+   "persona": "steady",
+   "track": "intervals",
+   "days": 28,
+   "seed": 3,
+   "answers": 303,
+   "sessions": 18,
+   "passed": [
+    "intervals/5/up/adjacent",
+    "intervals/5/up/adjacent-gb",
+    "intervals/5/up/skip",
+    "intervals/5/down/adjacent",
+    "intervals/5/down/adjacent-gb"
+   ],
+   "timeToPass": {
+    "intervals/5/up/adjacent": {
+     "answers": 77,
+     "sessions": 5,
+     "days": 10
+    },
+    "intervals/5/up/adjacent-gb": {
+     "answers": 29,
+     "sessions": 3,
+     "days": 4
+    },
+    "intervals/5/up/skip": {
+     "answers": 93,
+     "sessions": 6,
+     "days": 11
+    },
+    "intervals/5/down/adjacent": {
+     "answers": 64,
+     "sessions": 5,
+     "days": 5
+    },
+    "intervals/5/down/adjacent-gb": {
+     "answers": 25,
+     "sessions": 3,
+     "days": 2
+    }
+   },
+   "retention7": 0.4901112256748478,
+   "retention21": 0.3278597139307762,
+   "retentionByDrill": {
+    "intervals/5/up/adjacent": {
+     "kAtPass": 0.9573484353202076,
+     "r7": 0.36840100479596666,
+     "r21": 0.26074726448681584
+    },
+    "intervals/5/up/adjacent-gb": {
+     "kAtPass": 0.9981409932103535,
+     "r7": 0.4954032340911888,
+     "r21": 0.3128627455250539
+    },
+    "intervals/5/up/skip": {
+     "kAtPass": 0.9890630284973685,
+     "r7": 0.7180015155237751,
+     "r21": 0.5180675887003887
+    },
+    "intervals/5/down/adjacent": {
+     "kAtPass": 0.9696816150790093,
+     "r7": 0.48926197180172987,
+     "r21": 0.3170982915347853
+    },
+    "intervals/5/down/adjacent-gb": {
+     "kAtPass": 0.996589728950396,
+     "r7": 0.3794884021615783,
+     "r21": 0.23052267940683713
+    }
+   },
+   "falsePasses": [
+    "intervals/5/up/adjacent",
+    "intervals/5/up/adjacent-gb",
+    "intervals/5/down/adjacent",
+    "intervals/5/down/adjacent-gb"
+   ],
+   "falsePassRate": 0.8,
+   "overScheduled": 0.2871287128712871,
+   "underScheduled": 1,
+   "weakShare": 0.7604854056108327,
+   "calibration": {
+    "knowledge": 0.15389330260714162,
+    "recall": 0.31880681729971105
+   },
+   "helpByDay": [
+    1,
+    3,
+    3,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    3,
+    null,
+    null,
+    2,
+    3,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    1,
+    2,
+    1,
+    null,
+    3,
+    3,
+    2
+   ],
+   "returnSlips": null,
+   "rePass": null,
+   "reviewShare": 0,
+   "warmupPicks": null,
+   "trueSkills": {
+    "seen": 18,
+    "meanK": 0.919015314333275
+   },
+   "jamChords": 0
+  },
+  {
+   "driver": "v1",
+   "persona": "steady",
+   "track": "intervals",
+   "days": 28,
+   "seed": 4,
+   "answers": 204,
+   "sessions": 12,
+   "passed": [
+    "intervals/5/up/adjacent",
+    "intervals/5/up/adjacent-gb",
+    "intervals/5/up/skip",
+    "intervals/5/down/adjacent"
+   ],
+   "timeToPass": {
+    "intervals/5/up/adjacent": {
+     "answers": 59,
+     "sessions": 4,
+     "days": 10
+    },
+    "intervals/5/up/adjacent-gb": {
+     "answers": 30,
+     "sessions": 3,
+     "days": 4
+    },
+    "intervals/5/up/skip": {
+     "answers": 50,
+     "sessions": 4,
+     "days": 4
+    },
+    "intervals/5/down/adjacent": {
+     "answers": 57,
+     "sessions": 4,
+     "days": 7
+    }
+   },
+   "retention7": 0.506286104998293,
+   "retention21": 0.3366780669112519,
+   "retentionByDrill": {
+    "intervals/5/up/adjacent": {
+     "kAtPass": 0.9282578199900897,
+     "r7": 0.6773844149538288,
+     "r21": 0.49162721711778756
+    },
+    "intervals/5/up/adjacent-gb": {
+     "kAtPass": 0.9983268938893182,
+     "r7": 0.4791365279139112,
+     "r21": 0.30067747650744425
+    },
+    "intervals/5/up/skip": {
+     "kAtPass": 0.9137907885673677,
+     "r7": 0.4134193615705839,
+     "r21": 0.25839807814710625
+    },
+    "intervals/5/down/adjacent": {
+     "kAtPass": 0.9575765581731672,
+     "r7": 0.45520411555484797,
+     "r21": 0.29600949587266967
+    }
+   },
+   "falsePasses": [
+    "intervals/5/up/adjacent-gb",
+    "intervals/5/up/skip",
+    "intervals/5/down/adjacent"
+   ],
+   "falsePassRate": 0.75,
+   "overScheduled": 0.1715686274509804,
+   "underScheduled": 1,
+   "weakShare": 1.076362985990668,
+   "calibration": {
+    "knowledge": 0.18273638098875367,
+    "recall": 0.19897020350135622
+   },
+   "helpByDay": [
+    0,
+    2,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    1,
+    3,
+    null,
+    null,
+    1,
+    0,
+    null,
+    1,
+    null,
+    null,
+    2,
+    null,
+    null,
+    2,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "returnSlips": null,
+   "rePass": null,
+   "reviewShare": 0,
+   "warmupPicks": null,
+   "trueSkills": {
+    "seen": 14,
+    "meanK": 0.9330166761963115
+   },
+   "jamChords": 0
+  },
+  {
+   "driver": "v1",
+   "persona": "steady",
+   "track": "intervals",
+   "days": 28,
+   "seed": 5,
+   "answers": 285,
+   "sessions": 17,
+   "passed": [
+    "intervals/5/up/adjacent",
+    "intervals/5/up/adjacent-gb",
+    "intervals/5/up/skip",
+    "intervals/5/down/adjacent",
+    "intervals/5/down/adjacent-gb"
+   ],
+   "timeToPass": {
+    "intervals/5/up/adjacent": {
+     "answers": 73,
+     "sessions": 5,
+     "days": 4
+    },
+    "intervals/5/up/adjacent-gb": {
+     "answers": 17,
+     "sessions": 2,
+     "days": 1
+    },
+    "intervals/5/up/skip": {
+     "answers": 84,
+     "sessions": 6,
+     "days": 6
+    },
+    "intervals/5/down/adjacent": {
+     "answers": 63,
+     "sessions": 5,
+     "days": 12
+    },
+    "intervals/5/down/adjacent-gb": {
+     "answers": 11,
+     "sessions": 2,
+     "days": 9
+    }
+   },
+   "retention7": 0.478181510341462,
+   "retention21": 0.3238517865562618,
+   "retentionByDrill": {
+    "intervals/5/up/adjacent": {
+     "kAtPass": 0.9704775374201473,
+     "r7": 0.45318626688423036,
+     "r21": 0.29350439877333073
+    },
+    "intervals/5/up/adjacent-gb": {
+     "kAtPass": 0.965762174278697,
+     "r7": 0.10050532195965806,
+     "r21": 0.05823739705370541
+    },
+    "intervals/5/up/skip": {
+     "kAtPass": 0.9831270603857856,
+     "r7": 0.5834425442535569,
+     "r21": 0.3998867792684704
+    },
+    "intervals/5/down/adjacent": {
+     "kAtPass": 0.9724117206630828,
+     "r7": 0.6592336244110449,
+     "r21": 0.4691208527656638
+    },
+    "intervals/5/down/adjacent-gb": {
+     "kAtPass": 0.9555798236224085,
+     "r7": 0.5945397941988196,
+     "r21": 0.3985095049201385
+    }
+   },
+   "falsePasses": [
+    "intervals/5/up/adjacent",
+    "intervals/5/up/adjacent-gb",
+    "intervals/5/up/skip",
+    "intervals/5/down/adjacent-gb"
+   ],
+   "falsePassRate": 0.8,
+   "overScheduled": 0.21052631578947367,
+   "underScheduled": 1,
+   "weakShare": 0.6047473695506753,
+   "calibration": {
+    "knowledge": 0.17323737413409618,
+    "recall": 0.33215438941651665
+   },
+   "helpByDay": [
+    0,
+    3,
+    3,
+    1,
+    1,
+    null,
+    3,
+    3,
+    1,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    1,
+    3,
+    3,
+    3,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    1
+   ],
+   "returnSlips": null,
+   "rePass": null,
+   "reviewShare": 0,
+   "warmupPicks": null,
+   "trueSkills": {
+    "seen": 18,
+    "meanK": 0.9541538643145587
+   },
+   "jamChords": 0
+  },
+  {
+   "driver": "v1",
+   "persona": "slow",
+   "track": "fretboard",
+   "days": 28,
+   "seed": 1,
+   "answers": 482,
+   "sessions": 30,
+   "passed": [
+    "fretboard/6/naturals"
+   ],
+   "timeToPass": {
+    "fretboard/6/naturals": {
+     "answers": 313,
+     "sessions": 20,
+     "days": 18
+    }
+   },
+   "retention7": 0.7328952700537787,
+   "retention21": 0.5609144863104627,
+   "retentionByDrill": {
+    "fretboard/6/naturals": {
+     "kAtPass": 0.9201140963496984,
+     "r7": 0.7328952700537787,
+     "r21": 0.5609144863104627
+    }
+   },
+   "falsePasses": [],
+   "falsePassRate": 0,
+   "overScheduled": 0.13278008298755187,
+   "underScheduled": 0,
+   "weakShare": 1.740002899407019,
+   "calibration": {
+    "knowledge": 0.12483711251947593,
+    "recall": 0.02310179332525401
+   },
+   "helpByDay": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.2857142857142857,
+    null,
+    0.14285714285714285,
+    0.7142857142857143,
+    0.7142857142857143,
+    1,
+    1.4285714285714286,
+    1.7142857142857142,
+    2.142857142857143,
+    null,
+    2.5714285714285716,
+    2.857142857142857,
+    2.857142857142857,
+    null,
+    2.7142857142857144,
+    2.7142857142857144,
+    2.7142857142857144,
+    2.857142857142857,
+    2.857142857142857,
+    2.857142857142857,
+    2.7142857142857144,
+    null,
+    null
+   ],
+   "returnSlips": null,
+   "rePass": null,
+   "reviewShare": 0,
+   "warmupPicks": null,
+   "trueSkills": {
+    "seen": 12,
+    "meanK": 0.759027543906926
+   },
+   "jamChords": 0
+  },
+  {
+   "driver": "v1",
+   "persona": "slow",
+   "track": "fretboard",
+   "days": 28,
+   "seed": 2,
+   "answers": 211,
+   "sessions": 13,
+   "passed": [],
+   "timeToPass": {},
+   "retention7": null,
+   "retention21": null,
+   "retentionByDrill": {},
+   "falsePasses": [],
+   "falsePassRate": 0,
+   "overScheduled": 0,
+   "underScheduled": null,
+   "weakShare": 1.2415094339622623,
+   "calibration": {
+    "knowledge": 0.2273838533845521,
+    "recall": 0.02653954347380465
+   },
+   "helpByDay": [
+    0,
+    0,
+    null,
+    null,
+    0,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    0,
+    0.14285714285714285,
+    null,
+    0.5714285714285714,
+    0.5714285714285714,
+    0.5714285714285714,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    0.7142857142857143,
+    null,
+    1.1428571428571428,
+    null
+   ],
+   "returnSlips": null,
+   "rePass": null,
+   "reviewShare": 0,
+   "warmupPicks": null,
+   "trueSkills": {
+    "seen": 7,
+    "meanK": 0.7997748324877548
+   },
+   "jamChords": 0
+  },
+  {
+   "driver": "v1",
+   "persona": "slow",
+   "track": "fretboard",
+   "days": 28,
+   "seed": 3,
+   "answers": 303,
+   "sessions": 18,
+   "passed": [],
+   "timeToPass": {},
+   "retention7": null,
+   "retention21": null,
+   "retentionByDrill": {},
+   "falsePasses": [],
+   "falsePassRate": 0,
+   "overScheduled": 0.07920792079207921,
+   "underScheduled": null,
+   "weakShare": 1.4528301886792467,
+   "calibration": {
+    "knowledge": 0.1865370391719934,
+    "recall": 0.02876019031884066
+   },
+   "helpByDay": [
+    0,
+    0,
+    0,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    0,
+    null,
+    null,
+    0,
+    0.8571428571428571,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    0.7142857142857143,
+    1.4285714285714286,
+    2.142857142857143,
+    null,
+    2.142857142857143,
+    2.5714285714285716,
+    2.857142857142857
+   ],
+   "returnSlips": null,
+   "rePass": null,
+   "reviewShare": 0,
+   "warmupPicks": null,
+   "trueSkills": {
+    "seen": 7,
+    "meanK": 0.9096525440261046
+   },
+   "jamChords": 0
+  },
+  {
+   "driver": "v1",
+   "persona": "slow",
+   "track": "fretboard",
+   "days": 28,
+   "seed": 4,
+   "answers": 204,
+   "sessions": 12,
+   "passed": [],
+   "timeToPass": {},
+   "retention7": null,
+   "retention21": null,
+   "retentionByDrill": {},
+   "falsePasses": [],
+   "falsePassRate": 0,
+   "overScheduled": 0,
+   "underScheduled": null,
+   "weakShare": 1.1914893617021263,
+   "calibration": {
+    "knowledge": 0.2444999294129668,
+    "recall": 0.04233539023206537
+   },
+   "helpByDay": [
+    0,
+    0,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    0,
+    0,
+    null,
+    null,
+    0,
+    0.14285714285714285,
+    null,
+    0.42857142857142855,
+    null,
+    null,
+    0.42857142857142855,
+    null,
+    null,
+    1,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "returnSlips": null,
+   "rePass": null,
+   "reviewShare": 0,
+   "warmupPicks": null,
+   "trueSkills": {
+    "seen": 7,
+    "meanK": 0.7657935546185912
+   },
+   "jamChords": 0
+  },
+  {
+   "driver": "v1",
+   "persona": "slow",
+   "track": "fretboard",
+   "days": 28,
+   "seed": 5,
+   "answers": 285,
+   "sessions": 17,
+   "passed": [],
+   "timeToPass": {},
+   "retention7": null,
+   "retention21": null,
+   "retentionByDrill": {},
+   "falsePasses": [],
+   "falsePassRate": 0,
+   "overScheduled": 0.03508771929824561,
+   "underScheduled": null,
+   "weakShare": 1.4076086956521752,
+   "calibration": {
+    "knowledge": 0.1931649403394658,
+    "recall": 0.011950173090358148
+   },
+   "helpByDay": [
+    0,
+    0,
+    0,
+    0,
+    0.14285714285714285,
+    null,
+    0.5714285714285714,
+    0.7142857142857143,
+    1,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    1.2857142857142858,
+    1.2857142857142858,
+    1.1428571428571428,
+    1.7142857142857142,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    2.142857142857143
+   ],
+   "returnSlips": null,
+   "rePass": null,
+   "reviewShare": 0,
+   "warmupPicks": null,
+   "trueSkills": {
+    "seen": 7,
+    "meanK": 0.8892266435902962
+   },
+   "jamChords": 0
+  },
+  {
+   "driver": "v1",
+   "persona": "stuck",
+   "track": "intervals",
+   "days": 56,
+   "seed": 1,
+   "answers": 891,
+   "sessions": 57,
+   "passed": [],
+   "timeToPass": {},
+   "retention7": null,
+   "retention21": null,
+   "retentionByDrill": {},
+   "falsePasses": [],
+   "falsePassRate": 0,
+   "overScheduled": 0,
+   "underScheduled": null,
+   "weakShare": 1,
+   "calibration": {
+    "knowledge": 0.16472579612218186,
+    "recall": 0.014585018290309544
+   },
+   "helpByDay": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    null,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    null,
+    0,
+    0,
+    0,
+    null,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    null,
+    null,
+    0,
+    0,
+    0,
+    0,
+    null,
+    null,
+    0,
+    0,
+    0,
+    0,
+    null,
+    null,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    null,
+    0,
+    0,
+    null,
+    null,
+    0,
+    0,
+    0,
+    null,
+    null
+   ],
+   "returnSlips": null,
+   "rePass": null,
+   "reviewShare": 0,
+   "warmupPicks": null,
+   "trueSkills": {
+    "seen": 4,
+    "meanK": 0.5
+   },
+   "jamChords": 0
+  },
+  {
+   "driver": "v1",
+   "persona": "stuck",
+   "track": "intervals",
+   "days": 56,
+   "seed": 2,
+   "answers": 392,
+   "sessions": 24,
+   "passed": [],
+   "timeToPass": {},
+   "retention7": null,
+   "retention21": null,
+   "retentionByDrill": {},
+   "falsePasses": [],
+   "falsePassRate": 0,
+   "overScheduled": 0,
+   "underScheduled": null,
+   "weakShare": 1,
+   "calibration": {
+    "knowledge": 0.1861965677494725,
+    "recall": 0.02258696483421686
+   },
+   "helpByDay": [
+    0,
+    0,
+    null,
+    null,
+    0,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    0,
+    0,
+    null,
+    0,
+    0,
+    0,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    0,
+    null,
+    0,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    0,
+    0,
+    null,
+    0,
+    null,
+    null,
+    0,
+    null,
+    0,
+    0,
+    0,
+    null,
+    null,
+    0,
+    0,
+    null,
+    null,
+    0,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "returnSlips": null,
+   "rePass": null,
+   "reviewShare": 0,
+   "warmupPicks": null,
+   "trueSkills": {
+    "seen": 4,
+    "meanK": 0.5
+   },
+   "jamChords": 0
+  },
+  {
+   "driver": "v1",
+   "persona": "stuck",
+   "track": "intervals",
+   "days": 56,
+   "seed": 3,
+   "answers": 862,
+   "sessions": 53,
+   "passed": [],
+   "timeToPass": {},
+   "retention7": null,
+   "retention21": null,
+   "retentionByDrill": {},
+   "falsePasses": [],
+   "falsePassRate": 0,
+   "overScheduled": 0,
+   "underScheduled": null,
+   "weakShare": 1,
+   "calibration": {
+    "knowledge": 0.18699631334548253,
+    "recall": 0.010798112563003876
+   },
+   "helpByDay": [
+    0,
+    0,
+    0,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    0,
+    null,
+    null,
+    0,
+    0,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    0,
+    0,
+    0,
+    null,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    null,
+    null,
+    0,
+    0,
+    0,
+    null,
+    0,
+    null,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    null
+   ],
+   "returnSlips": null,
+   "rePass": null,
+   "reviewShare": 0,
+   "warmupPicks": null,
+   "trueSkills": {
+    "seen": 4,
+    "meanK": 0.5
+   },
+   "jamChords": 0
+  },
+  {
+   "driver": "v1",
+   "persona": "stuck",
+   "track": "intervals",
+   "days": 56,
+   "seed": 4,
+   "answers": 552,
+   "sessions": 34,
+   "passed": [],
+   "timeToPass": {},
+   "retention7": null,
+   "retention21": null,
+   "retentionByDrill": {},
+   "falsePasses": [],
+   "falsePassRate": 0,
+   "overScheduled": 0,
+   "underScheduled": null,
+   "weakShare": 1,
+   "calibration": {
+    "knowledge": 0.22501657706054018,
+    "recall": 0.024724929615234002
+   },
+   "helpByDay": [
+    0,
+    0,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    0,
+    0,
+    null,
+    null,
+    0,
+    0,
+    null,
+    0,
+    null,
+    null,
+    0,
+    null,
+    null,
+    0,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    0,
+    null,
+    0,
+    0,
+    0,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    0,
+    null,
+    0,
+    0,
+    null,
+    0,
+    0,
+    0,
+    null,
+    0,
+    null,
+    0,
+    0,
+    0,
+    null,
+    0,
+    0
+   ],
+   "returnSlips": null,
+   "rePass": null,
+   "reviewShare": 0,
+   "warmupPicks": null,
+   "trueSkills": {
+    "seen": 4,
+    "meanK": 0.5
+   },
+   "jamChords": 0
+  },
+  {
+   "driver": "v1",
+   "persona": "stuck",
+   "track": "intervals",
+   "days": 56,
+   "seed": 5,
+   "answers": 613,
+   "sessions": 38,
+   "passed": [],
+   "timeToPass": {},
+   "retention7": null,
+   "retention21": null,
+   "retentionByDrill": {},
+   "falsePasses": [],
+   "falsePassRate": 0,
+   "overScheduled": 0,
+   "underScheduled": null,
+   "weakShare": 1,
+   "calibration": {
+    "knowledge": 0.19025743129022948,
+    "recall": 0.0016099725983051351
+   },
+   "helpByDay": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    null,
+    0,
+    0,
+    0,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    0,
+    0,
+    0,
+    0,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    0,
+    null,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    null,
+    null,
+    0,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    0,
+    0,
+    0,
+    0,
+    0,
+    null,
+    null,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "returnSlips": null,
+   "rePass": null,
+   "reviewShare": 0,
+   "warmupPicks": null,
+   "trueSkills": {
+    "seen": 4,
+    "meanK": 0.5
+   },
+   "jamChords": 0
+  },
+  {
+   "driver": "v1",
+   "persona": "foundOnly",
+   "track": "fretboard",
+   "days": 42,
+   "seed": 1,
+   "answers": 686,
+   "sessions": 43,
+   "passed": [],
+   "timeToPass": {},
+   "retention7": null,
+   "retention21": null,
+   "retentionByDrill": {},
+   "falsePasses": [],
+   "falsePassRate": 0,
+   "overScheduled": 0.8221574344023324,
+   "underScheduled": null,
+   "weakShare": null,
+   "calibration": {
+    "knowledge": 0.4994553190362821,
+    "recall": 0.0001942704589773713
+   },
+   "helpByDay": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    null,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    null,
+    0,
+    0,
+    0,
+    null,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    null,
+    null,
+    0,
+    0,
+    0,
+    0,
+    null,
+    null,
+    0,
+    0,
+    0,
+    0,
+    null,
+    null,
+    0,
+    0
+   ],
+   "returnSlips": null,
+   "rePass": null,
+   "reviewShare": 0,
+   "warmupPicks": null,
+   "trueSkills": {
+    "seen": 7,
+    "meanK": 0.9999995650333499
+   },
+   "jamChords": 0
+  },
+  {
+   "driver": "v1",
+   "persona": "foundOnly",
+   "track": "fretboard",
+   "days": 42,
+   "seed": 2,
+   "answers": 315,
+   "sessions": 19,
+   "passed": [],
+   "timeToPass": {},
+   "retention7": null,
+   "retention21": null,
+   "retentionByDrill": {},
+   "falsePasses": [],
+   "falsePassRate": 0,
+   "overScheduled": 0.5841269841269842,
+   "underScheduled": null,
+   "weakShare": null,
+   "calibration": {
+    "knowledge": 0.519040599842103,
+    "recall": 0.003072054916732107
+   },
+   "helpByDay": [
+    0,
+    0,
+    null,
+    null,
+    0,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    0,
+    0,
+    null,
+    0,
+    0,
+    0,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    0,
+    null,
+    0,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    0,
+    0,
+    null,
+    0,
+    null,
+    null,
+    0,
+    null,
+    0
+   ],
+   "returnSlips": null,
+   "rePass": null,
+   "reviewShare": 0,
+   "warmupPicks": null,
+   "trueSkills": {
+    "seen": 7,
+    "meanK": 0.9988590385149091
+   },
+   "jamChords": 0
+  },
+  {
+   "driver": "v1",
+   "persona": "foundOnly",
+   "track": "fretboard",
+   "days": 42,
+   "seed": 3,
+   "answers": 514,
+   "sessions": 31,
+   "passed": [],
+   "timeToPass": {},
+   "retention7": null,
+   "retention21": null,
+   "retentionByDrill": {},
+   "falsePasses": [],
+   "falsePassRate": 0,
+   "overScheduled": 0.7626459143968871,
+   "underScheduled": null,
+   "weakShare": null,
+   "calibration": {
+    "knowledge": 0.4981296640377722,
+    "recall": 0.00006764989030969279
+   },
+   "helpByDay": [
+    0,
+    0,
+    0,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    0,
+    null,
+    null,
+    0,
+    0,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    0,
+    0,
+    0,
+    null,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    null,
+    null,
+    0,
+    0,
+    0,
+    null,
+    0,
+    null
+   ],
+   "returnSlips": null,
+   "rePass": null,
+   "reviewShare": 0,
+   "warmupPicks": null,
+   "trueSkills": {
+    "seen": 7,
+    "meanK": 0.9999819914849616
+   },
+   "jamChords": 0
+  },
+  {
+   "driver": "v1",
+   "persona": "foundOnly",
+   "track": "fretboard",
+   "days": 42,
+   "seed": 4,
+   "answers": 325,
+   "sessions": 20,
+   "passed": [],
+   "timeToPass": {},
+   "retention7": null,
+   "retention21": null,
+   "retentionByDrill": {},
+   "falsePasses": [],
+   "falsePassRate": 0,
+   "overScheduled": 0.6061538461538462,
+   "underScheduled": null,
+   "weakShare": null,
+   "calibration": {
+    "knowledge": 0.4885034287771653,
+    "recall": 0.000014716275071581718
+   },
+   "helpByDay": [
+    0,
+    0,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    0,
+    0,
+    null,
+    null,
+    0,
+    0,
+    null,
+    0,
+    null,
+    null,
+    0,
+    null,
+    null,
+    0,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    0,
+    null,
+    0,
+    0,
+    0,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    0,
+    null,
+    0
+   ],
+   "returnSlips": null,
+   "rePass": null,
+   "reviewShare": 0,
+   "warmupPicks": null,
+   "trueSkills": {
+    "seen": 7,
+    "meanK": 0.9990942530200698
+   },
+   "jamChords": 0
+  },
+  {
+   "driver": "v1",
+   "persona": "foundOnly",
+   "track": "fretboard",
+   "days": 42,
+   "seed": 5,
+   "answers": 412,
+   "sessions": 25,
+   "passed": [],
+   "timeToPass": {},
+   "retention7": null,
+   "retention21": null,
+   "retentionByDrill": {},
+   "falsePasses": [],
+   "falsePassRate": 0,
+   "overScheduled": 0.662621359223301,
+   "underScheduled": null,
+   "weakShare": null,
+   "calibration": {
+    "knowledge": 0.49991165666790544,
+    "recall": 0.00003930126720242875
+   },
+   "helpByDay": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    null,
+    0,
+    0,
+    0,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    0,
+    0,
+    0,
+    0,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    0,
+    null,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    null,
+    null,
+    0,
+    null,
+    null,
+    null,
+    null
+   ],
+   "returnSlips": null,
+   "rePass": null,
+   "reviewShare": 0,
+   "warmupPicks": null,
+   "trueSkills": {
+    "seen": 7,
+    "meanK": 0.9998507082881668
+   },
+   "jamChords": 0
+  },
+  {
+   "driver": "v1",
+   "persona": "optimist",
+   "track": "fretboard",
+   "days": 28,
+   "seed": 1,
+   "answers": 482,
+   "sessions": 30,
+   "passed": [
+    "fretboard/6/naturals",
+    "fretboard/6/all",
+    "fretboard/5/naturals",
+    "fretboard/5/all"
+   ],
+   "timeToPass": {
+    "fretboard/6/naturals": {
+     "answers": 149,
+     "sessions": 10,
+     "days": 10
+    },
+    "fretboard/6/all": {
+     "answers": 89,
+     "sessions": 6,
+     "days": 5
+    },
+    "fretboard/5/naturals": {
+     "answers": 125,
+     "sessions": 9,
+     "days": 8
+    },
+    "fretboard/5/all": {
+     "answers": 91,
+     "sessions": 7,
+     "days": 6
+    }
+   },
+   "retention7": 0.7282530033219439,
+   "retention21": 0.5554952836751438,
+   "retentionByDrill": {
+    "fretboard/6/naturals": {
+     "kAtPass": 0.9773060547854054,
+     "r7": 0.758693668745898,
+     "r21": 0.5861840513919073
+    },
+    "fretboard/6/all": {
+     "kAtPass": 0.9440484368483452,
+     "r7": 0.7277296704999675,
+     "r21": 0.57224613887824
+    },
+    "fretboard/5/naturals": {
+     "kAtPass": 0.982113199610782,
+     "r7": 0.652697622970912,
+     "r21": 0.45905667478062057
+    },
+    "fretboard/5/all": {
+     "kAtPass": 0.9656972948417389,
+     "r7": 0.7738910510709981,
+     "r21": 0.6044942696498071
+    }
+   },
+   "falsePasses": [],
+   "falsePassRate": 0,
+   "overScheduled": 0.21991701244813278,
+   "underScheduled": 1,
+   "weakShare": 1.9212948224259214,
+   "calibration": {
+    "knowledge": 0.1521677663483929,
+    "recall": 0.1094892950347333
+   },
+   "helpByDay": [
+    0,
+    0,
+    0.7142857142857143,
+    1,
+    1.1428571428571428,
+    1.2857142857142858,
+    null,
+    1.5714285714285714,
+    2,
+    2.5714285714285716,
+    2.5714285714285716,
+    2.5714285714285716,
+    2.7142857142857144,
+    2.857142857142857,
+    null,
+    2.7142857142857144,
+    2.142857142857143,
+    2,
+    null,
+    2.2857142857142856,
+    2.4285714285714284,
+    2.7142857142857144,
+    2.857142857142857,
+    2.857142857142857,
+    2.857142857142857,
+    2.2857142857142856,
+    null,
+    null
+   ],
+   "returnSlips": null,
+   "rePass": null,
+   "reviewShare": 0,
+   "warmupPicks": null,
+   "trueSkills": {
+    "seen": 31,
+    "meanK": 0.9047474255676597
+   },
+   "jamChords": 0
+  },
+  {
+   "driver": "v1",
+   "persona": "optimist",
+   "track": "fretboard",
+   "days": 28,
+   "seed": 2,
+   "answers": 211,
+   "sessions": 13,
+   "passed": [
+    "fretboard/6/naturals"
+   ],
+   "timeToPass": {
+    "fretboard/6/naturals": {
+     "answers": 141,
+     "sessions": 9,
+     "days": 17
+    }
+   },
+   "retention7": 0.7641381435295899,
+   "retention21": 0.6005571270910829,
+   "retentionByDrill": {
+    "fretboard/6/naturals": {
+     "kAtPass": 0.9710813881459721,
+     "r7": 0.7641381435295899,
+     "r21": 0.6005571270910829
+    }
+   },
+   "falsePasses": [],
+   "falsePassRate": 0,
+   "overScheduled": 0.20853080568720378,
+   "underScheduled": null,
+   "weakShare": 1.860232059251836,
+   "calibration": {
+    "knowledge": 0.1480652049152377,
+    "recall": 0.008828861707424803
+   },
+   "helpByDay": [
+    0,
+    0,
+    null,
+    null,
+    0.42857142857142855,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    0.5714285714285714,
+    1.4285714285714286,
+    null,
+    2,
+    2.2857142857142856,
+    2.4285714285714284,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    2.5714285714285716,
+    null,
+    2.857142857142857,
+    null
+   ],
+   "returnSlips": null,
+   "rePass": null,
+   "reviewShare": 0,
+   "warmupPicks": null,
+   "trueSkills": {
+    "seen": 12,
+    "meanK": 0.9069138318548005
+   },
+   "jamChords": 0
+  },
+  {
+   "driver": "v1",
+   "persona": "optimist",
+   "track": "fretboard",
+   "days": 28,
+   "seed": 3,
+   "answers": 303,
+   "sessions": 18,
+   "passed": [
+    "fretboard/6/naturals",
+    "fretboard/6/all"
+   ],
+   "timeToPass": {
+    "fretboard/6/naturals": {
+     "answers": 132,
+     "sessions": 8,
+     "days": 14
+    },
+    "fretboard/6/all": {
+     "answers": 119,
+     "sessions": 8,
+     "days": 13
+    }
+   },
+   "retention7": 0.7593472966913346,
+   "retention21": 0.5956579924018021,
+   "retentionByDrill": {
+    "fretboard/6/naturals": {
+     "kAtPass": 0.9613042942161625,
+     "r7": 0.6910181658214126,
+     "r21": 0.5066854824726895
+    },
+    "fretboard/6/all": {
+     "kAtPass": 0.9604236849732565,
+     "r7": 0.8276764275612565,
+     "r21": 0.6846305023309146
+    }
+   },
+   "falsePasses": [],
+   "falsePassRate": 0,
+   "overScheduled": 0.20132013201320131,
+   "underScheduled": null,
+   "weakShare": 2.4993816092151877,
+   "calibration": {
+    "knowledge": 0.18501362379251485,
+    "recall": 0.065731857429885
+   },
+   "helpByDay": [
+    0,
+    0.2857142857142857,
+    0.8571428571428571,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    0.7142857142857143,
+    null,
+    null,
+    1.7142857142857142,
+    2.2857142857142856,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    2.4285714285714284,
+    2.5714285714285716,
+    3,
+    null,
+    3,
+    1.8571428571428572,
+    1.2857142857142858
+   ],
+   "returnSlips": null,
+   "rePass": null,
+   "reviewShare": 0,
+   "warmupPicks": null,
+   "trueSkills": {
+    "seen": 19,
+    "meanK": 0.9150153635408059
+   },
+   "jamChords": 0
+  },
+  {
+   "driver": "v1",
+   "persona": "optimist",
+   "track": "fretboard",
+   "days": 28,
+   "seed": 4,
+   "answers": 204,
+   "sessions": 12,
+   "passed": [
+    "fretboard/6/naturals"
+   ],
+   "timeToPass": {
+    "fretboard/6/naturals": {
+     "answers": 118,
+     "sessions": 8,
+     "days": 16
+    }
+   },
+   "retention7": 0.7353056708983328,
+   "retention21": 0.5720792869805778,
+   "retentionByDrill": {
+    "fretboard/6/naturals": {
+     "kAtPass": 0.9285384494498038,
+     "r7": 0.7353056708983328,
+     "r21": 0.5720792869805778
+    }
+   },
+   "falsePasses": [],
+   "falsePassRate": 0,
+   "overScheduled": 0.11274509803921569,
+   "underScheduled": null,
+   "weakShare": 1.8194139741101065,
+   "calibration": {
+    "knowledge": 0.18334167476639818,
+    "recall": 0.04527260813627735
+   },
+   "helpByDay": [
+    0,
+    0,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    0.14285714285714285,
+    0.2857142857142857,
+    null,
+    null,
+    0.7142857142857143,
+    0.8571428571428571,
+    null,
+    1.4285714285714286,
+    null,
+    null,
+    1.8571428571428572,
+    null,
+    null,
+    2.142857142857143,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "returnSlips": null,
+   "rePass": null,
+   "reviewShare": 0,
+   "warmupPicks": null,
+   "trueSkills": {
+    "seen": 12,
+    "meanK": 0.9080480528891522
+   },
+   "jamChords": 0
+  },
+  {
+   "driver": "v1",
+   "persona": "optimist",
+   "track": "fretboard",
+   "days": 28,
+   "seed": 5,
+   "answers": 285,
+   "sessions": 17,
+   "passed": [
+    "fretboard/6/naturals"
+   ],
+   "timeToPass": {
+    "fretboard/6/naturals": {
+     "answers": 109,
+     "sessions": 7,
+     "days": 5
+    }
+   },
+   "retention7": 0.5581387295154269,
+   "retention21": 0.3834237587937155,
+   "retentionByDrill": {
+    "fretboard/6/naturals": {
+     "kAtPass": 0.9290257045137532,
+     "r7": 0.5581387295154269,
+     "r21": 0.3834237587937155
+    }
+   },
+   "falsePasses": [
+    "fretboard/6/naturals"
+   ],
+   "falsePassRate": 1,
+   "overScheduled": 0.22807017543859648,
+   "underScheduled": 0,
+   "weakShare": 2,
+   "calibration": {
+    "knowledge": 0.13718249218838477,
+    "recall": 0.018663626155001493
+   },
+   "helpByDay": [
+    0,
+    0.2857142857142857,
+    0.5714285714285714,
+    1.4285714285714286,
+    2,
+    null,
+    2,
+    2,
+    2.2857142857142856,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    2.7142857142857144,
+    2.7142857142857144,
+    2.7142857142857144,
+    2.7142857142857144,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    3
+   ],
+   "returnSlips": null,
+   "rePass": null,
+   "reviewShare": 0,
+   "warmupPicks": null,
+   "trueSkills": {
+    "seen": 12,
+    "meanK": 0.9852773755080363
+   },
+   "jamChords": 0
+  },
+  {
+   "driver": "v1",
+   "persona": "forgetful",
+   "track": "fretboard",
+   "days": 28,
+   "seed": 1,
+   "answers": 482,
+   "sessions": 30,
+   "passed": [
+    "fretboard/6/naturals",
+    "fretboard/6/all",
+    "fretboard/5/naturals"
+   ],
+   "timeToPass": {
+    "fretboard/6/naturals": {
+     "answers": 135,
+     "sessions": 9,
+     "days": 9
+    },
+    "fretboard/6/all": {
+     "answers": 163,
+     "sessions": 11,
+     "days": 9
+    },
+    "fretboard/5/naturals": {
+     "answers": 141,
+     "sessions": 10,
+     "days": 9
+    }
+   },
+   "retention7": 0.5565632551780464,
+   "retention21": 0.37796776699755186,
+   "retentionByDrill": {
+    "fretboard/6/naturals": {
+     "kAtPass": 0.967315064223216,
+     "r7": 0.5048828822055785,
+     "r21": 0.32467585693617995
+    },
+    "fretboard/6/all": {
+     "kAtPass": 0.985872615374316,
+     "r7": 0.6632560676423913,
+     "r21": 0.4790876765172385
+    },
+    "fretboard/5/naturals": {
+     "kAtPass": 0.9896001680328401,
+     "r7": 0.5015508156861693,
+     "r21": 0.3301397675392371
+    }
+   },
+   "falsePasses": [
+    "fretboard/6/naturals",
+    "fretboard/5/naturals"
+   ],
+   "falsePassRate": 0.6666666666666666,
+   "overScheduled": 0.1991701244813278,
+   "underScheduled": 1,
+   "weakShare": 1.7347793061793395,
+   "calibration": {
+    "knowledge": 0.16352787797537033,
+    "recall": 0.11229004470316878
+   },
+   "helpByDay": [
+    0,
+    0,
+    0.2857142857142857,
+    0.8571428571428571,
+    1.1428571428571428,
+    1.2857142857142858,
+    null,
+    1.8571428571428572,
+    2.142857142857143,
+    2.4285714285714284,
+    2.5714285714285716,
+    2.7142857142857144,
+    2.7142857142857144,
+    2.857142857142857,
+    null,
+    2.857142857142857,
+    3,
+    2.857142857142857,
+    null,
+    2.7142857142857144,
+    2.7142857142857144,
+    2.5714285714285716,
+    2.7142857142857144,
+    2.857142857142857,
+    3,
+    3,
+    null,
+    null
+   ],
+   "returnSlips": null,
+   "rePass": null,
+   "reviewShare": 0,
+   "warmupPicks": null,
+   "trueSkills": {
+    "seen": 24,
+    "meanK": 0.9494933729753182
+   },
+   "jamChords": 0
+  },
+  {
+   "driver": "v1",
+   "persona": "forgetful",
+   "track": "fretboard",
+   "days": 28,
+   "seed": 2,
+   "answers": 211,
+   "sessions": 13,
+   "passed": [
+    "fretboard/6/naturals"
+   ],
+   "timeToPass": {
+    "fretboard/6/naturals": {
+     "answers": 203,
+     "sessions": 13,
+     "days": 27
+    }
+   },
+   "retention7": 0.6693307504306965,
+   "retention21": 0.47170883983677747,
+   "retentionByDrill": {
+    "fretboard/6/naturals": {
+     "kAtPass": 0.9955325543472492,
+     "r7": 0.6693307504306965,
+     "r21": 0.47170883983677747
+    }
+   },
+   "falsePasses": [],
+   "falsePassRate": 0,
+   "overScheduled": 0.2985781990521327,
+   "underScheduled": null,
+   "weakShare": 2.135171696650796,
+   "calibration": {
+    "knowledge": 0.19650872715577192,
+    "recall": 0.002818633355623785
+   },
+   "helpByDay": [
+    0,
+    0,
+    null,
+    null,
+    0.7142857142857143,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    1,
+    1.8571428571428572,
+    null,
+    2,
+    2.4285714285714284,
+    2.4285714285714284,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    2.5714285714285716,
+    null,
+    2.857142857142857,
+    null
+   ],
+   "returnSlips": null,
+   "rePass": null,
+   "reviewShare": 0,
+   "warmupPicks": null,
+   "trueSkills": {
+    "seen": 12,
+    "meanK": 0.7238473599221215
+   },
+   "jamChords": 0
+  },
+  {
+   "driver": "v1",
+   "persona": "forgetful",
+   "track": "fretboard",
+   "days": 28,
+   "seed": 3,
+   "answers": 303,
+   "sessions": 18,
+   "passed": [
+    "fretboard/6/naturals",
+    "fretboard/6/all"
+   ],
+   "timeToPass": {
+    "fretboard/6/naturals": {
+     "answers": 135,
+     "sessions": 8,
+     "days": 14
+    },
+    "fretboard/6/all": {
+     "answers": 143,
+     "sessions": 10,
+     "days": 14
+    }
+   },
+   "retention7": 0.7017576518832278,
+   "retention21": 0.5210310534972781,
+   "retentionByDrill": {
+    "fretboard/6/naturals": {
+     "kAtPass": 0.9692286942218139,
+     "r7": 0.6485828234533736,
+     "r21": 0.4616717925095845
+    },
+    "fretboard/6/all": {
+     "kAtPass": 0.9700697509114177,
+     "r7": 0.754932480313082,
+     "r21": 0.5803903144849717
+    }
+   },
+   "falsePasses": [],
+   "falsePassRate": 0,
+   "overScheduled": 0.2145214521452145,
+   "underScheduled": 0,
+   "weakShare": 2.0155244835136465,
+   "calibration": {
+    "knowledge": 0.19571447916894538,
+    "recall": 0.07592070163930066
+   },
+   "helpByDay": [
+    0,
+    0.2857142857142857,
+    1,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    1.2857142857142858,
+    null,
+    null,
+    2.142857142857143,
+    2.7142857142857144,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    2.7142857142857144,
+    2.2857142857142856,
+    2.4285714285714284,
+    null,
+    2.4285714285714284,
+    2.7142857142857144,
+    2
+   ],
+   "returnSlips": null,
+   "rePass": null,
+   "reviewShare": 0,
+   "warmupPicks": null,
+   "trueSkills": {
+    "seen": 19,
+    "meanK": 0.8761644661179874
+   },
+   "jamChords": 0
+  },
+  {
+   "driver": "v1",
+   "persona": "forgetful",
+   "track": "fretboard",
+   "days": 28,
+   "seed": 4,
+   "answers": 204,
+   "sessions": 12,
+   "passed": [
+    "fretboard/6/naturals"
+   ],
+   "timeToPass": {
+    "fretboard/6/naturals": {
+     "answers": 113,
+     "sessions": 7,
+     "days": 14
+    }
+   },
+   "retention7": 0.6701219017652175,
+   "retention21": 0.47622573036328386,
+   "retentionByDrill": {
+    "fretboard/6/naturals": {
+     "kAtPass": 0.9483868756806615,
+     "r7": 0.6701219017652175,
+     "r21": 0.47622573036328386
+    }
+   },
+   "falsePasses": [],
+   "falsePassRate": 0,
+   "overScheduled": 0.11764705882352941,
+   "underScheduled": 0,
+   "weakShare": 1.9964831597457058,
+   "calibration": {
+    "knowledge": 0.20489707093425874,
+    "recall": 0.030479140701685736
+   },
+   "helpByDay": [
+    0,
+    0,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    0.42857142857142855,
+    0.7142857142857143,
+    null,
+    null,
+    1.4285714285714286,
+    2,
+    null,
+    2.142857142857143,
+    null,
+    null,
+    2,
+    null,
+    null,
+    2.142857142857143,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "returnSlips": null,
+   "rePass": null,
+   "reviewShare": 0,
+   "warmupPicks": null,
+   "trueSkills": {
+    "seen": 12,
+    "meanK": 0.9184567823347293
+   },
+   "jamChords": 0
+  },
+  {
+   "driver": "v1",
+   "persona": "forgetful",
+   "track": "fretboard",
+   "days": 28,
+   "seed": 5,
+   "answers": 285,
+   "sessions": 17,
+   "passed": [
+    "fretboard/6/naturals"
+   ],
+   "timeToPass": {
+    "fretboard/6/naturals": {
+     "answers": 244,
+     "sessions": 15,
+     "days": 20
+    }
+   },
+   "retention7": 0.7145692991932947,
+   "retention21": 0.5229032264890601,
+   "retentionByDrill": {
+    "fretboard/6/naturals": {
+     "kAtPass": 0.9981219615682726,
+     "r7": 0.7145692991932947,
+     "r21": 0.5229032264890601
+    }
+   },
+   "falsePasses": [],
+   "falsePassRate": 0,
+   "overScheduled": 0.20350877192982456,
+   "underScheduled": null,
+   "weakShare": 1.6959460038201624,
+   "calibration": {
+    "knowledge": 0.2732450478516683,
+    "recall": 0.05844465223735207
+   },
+   "helpByDay": [
+    0,
+    0,
+    0.7142857142857143,
+    1.2857142857142858,
+    1.7142857142857142,
+    null,
+    1.8571428571428572,
+    1.8571428571428572,
+    1.7142857142857142,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    1.8571428571428572,
+    2,
+    2.2857142857142856,
+    2.7142857142857144,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    2.4285714285714284
+   ],
+   "returnSlips": null,
+   "rePass": null,
+   "reviewShare": 0,
+   "warmupPicks": null,
+   "trueSkills": {
+    "seen": 12,
+    "meanK": 0.8386905014010918
+   },
+   "jamChords": 0
+  },
+  {
+   "driver": "v1",
+   "persona": "returning",
+   "track": "fretboard",
+   "days": 42,
+   "seed": 1,
+   "answers": 419,
+   "sessions": 27,
+   "passed": [
+    "fretboard/6/naturals",
+    "fretboard/6/all",
+    "fretboard/5/naturals"
+   ],
+   "timeToPass": {
+    "fretboard/6/naturals": {
+     "answers": 129,
+     "sessions": 9,
+     "days": 9
+    },
+    "fretboard/6/all": {
+     "answers": 163,
+     "sessions": 11,
+     "days": 26
+    },
+    "fretboard/5/naturals": {
+     "answers": 109,
+     "sessions": 8,
+     "days": 9
+    }
+   },
+   "retention7": 0.779290657450789,
+   "retention21": 0.621914634459059,
+   "retentionByDrill": {
+    "fretboard/6/naturals": {
+     "kAtPass": 0.9609240030374172,
+     "r7": 0.743673743270653,
+     "r21": 0.5846328998385316
+    },
+    "fretboard/6/all": {
+     "kAtPass": 0.9813158992262628,
+     "r7": 0.8796216714636999,
+     "r21": 0.7614345703135768
+    },
+    "fretboard/5/naturals": {
+     "kAtPass": 0.9704613944199469,
+     "r7": 0.7145765576180142,
+     "r21": 0.5196764332250685
+    }
+   },
+   "falsePasses": [],
+   "falsePassRate": 0,
+   "overScheduled": 0.2529832935560859,
+   "underScheduled": null,
+   "weakShare": 3.278887224853106,
+   "calibration": {
+    "knowledge": 0.18898289701149334,
+    "recall": 0.06060806613890932
+   },
+   "helpByDay": [
+    0,
+    0,
+    0.2857142857142857,
+    0.7142857142857143,
+    1,
+    1.2857142857142858,
+    null,
+    2,
+    2,
+    2.142857142857143,
+    2.4285714285714284,
+    2.7142857142857144,
+    2.7142857142857144,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    2.7142857142857144,
+    2.5714285714285716,
+    null,
+    2.5714285714285716,
+    2.5714285714285716,
+    2.7142857142857144,
+    null,
+    2.4285714285714284,
+    null,
+    null,
+    2,
+    null,
+    1.5714285714285714,
+    1.4285714285714286,
+    1.8571428571428572,
+    2.4285714285714284
+   ],
+   "returnSlips": 0,
+   "rePass": {
+    "slipped": 0,
+    "rePassed": 0,
+    "sessions": null
+   },
+   "reviewShare": 0,
+   "warmupPicks": 0,
+   "trueSkills": {
+    "seen": 24,
+    "meanK": 0.9172643037326423
+   },
+   "jamChords": 0
+  },
+  {
+   "driver": "v1",
+   "persona": "returning",
+   "track": "fretboard",
+   "days": 42,
+   "seed": 2,
+   "answers": 265,
+   "sessions": 16,
+   "passed": [
+    "fretboard/6/naturals",
+    "fretboard/6/all"
+   ],
+   "timeToPass": {
+    "fretboard/6/naturals": {
+     "answers": 136,
+     "sessions": 9,
+     "days": 29
+    },
+    "fretboard/6/all": {
+     "answers": 111,
+     "sessions": 7,
+     "days": 7
+    }
+   },
+   "retention7": 0.7758036448286594,
+   "retention21": 0.6244926165568143,
+   "retentionByDrill": {
+    "fretboard/6/naturals": {
+     "kAtPass": 0.9694315170419723,
+     "r7": 0.8184984667510239,
+     "r21": 0.6599488527234688
+    },
+    "fretboard/6/all": {
+     "kAtPass": 0.9522772788627499,
+     "r7": 0.7331088229062949,
+     "r21": 0.5890363803901599
+    }
+   },
+   "falsePasses": [],
+   "falsePassRate": 0,
+   "overScheduled": 0.23773584905660378,
+   "underScheduled": null,
+   "weakShare": 2.12957817284122,
+   "calibration": {
+    "knowledge": 0.19797117146957277,
+    "recall": 0.03577657112510952
+   },
+   "helpByDay": [
+    0,
+    0,
+    null,
+    null,
+    0.7142857142857143,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    1,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    1.1428571428571428,
+    1.4285714285714286,
+    2.142857142857143,
+    2.4285714285714284,
+    null,
+    null,
+    2.5714285714285716,
+    2.5714285714285716,
+    2.7142857142857144,
+    2.7142857142857144,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "returnSlips": 0,
+   "rePass": {
+    "slipped": 0,
+    "rePassed": 0,
+    "sessions": null
+   },
+   "reviewShare": 0,
+   "warmupPicks": 0,
+   "trueSkills": {
+    "seen": 19,
+    "meanK": 0.8516306918945254
+   },
+   "jamChords": 0
+  },
+  {
+   "driver": "v1",
+   "persona": "returning",
+   "track": "fretboard",
+   "days": 42,
+   "seed": 3,
+   "answers": 146,
+   "sessions": 9,
+   "passed": [
+    "fretboard/6/naturals"
+   ],
+   "timeToPass": {
+    "fretboard/6/naturals": {
+     "answers": 140,
+     "sessions": 9,
+     "days": 37
+    }
+   },
+   "retention7": 0.9217022580653732,
+   "retention21": 0.844338471802759,
+   "retentionByDrill": {
+    "fretboard/6/naturals": {
+     "kAtPass": 0.9739764322021218,
+     "r7": 0.9217022580653732,
+     "r21": 0.844338471802759
+    }
+   },
+   "falsePasses": [],
+   "falsePassRate": 0,
+   "overScheduled": 0.15753424657534246,
+   "underScheduled": null,
+   "weakShare": 1.9597682745771579,
+   "calibration": {
+    "knowledge": 0.1551075689810048,
+    "recall": 0.030219479950111434
+   },
+   "helpByDay": [
+    0,
+    0.2857142857142857,
+    1,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    1.2857142857142858,
+    null,
+    null,
+    1.7142857142857142,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    1.8571428571428572,
+    null,
+    null,
+    2.2857142857142856,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    2.7142857142857144,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "returnSlips": 0,
+   "rePass": {
+    "slipped": 0,
+    "rePassed": 0,
+    "sessions": null
+   },
+   "reviewShare": 0,
+   "warmupPicks": 0,
+   "trueSkills": {
+    "seen": 11,
+    "meanK": 0.7577432842167753
+   },
+   "jamChords": 0
+  },
+  {
+   "driver": "v1",
+   "persona": "returning",
+   "track": "fretboard",
+   "days": 42,
+   "seed": 4,
+   "answers": 234,
+   "sessions": 14,
+   "passed": [
+    "fretboard/6/naturals"
+   ],
+   "timeToPass": {
+    "fretboard/6/naturals": {
+     "answers": 125,
+     "sessions": 8,
+     "days": 28
+    }
+   },
+   "retention7": 0.794425829655431,
+   "retention21": 0.6340694758948838,
+   "retentionByDrill": {
+    "fretboard/6/naturals": {
+     "kAtPass": 0.9597307017669049,
+     "r7": 0.794425829655431,
+     "r21": 0.6340694758948838
+    }
+   },
+   "falsePasses": [],
+   "falsePassRate": 0,
+   "overScheduled": 0.23504273504273504,
+   "underScheduled": null,
+   "weakShare": 1.7913080846347844,
+   "calibration": {
+    "knowledge": 0.2003308619479975,
+    "recall": 0.04120844832385871
+   },
+   "helpByDay": [
+    0,
+    0,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    0.42857142857142855,
+    0.7142857142857143,
+    null,
+    null,
+    1.1428571428571428,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    1.8571428571428572,
+    2.2857142857142856,
+    null,
+    null,
+    2.2857142857142856,
+    null,
+    2.5714285714285716,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    2.5714285714285716,
+    null,
+    2.7142857142857144
+   ],
+   "returnSlips": 0,
+   "rePass": {
+    "slipped": 0,
+    "rePassed": 0,
+    "sessions": null
+   },
+   "reviewShare": 0,
+   "warmupPicks": 0,
+   "trueSkills": {
+    "seen": 12,
+    "meanK": 0.9350823090622767
+   },
+   "jamChords": 0
+  },
+  {
+   "driver": "v1",
+   "persona": "returning",
+   "track": "fretboard",
+   "days": 42,
+   "seed": 5,
+   "answers": 323,
+   "sessions": 19,
+   "passed": [
+    "fretboard/6/naturals",
+    "fretboard/6/all"
+   ],
+   "timeToPass": {
+    "fretboard/6/naturals": {
+     "answers": 125,
+     "sessions": 8,
+     "days": 5
+    },
+    "fretboard/6/all": {
+     "answers": 178,
+     "sessions": 11,
+     "days": 38
+    }
+   },
+   "retention7": 0.7844026639262197,
+   "retention21": 0.6531035117915607,
+   "retentionByDrill": {
+    "fretboard/6/naturals": {
+     "kAtPass": 0.9557694811480971,
+     "r7": 0.6330768434166896,
+     "r21": 0.4472730200588203
+    },
+    "fretboard/6/all": {
+     "kAtPass": 0.9860550049622908,
+     "r7": 0.9357284844357499,
+     "r21": 0.858934003524301
+    }
+   },
+   "falsePasses": [],
+   "falsePassRate": 0,
+   "overScheduled": 0.25696594427244585,
+   "underScheduled": null,
+   "weakShare": 2.2770211618140346,
+   "calibration": {
+    "knowledge": 0.14110364746719312,
+    "recall": 0.01776206468004335
+   },
+   "helpByDay": [
+    0,
+    0,
+    0.7142857142857143,
+    1.5714285714285714,
+    2.2857142857142856,
+    null,
+    2.4285714285714284,
+    2.4285714285714284,
+    2.4285714285714284,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    2.857142857142857,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    3,
+    3,
+    3,
+    3,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    2.7142857142857144
+   ],
+   "returnSlips": 0,
+   "rePass": {
+    "slipped": 0,
+    "rePassed": 0,
+    "sessions": null
+   },
+   "reviewShare": 0,
+   "warmupPicks": 0,
+   "trueSkills": {
+    "seen": 19,
+    "meanK": 0.8782316400384779
+   },
+   "jamChords": 0
+  },
+  {
+   "driver": "v1",
+   "persona": "gbWeak",
+   "track": "intervals",
+   "days": 56,
+   "seed": 1,
+   "answers": 891,
+   "sessions": 57,
+   "passed": [
+    "intervals/5/up/adjacent",
+    "intervals/5/up/adjacent-gb",
+    "intervals/5/up/skip",
+    "intervals/5/down/adjacent",
+    "intervals/5/down/adjacent-gb",
+    "intervals/5/down/skip",
+    "intervals/4/up/adjacent",
+    "intervals/4/up/adjacent-gb",
+    "intervals/4/down/adjacent",
+    "intervals/4/down/adjacent-gb",
+    "intervals/8/up/skip"
+   ],
+   "timeToPass": {
+    "intervals/5/up/adjacent": {
+     "answers": 54,
+     "sessions": 4,
+     "days": 4
+    },
+    "intervals/5/up/adjacent-gb": {
+     "answers": 90,
+     "sessions": 7,
+     "days": 7
+    },
+    "intervals/5/up/skip": {
+     "answers": 111,
+     "sessions": 8,
+     "days": 8
+    },
+    "intervals/5/down/adjacent": {
+     "answers": 102,
+     "sessions": 7,
+     "days": 5
+    },
+    "intervals/5/down/adjacent-gb": {
+     "answers": 30,
+     "sessions": 3,
+     "days": 3
+    },
+    "intervals/5/down/skip": {
+     "answers": 77,
+     "sessions": 6,
+     "days": 4
+    },
+    "intervals/4/up/adjacent": {
+     "answers": 119,
+     "sessions": 8,
+     "days": 10
+    },
+    "intervals/4/up/adjacent-gb": {
+     "answers": 47,
+     "sessions": 4,
+     "days": 3
+    },
+    "intervals/4/down/adjacent": {
+     "answers": 57,
+     "sessions": 5,
+     "days": 7
+    },
+    "intervals/4/down/adjacent-gb": {
+     "answers": 15,
+     "sessions": 2,
+     "days": 2
+    },
+    "intervals/8/up/skip": {
+     "answers": 164,
+     "sessions": 12,
+     "days": 11
+    }
+   },
+   "retention7": 0.475741292838199,
+   "retention21": 0.3211471828444462,
+   "retentionByDrill": {
+    "intervals/5/up/adjacent": {
+     "kAtPass": 0.9059177646525667,
+     "r7": 0.40818335834055736,
+     "r21": 0.25603499006400066
+    },
+    "intervals/5/up/adjacent-gb": {
+     "kAtPass": 0.9997567050310804,
+     "r7": 0.5216933748228417,
+     "r21": 0.3329304894486189
+    },
+    "intervals/5/up/skip": {
+     "kAtPass": 0.9380427122994808,
+     "r7": 0.436461811527764,
+     "r21": 0.29001035603743186
+    },
+    "intervals/5/down/adjacent": {
+     "kAtPass": 0.992007394066561,
+     "r7": 0.6040120366646293,
+     "r21": 0.4201417960351275
+    },
+    "intervals/5/down/adjacent-gb": {
+     "kAtPass": 0.9627469822294328,
+     "r7": 0.3697631402071926,
+     "r21": 0.22482347985239565
+    },
+    "intervals/5/down/skip": {
+     "kAtPass": 0.947692773644401,
+     "r7": 0.42791307698163844,
+     "r21": 0.28232561241052523
+    },
+    "intervals/4/up/adjacent": {
+     "kAtPass": 0.9865833673102058,
+     "r7": 0.6462583730019429,
+     "r21": 0.5012476289806823
+    },
+    "intervals/4/up/adjacent-gb": {
+     "kAtPass": 0.9884672598339979,
+     "r7": 0.37629447532827304,
+     "r21": 0.22857594570525047
+    },
+    "intervals/4/down/adjacent": {
+     "kAtPass": 0.9687052030018055,
+     "r7": 0.5784471601159282,
+     "r21": 0.3983105058905767
+    },
+    "intervals/4/down/adjacent-gb": {
+     "kAtPass": 0.863543864007311,
+     "r7": 0.21445836206989494,
+     "r21": 0.12644441281549063
+    },
+    "intervals/8/up/skip": {
+     "kAtPass": 0.9853214369733234,
+     "r7": 0.6496690521595271,
+     "r21": 0.47177379404880915
+    }
+   },
+   "falsePasses": [
+    "intervals/5/up/adjacent",
+    "intervals/5/up/adjacent-gb",
+    "intervals/5/up/skip",
+    "intervals/5/down/adjacent-gb",
+    "intervals/5/down/skip",
+    "intervals/4/up/adjacent-gb",
+    "intervals/4/down/adjacent",
+    "intervals/4/down/adjacent-gb"
+   ],
+   "falsePassRate": 0.7272727272727273,
+   "overScheduled": 0.25813692480359146,
+   "underScheduled": 1,
+   "weakShare": 0.5369950102900901,
+   "calibration": {
+    "knowledge": 0.10244420782554109,
+    "recall": 0.4727990944593605
+   },
+   "helpByDay": [
+    1,
+    0,
+    3,
+    3,
+    3,
+    3,
+    null,
+    2,
+    3,
+    1,
+    0,
+    1,
+    0,
+    3,
+    null,
+    3,
+    2,
+    3,
+    null,
+    2,
+    2,
+    3,
+    1,
+    1,
+    3,
+    3,
+    null,
+    null,
+    3,
+    3,
+    3,
+    3,
+    null,
+    null,
+    3,
+    3,
+    3,
+    3,
+    null,
+    null,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    null,
+    3,
+    3,
+    null,
+    null,
+    3,
+    3,
+    3,
+    null,
+    null
+   ],
+   "returnSlips": null,
+   "rePass": null,
+   "reviewShare": 0,
+   "warmupPicks": null,
+   "trueSkills": {
+    "seen": 36,
+    "meanK": 0.9377511323013373
+   },
+   "jamChords": 0
+  },
+  {
+   "driver": "v1",
+   "persona": "gbWeak",
+   "track": "intervals",
+   "days": 56,
+   "seed": 2,
+   "answers": 392,
+   "sessions": 24,
+   "passed": [
+    "intervals/5/up/adjacent",
+    "intervals/5/up/adjacent-gb",
+    "intervals/5/up/skip",
+    "intervals/5/down/adjacent",
+    "intervals/5/down/adjacent-gb"
+   ],
+   "timeToPass": {
+    "intervals/5/up/adjacent": {
+     "answers": 69,
+     "sessions": 5,
+     "days": 13
+    },
+    "intervals/5/up/adjacent-gb": {
+     "answers": 33,
+     "sessions": 3,
+     "days": 2
+    },
+    "intervals/5/up/skip": {
+     "answers": 102,
+     "sessions": 7,
+     "days": 14
+    },
+    "intervals/5/down/adjacent": {
+     "answers": 96,
+     "sessions": 7,
+     "days": 16
+    },
+    "intervals/5/down/adjacent-gb": {
+     "answers": 33,
+     "sessions": 3,
+     "days": 3
+    }
+   },
+   "retention7": 0.5013045844543333,
+   "retention21": 0.35195853094941143,
+   "retentionByDrill": {
+    "intervals/5/up/adjacent": {
+     "kAtPass": 0.9639132768439056,
+     "r7": 0.695250128525944,
+     "r21": 0.49997832838372375
+    },
+    "intervals/5/up/adjacent-gb": {
+     "kAtPass": 0.952240884018221,
+     "r7": 0.14421413721677945,
+     "r21": 0.08390603817068508
+    },
+    "intervals/5/up/skip": {
+     "kAtPass": 0.9262042060653615,
+     "r7": 0.6061020574871054,
+     "r21": 0.429212632979853
+    },
+    "intervals/5/down/adjacent": {
+     "kAtPass": 0.9920700604742001,
+     "r7": 0.6927615810545639,
+     "r21": 0.5230235845976765
+    },
+    "intervals/5/down/adjacent-gb": {
+     "kAtPass": 0.9665429169244542,
+     "r7": 0.3681950179872737,
+     "r21": 0.22367207061511873
+    }
+   },
+   "falsePasses": [
+    "intervals/5/up/adjacent-gb",
+    "intervals/5/down/adjacent-gb"
+   ],
+   "falsePassRate": 0.4,
+   "overScheduled": 0.22193877551020408,
+   "underScheduled": 1,
+   "weakShare": 0.5636123961315438,
+   "calibration": {
+    "knowledge": 0.17494406057638598,
+    "recall": 0.31364042384687557
+   },
+   "helpByDay": [
+    1,
+    1,
+    null,
+    null,
+    3,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    1,
+    0,
+    null,
+    0,
+    1,
+    2,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    1,
+    null,
+    2,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    1,
+    1,
+    null,
+    3,
+    null,
+    null,
+    3,
+    null,
+    3,
+    2,
+    3,
+    null,
+    null,
+    1,
+    3,
+    null,
+    null,
+    3,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "returnSlips": null,
+   "rePass": null,
+   "reviewShare": 0,
+   "warmupPicks": null,
+   "trueSkills": {
+    "seen": 18,
+    "meanK": 0.9459094276670919
+   },
+   "jamChords": 0
+  },
+  {
+   "driver": "v1",
+   "persona": "gbWeak",
+   "track": "intervals",
+   "days": 56,
+   "seed": 3,
+   "answers": 862,
+   "sessions": 53,
+   "passed": [
+    "intervals/5/up/adjacent",
+    "intervals/5/up/adjacent-gb",
+    "intervals/5/up/skip",
+    "intervals/5/down/adjacent",
+    "intervals/5/down/adjacent-gb",
+    "intervals/5/down/skip",
+    "intervals/4/up/adjacent",
+    "intervals/4/up/adjacent-gb",
+    "intervals/4/down/adjacent",
+    "intervals/4/down/adjacent-gb",
+    "intervals/8/up/skip",
+    "intervals/8/down/skip",
+    "intervals/3/up/adjacent"
+   ],
+   "timeToPass": {
+    "intervals/5/up/adjacent": {
+     "answers": 77,
+     "sessions": 5,
+     "days": 10
+    },
+    "intervals/5/up/adjacent-gb": {
+     "answers": 29,
+     "sessions": 3,
+     "days": 4
+    },
+    "intervals/5/up/skip": {
+     "answers": 80,
+     "sessions": 5,
+     "days": 11
+    },
+    "intervals/5/down/adjacent": {
+     "answers": 103,
+     "sessions": 8,
+     "days": 6
+    },
+    "intervals/5/down/adjacent-gb": {
+     "answers": 16,
+     "sessions": 2,
+     "days": 2
+    },
+    "intervals/5/down/skip": {
+     "answers": 129,
+     "sessions": 9,
+     "days": 10
+    },
+    "intervals/4/up/adjacent": {
+     "answers": 63,
+     "sessions": 5,
+     "days": 4
+    },
+    "intervals/4/up/adjacent-gb": {
+     "answers": 53,
+     "sessions": 4,
+     "days": 5
+    },
+    "intervals/4/down/adjacent": {
+     "answers": 52,
+     "sessions": 4,
+     "days": 3
+    },
+    "intervals/4/down/adjacent-gb": {
+     "answers": 28,
+     "sessions": 3,
+     "days": 1
+    },
+    "intervals/8/up/skip": {
+     "answers": 98,
+     "sessions": 7,
+     "days": 6
+    },
+    "intervals/8/down/skip": {
+     "answers": 61,
+     "sessions": 5,
+     "days": 2
+    },
+    "intervals/3/up/adjacent": {
+     "answers": 63,
+     "sessions": 5,
+     "days": 3
+    }
+   },
+   "retention7": 0.44127041828897146,
+   "retention21": 0.29569827328217985,
+   "retentionByDrill": {
+    "intervals/5/up/adjacent": {
+     "kAtPass": 0.9573484353202076,
+     "r7": 0.36840100479596666,
+     "r21": 0.26074726448681584
+    },
+    "intervals/5/up/adjacent-gb": {
+     "kAtPass": 0.9310387466872009,
+     "r7": 0.42995296691711016,
+     "r21": 0.268015741002688
+    },
+    "intervals/5/up/skip": {
+     "kAtPass": 0.9019179647725906,
+     "r7": 0.6926151918073044,
+     "r21": 0.5133712260709896
+    },
+    "intervals/5/down/adjacent": {
+     "kAtPass": 0.9902151918531285,
+     "r7": 0.6285907106521994,
+     "r21": 0.449090746799098
+    },
+    "intervals/5/down/adjacent-gb": {
+     "kAtPass": 0.8702170629532705,
+     "r7": 0.21411586795462262,
+     "r21": 0.12619264912011857
+    },
+    "intervals/5/down/skip": {
+     "kAtPass": 0.9792354876311301,
+     "r7": 0.7054709986952135,
+     "r21": 0.5207599657782219
+    },
+    "intervals/4/up/adjacent": {
+     "kAtPass": 0.9157649417256355,
+     "r7": 0.38075052744374177,
+     "r21": 0.2379727366242744
+    },
+    "intervals/4/up/adjacent-gb": {
+     "kAtPass": 0.9913249156961772,
+     "r7": 0.5247905207776713,
+     "r21": 0.3359966254920037
+    },
+    "intervals/4/down/adjacent": {
+     "kAtPass": 0.9448418907613819,
+     "r7": 0.3735204935800458,
+     "r21": 0.23256989918822663
+    },
+    "intervals/4/down/adjacent-gb": {
+     "kAtPass": 0.9593219309947456,
+     "r7": 0.24186245924217922,
+     "r21": 0.14269549389817382
+    },
+    "intervals/8/up/skip": {
+     "kAtPass": 0.9322335256610853,
+     "r7": 0.48806184188586305,
+     "r21": 0.33072004764723373
+    },
+    "intervals/8/down/skip": {
+     "kAtPass": 0.8993815109393335,
+     "r7": 0.26713427080380703,
+     "r21": 0.16221024516548171
+    },
+    "intervals/3/up/adjacent": {
+     "kAtPass": 0.911334471423858,
+     "r7": 0.42124858320090375,
+     "r21": 0.26373491139501165
+    }
+   },
+   "falsePasses": [
+    "intervals/5/up/adjacent",
+    "intervals/5/up/adjacent-gb",
+    "intervals/5/down/adjacent-gb",
+    "intervals/4/up/adjacent",
+    "intervals/4/up/adjacent-gb",
+    "intervals/4/down/adjacent",
+    "intervals/4/down/adjacent-gb",
+    "intervals/8/up/skip",
+    "intervals/8/down/skip",
+    "intervals/3/up/adjacent"
+   ],
+   "falsePassRate": 0.7692307692307693,
+   "overScheduled": 0.19605568445475638,
+   "underScheduled": 1,
+   "weakShare": 0.6614173160995686,
+   "calibration": {
+    "knowledge": 0.10016766826010912,
+    "recall": 0.4330677521465704
+   },
+   "helpByDay": [
+    1,
+    3,
+    3,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    2,
+    null,
+    null,
+    0,
+    3,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    1,
+    3,
+    2,
+    null,
+    3,
+    3,
+    2,
+    1,
+    2,
+    2,
+    2,
+    3,
+    3,
+    null,
+    null,
+    3,
+    3,
+    3,
+    null,
+    3,
+    null,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    null
+   ],
+   "returnSlips": null,
+   "rePass": null,
+   "reviewShare": 0,
+   "warmupPicks": null,
+   "trueSkills": {
+    "seen": 41,
+    "meanK": 0.9285311566214361
+   },
+   "jamChords": 0
+  },
+  {
+   "driver": "v1",
+   "persona": "gbWeak",
+   "track": "intervals",
+   "days": 56,
+   "seed": 4,
+   "answers": 552,
+   "sessions": 34,
+   "passed": [
+    "intervals/5/up/adjacent",
+    "intervals/5/up/adjacent-gb",
+    "intervals/5/up/skip",
+    "intervals/5/down/adjacent",
+    "intervals/5/down/adjacent-gb",
+    "intervals/5/down/skip",
+    "intervals/4/up/adjacent",
+    "intervals/4/up/adjacent-gb"
+   ],
+   "timeToPass": {
+    "intervals/5/up/adjacent": {
+     "answers": 59,
+     "sessions": 4,
+     "days": 10
+    },
+    "intervals/5/up/adjacent-gb": {
+     "answers": 30,
+     "sessions": 3,
+     "days": 4
+    },
+    "intervals/5/up/skip": {
+     "answers": 134,
+     "sessions": 9,
+     "days": 17
+    },
+    "intervals/5/down/adjacent": {
+     "answers": 57,
+     "sessions": 5,
+     "days": 5
+    },
+    "intervals/5/down/adjacent-gb": {
+     "answers": 14,
+     "sessions": 2,
+     "days": 8
+    },
+    "intervals/5/down/skip": {
+     "answers": 81,
+     "sessions": 6,
+     "days": 7
+    },
+    "intervals/4/up/adjacent": {
+     "answers": 83,
+     "sessions": 6,
+     "days": 7
+    },
+    "intervals/4/up/adjacent-gb": {
+     "answers": 46,
+     "sessions": 4,
+     "days": 2
+    }
+   },
+   "retention7": 0.5137556675444944,
+   "retention21": 0.3495666774221426,
+   "retentionByDrill": {
+    "intervals/5/up/adjacent": {
+     "kAtPass": 0.9282578199900897,
+     "r7": 0.6773844149538288,
+     "r21": 0.49162721711778756
+    },
+    "intervals/5/up/adjacent-gb": {
+     "kAtPass": 0.9024970072370959,
+     "r7": 0.22000110563204792,
+     "r21": 0.12961095236352915
+    },
+    "intervals/5/up/skip": {
+     "kAtPass": 0.9745484160156405,
+     "r7": 0.6779338177884138,
+     "r21": 0.4919227330002472
+    },
+    "intervals/5/down/adjacent": {
+     "kAtPass": 0.9613684709819146,
+     "r7": 0.5288307632142325,
+     "r21": 0.3530275623930627
+    },
+    "intervals/5/down/adjacent-gb": {
+     "kAtPass": 0.8601272732334425,
+     "r7": 0.5351514121284665,
+     "r21": 0.3587025231709066
+    },
+    "intervals/5/down/skip": {
+     "kAtPass": 0.9390988863215173,
+     "r7": 0.4504745075677429,
+     "r21": 0.2872289669683375
+    },
+    "intervals/4/up/adjacent": {
+     "kAtPass": 0.9751351343731371,
+     "r7": 0.6280665804743992,
+     "r21": 0.4450493749732696
+    },
+    "intervals/4/up/adjacent-gb": {
+     "kAtPass": 0.9878602735094715,
+     "r7": 0.3922027385968237,
+     "r21": 0.23936408939000003
+    }
+   },
+   "falsePasses": [
+    "intervals/5/up/adjacent-gb",
+    "intervals/5/down/adjacent",
+    "intervals/5/down/adjacent-gb",
+    "intervals/5/down/skip",
+    "intervals/4/up/adjacent-gb"
+   ],
+   "falsePassRate": 0.625,
+   "overScheduled": 0.16847826086956522,
+   "underScheduled": 1,
+   "weakShare": 0.639276854315895,
+   "calibration": {
+    "knowledge": 0.15009848637123413,
+    "recall": 0.3721688696672005
+   },
+   "helpByDay": [
+    0,
+    2,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    1,
+    0,
+    null,
+    null,
+    0,
+    0,
+    null,
+    1,
+    null,
+    null,
+    1,
+    null,
+    null,
+    3,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    2,
+    null,
+    2,
+    3,
+    3,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    2,
+    null,
+    0,
+    1,
+    null,
+    3,
+    3,
+    3,
+    null,
+    3,
+    null,
+    3,
+    3,
+    3,
+    null,
+    3,
+    3
+   ],
+   "returnSlips": null,
+   "rePass": null,
+   "reviewShare": 0,
+   "warmupPicks": null,
+   "trueSkills": {
+    "seen": 27,
+    "meanK": 0.9452489960328931
+   },
+   "jamChords": 0
+  },
+  {
+   "driver": "v1",
+   "persona": "gbWeak",
+   "track": "intervals",
+   "days": 56,
+   "seed": 5,
+   "answers": 613,
+   "sessions": 38,
+   "passed": [
+    "intervals/5/up/adjacent",
+    "intervals/5/up/adjacent-gb",
+    "intervals/5/up/skip",
+    "intervals/5/down/adjacent",
+    "intervals/5/down/adjacent-gb",
+    "intervals/5/down/skip",
+    "intervals/4/up/adjacent",
+    "intervals/4/up/adjacent-gb"
+   ],
+   "timeToPass": {
+    "intervals/5/up/adjacent": {
+     "answers": 73,
+     "sessions": 5,
+     "days": 4
+    },
+    "intervals/5/up/adjacent-gb": {
+     "answers": 51,
+     "sessions": 4,
+     "days": 2
+    },
+    "intervals/5/up/skip": {
+     "answers": 92,
+     "sessions": 6,
+     "days": 14
+    },
+    "intervals/5/down/adjacent": {
+     "answers": 73,
+     "sessions": 6,
+     "days": 13
+    },
+    "intervals/5/down/adjacent-gb": {
+     "answers": 48,
+     "sessions": 4,
+     "days": 4
+    },
+    "intervals/5/down/skip": {
+     "answers": 99,
+     "sessions": 7,
+     "days": 14
+    },
+    "intervals/4/up/adjacent": {
+     "answers": 72,
+     "sessions": 5,
+     "days": 4
+    },
+    "intervals/4/up/adjacent-gb": {
+     "answers": 35,
+     "sessions": 4,
+     "days": 4
+    }
+   },
+   "retention7": 0.547449961149754,
+   "retention21": 0.38258248028702885,
+   "retentionByDrill": {
+    "intervals/5/up/adjacent": {
+     "kAtPass": 0.9704775374201473,
+     "r7": 0.45318626688423036,
+     "r21": 0.29350439877333073
+    },
+    "intervals/5/up/adjacent-gb": {
+     "kAtPass": 0.9872200680103419,
+     "r7": 0.3920003856051682,
+     "r21": 0.23924430663830223
+    },
+    "intervals/5/up/skip": {
+     "kAtPass": 0.9348596952433452,
+     "r7": 0.7131983385212911,
+     "r21": 0.5386671630823116
+    },
+    "intervals/5/down/adjacent": {
+     "kAtPass": 0.9849606033272207,
+     "r7": 0.8090485270710254,
+     "r21": 0.6367487445555627
+    },
+    "intervals/5/down/adjacent-gb": {
+     "kAtPass": 0.9888663236195032,
+     "r7": 0.3797948202548113,
+     "r21": 0.2309229445416227
+    },
+    "intervals/5/down/skip": {
+     "kAtPass": 0.9742603897420906,
+     "r7": 0.7687709476838258,
+     "r21": 0.5817141118323065
+    },
+    "intervals/4/up/adjacent": {
+     "kAtPass": 0.9577208950014114,
+     "r7": 0.41493539158769477,
+     "r21": 0.2577285635955565
+    },
+    "intervals/4/up/adjacent-gb": {
+     "kAtPass": 0.9245321708427799,
+     "r7": 0.4486650115899848,
+     "r21": 0.28212960927723785
+    }
+   },
+   "falsePasses": [
+    "intervals/5/up/adjacent",
+    "intervals/5/up/adjacent-gb",
+    "intervals/5/down/adjacent-gb",
+    "intervals/4/up/adjacent",
+    "intervals/4/up/adjacent-gb"
+   ],
+   "falsePassRate": 0.625,
+   "overScheduled": 0.2300163132137031,
+   "underScheduled": 1,
+   "weakShare": 0.8275508678517506,
+   "calibration": {
+    "knowledge": 0.09555236125544204,
+    "recall": 0.3708094641771403
+   },
+   "helpByDay": [
+    0,
+    3,
+    3,
+    3,
+    2,
+    null,
+    0,
+    1,
+    2,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    2,
+    3,
+    1,
+    3,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    3,
+    null,
+    2,
+    2,
+    3,
+    2,
+    3,
+    3,
+    null,
+    null,
+    3,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    3,
+    3,
+    3,
+    3,
+    3,
+    null,
+    null,
+    3,
+    3,
+    3,
+    3,
+    3
+   ],
+   "returnSlips": null,
+   "rePass": null,
+   "reviewShare": 0,
+   "warmupPicks": null,
+   "trueSkills": {
+    "seen": 27,
+    "meanK": 0.9650809604763159
+   },
+   "jamChords": 0
+  },
+  {
+   "driver": "v1",
+   "persona": "noodler",
+   "track": "keys",
+   "days": 28,
+   "seed": 1,
+   "answers": 267,
+   "sessions": 17,
+   "passed": [
+    "keys/maj/0",
+    "keys/maj/1",
+    "keys/maj/2",
+    "keys/min/0",
+    "keys/min/1",
+    "keys/min/2",
+    "keys/dim",
+    "keys/aug"
+   ],
+   "timeToPass": {
+    "keys/maj/0": {
+     "answers": 21,
+     "sessions": 2,
+     "days": 2
+    },
+    "keys/maj/1": {
+     "answers": 28,
+     "sessions": 3,
+     "days": 3
+    },
+    "keys/maj/2": {
+     "answers": 18,
+     "sessions": 2,
+     "days": 1
+    },
+    "keys/min/0": {
+     "answers": 26,
+     "sessions": 3,
+     "days": 3
+    },
+    "keys/min/1": {
+     "answers": 17,
+     "sessions": 2,
+     "days": 3
+    },
+    "keys/min/2": {
+     "answers": 34,
+     "sessions": 3,
+     "days": 3
+    },
+    "keys/dim": {
+     "answers": 63,
+     "sessions": 5,
+     "days": 5
+    },
+    "keys/aug": {
+     "answers": 60,
+     "sessions": 4,
+     "days": 4
+    }
+   },
+   "retention7": 0.4608112685837483,
+   "retention21": 0.29926653038078443,
+   "retentionByDrill": {
+    "keys/maj/0": {
+     "kAtPass": 0.9864917766306224,
+     "r7": 0.2651156707284203,
+     "r21": 0.1568882509618786
+    },
+    "keys/maj/1": {
+     "kAtPass": 0.9988885535192915,
+     "r7": 0.5440419862520971,
+     "r21": 0.35068707795934306
+    },
+    "keys/maj/2": {
+     "kAtPass": 0.9917190784163135,
+     "r7": 0.26772489636915686,
+     "r21": 0.15846863101430592
+    },
+    "keys/min/0": {
+     "kAtPass": 0.9952404573831423,
+     "r7": 0.37572479901708977,
+     "r21": 0.22802819834343058
+    },
+    "keys/min/1": {
+     "kAtPass": 0.9925471705746822,
+     "r7": 0.560346506595877,
+     "r21": 0.36455702875165363
+    },
+    "keys/min/2": {
+     "kAtPass": 0.9998111993509972,
+     "r7": 0.7377923209631712,
+     "r21": 0.5337201317110463
+    },
+    "keys/dim": {
+     "kAtPass": 0.9759767405232375,
+     "r7": 0.44666214859239767,
+     "r21": 0.29230689165255336
+    },
+    "keys/aug": {
+     "kAtPass": 0.977054067943517,
+     "r7": 0.4890818201517764,
+     "r21": 0.30947603265206375
+    }
+   },
+   "falsePasses": [
+    "keys/maj/0",
+    "keys/maj/1",
+    "keys/maj/2",
+    "keys/min/0",
+    "keys/min/1",
+    "keys/dim",
+    "keys/aug"
+   ],
+   "falsePassRate": 0.875,
+   "overScheduled": 0.40823970037453183,
+   "underScheduled": null,
+   "weakShare": 2.913405026359379,
+   "calibration": {
+    "knowledge": 0.17197242935291404,
+    "recall": 0.07704107629458072
+   },
+   "helpByDay": [
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    null,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    null,
+    3,
+    3,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "returnSlips": null,
+   "rePass": null,
+   "reviewShare": 0,
+   "warmupPicks": null,
+   "trueSkills": {
+    "seen": 12,
+    "meanK": 0.9881318152547595
+   },
+   "jamChords": 840
+  },
+  {
+   "driver": "v1",
+   "persona": "noodler",
+   "track": "keys",
+   "days": 28,
+   "seed": 2,
+   "answers": 211,
+   "sessions": 13,
+   "passed": [
+    "keys/maj/0",
+    "keys/maj/1",
+    "keys/maj/2",
+    "keys/min/0",
+    "keys/min/1",
+    "keys/min/2",
+    "keys/dim"
+   ],
+   "timeToPass": {
+    "keys/maj/0": {
+     "answers": 19,
+     "sessions": 2,
+     "days": 2
+    },
+    "keys/maj/1": {
+     "answers": 16,
+     "sessions": 2,
+     "days": 4
+    },
+    "keys/maj/2": {
+     "answers": 29,
+     "sessions": 3,
+     "days": 9
+    },
+    "keys/min/0": {
+     "answers": 20,
+     "sessions": 2,
+     "days": 2
+    },
+    "keys/min/1": {
+     "answers": 18,
+     "sessions": 2,
+     "days": 1
+    },
+    "keys/min/2": {
+     "answers": 16,
+     "sessions": 2,
+     "days": 3
+    },
+    "keys/dim": {
+     "answers": 66,
+     "sessions": 5,
+     "days": 12
+    }
+   },
+   "retention7": 0.6779912817962492,
+   "retention21": 0.522129966906074,
+   "retentionByDrill": {
+    "keys/maj/0": {
+     "kAtPass": 0.9839016539492905,
+     "r7": 0.2768511240464028,
+     "r21": 0.16423322826444892
+    },
+    "keys/maj/1": {
+     "kAtPass": 0.9896488480203918,
+     "r7": 0.5320595835884239,
+     "r21": 0.34188528953038644
+    },
+    "keys/maj/2": {
+     "kAtPass": 0.9998918992440953,
+     "r7": 0.9253435676258221,
+     "r21": 0.8156342845285718
+    },
+    "keys/min/0": {
+     "kAtPass": 0.9951906552548233,
+     "r7": 0.8972980852161069,
+     "r21": 0.7654658787661486
+    },
+    "keys/min/1": {
+     "kAtPass": 0.9947002101864406,
+     "r7": 0.8441175720933254,
+     "r21": 0.6758988561120247
+    },
+    "keys/min/2": {
+     "kAtPass": 0.9856234000283219,
+     "r7": 0.5100792856757052,
+     "r21": 0.3249277006795984
+    },
+    "keys/dim": {
+     "kAtPass": 0.9808335900411841,
+     "r7": 0.7601897543279587,
+     "r21": 0.5668645304613391
+    }
+   },
+   "falsePasses": [
+    "keys/maj/0",
+    "keys/maj/1",
+    "keys/min/2"
+   ],
+   "falsePassRate": 0.42857142857142855,
+   "overScheduled": 0.3886255924170616,
+   "underScheduled": null,
+   "weakShare": 3.8195031915711777,
+   "calibration": {
+    "knowledge": 0.14451158083928053,
+    "recall": 0.02398708032899514
+   },
+   "helpByDay": [
+    2,
+    3,
+    null,
+    null,
+    3,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    3,
+    3,
+    null,
+    3,
+    3,
+    3,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    3,
+    null,
+    3,
+    null
+   ],
+   "returnSlips": null,
+   "rePass": null,
+   "reviewShare": 0,
+   "warmupPicks": null,
+   "trueSkills": {
+    "seen": 12,
+    "meanK": 0.9473111419602306
+   },
+   "jamChords": 840
+  },
+  {
+   "driver": "v1",
+   "persona": "noodler",
+   "track": "keys",
+   "days": 28,
+   "seed": 3,
+   "answers": 274,
+   "sessions": 17,
+   "passed": [
+    "keys/maj/0",
+    "keys/maj/1",
+    "keys/maj/2",
+    "keys/min/0",
+    "keys/min/1",
+    "keys/min/2",
+    "keys/dim",
+    "keys/aug"
+   ],
+   "timeToPass": {
+    "keys/maj/0": {
+     "answers": 21,
+     "sessions": 2,
+     "days": 2
+    },
+    "keys/maj/1": {
+     "answers": 56,
+     "sessions": 4,
+     "days": 9
+    },
+    "keys/maj/2": {
+     "answers": 15,
+     "sessions": 2,
+     "days": 4
+    },
+    "keys/min/0": {
+     "answers": 14,
+     "sessions": 2,
+     "days": 1
+    },
+    "keys/min/1": {
+     "answers": 40,
+     "sessions": 3,
+     "days": 2
+    },
+    "keys/min/2": {
+     "answers": 20,
+     "sessions": 2,
+     "days": 9
+    },
+    "keys/dim": {
+     "answers": 51,
+     "sessions": 4,
+     "days": 3
+    },
+    "keys/aug": {
+     "answers": 57,
+     "sessions": 5,
+     "days": 4
+    }
+   },
+   "retention7": 0.6977119891251076,
+   "retention21": 0.5479080791384312,
+   "retentionByDrill": {
+    "keys/maj/0": {
+     "kAtPass": 0.9858670212997886,
+     "r7": 0.26723127722790074,
+     "r21": 0.15820949790615857
+    },
+    "keys/maj/1": {
+     "kAtPass": 0.9999996650666014,
+     "r7": 0.8645581584453343,
+     "r21": 0.7047170825247109
+    },
+    "keys/maj/2": {
+     "kAtPass": 0.9973359870005433,
+     "r7": 0.8499249071357451,
+     "r21": 0.6832214101064555
+    },
+    "keys/min/0": {
+     "kAtPass": 0.9909303071462181,
+     "r7": 0.9242731456840777,
+     "r21": 0.8234016720792317
+    },
+    "keys/min/1": {
+     "kAtPass": 0.9999381338033347,
+     "r7": 0.779873263263087,
+     "r21": 0.5839749091371935
+    },
+    "keys/min/2": {
+     "kAtPass": 0.9983574022710668,
+     "r7": 0.9158001494828292,
+     "r21": 0.7979799644817203
+    },
+    "keys/dim": {
+     "kAtPass": 0.9678025055487783,
+     "r7": 0.5192488977712258,
+     "r21": 0.3376312820951701
+    },
+    "keys/aug": {
+     "kAtPass": 0.9764240159379981,
+     "r7": 0.460786113990661,
+     "r21": 0.2941288147768089
+    }
+   },
+   "falsePasses": [
+    "keys/maj/0",
+    "keys/dim",
+    "keys/aug"
+   ],
+   "falsePassRate": 0.375,
+   "overScheduled": 0.5364963503649635,
+   "underScheduled": null,
+   "weakShare": 4.027808825501856,
+   "calibration": {
+    "knowledge": 0.14351752337530502,
+    "recall": 0.06597446536211465
+   },
+   "helpByDay": [
+    3,
+    3,
+    3,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    3,
+    null,
+    null,
+    3,
+    3,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    3,
+    3,
+    3,
+    null,
+    3,
+    3,
+    null
+   ],
+   "returnSlips": null,
+   "rePass": null,
+   "reviewShare": 0,
+   "warmupPicks": null,
+   "trueSkills": {
+    "seen": 12,
+    "meanK": 0.98578051304465
+   },
+   "jamChords": 840
+  },
+  {
+   "driver": "v1",
+   "persona": "noodler",
+   "track": "keys",
+   "days": 28,
+   "seed": 4,
+   "answers": 204,
+   "sessions": 12,
+   "passed": [
+    "keys/maj/0",
+    "keys/maj/1",
+    "keys/maj/2",
+    "keys/min/0",
+    "keys/min/1",
+    "keys/min/2"
+   ],
+   "timeToPass": {
+    "keys/maj/0": {
+     "answers": 35,
+     "sessions": 3,
+     "days": 9
+    },
+    "keys/maj/1": {
+     "answers": 17,
+     "sessions": 2,
+     "days": 2
+    },
+    "keys/maj/2": {
+     "answers": 19,
+     "sessions": 2,
+     "days": 4
+    },
+    "keys/min/0": {
+     "answers": 32,
+     "sessions": 3,
+     "days": 2
+    },
+    "keys/min/1": {
+     "answers": 32,
+     "sessions": 3,
+     "days": 3
+    },
+    "keys/min/2": {
+     "answers": 15,
+     "sessions": 2,
+     "days": 4
+    }
+   },
+   "retention7": 0.7411709119321402,
+   "retention21": 0.5883775285363607,
+   "retentionByDrill": {
+    "keys/maj/0": {
+     "kAtPass": 0.999909737020328,
+     "r7": 0.87128821763367,
+     "r21": 0.7158464454204101
+    },
+    "keys/maj/1": {
+     "kAtPass": 0.9971482678317133,
+     "r7": 0.755017081367493,
+     "r21": 0.5545950018179323
+    },
+    "keys/maj/2": {
+     "kAtPass": 0.9995418092689311,
+     "r7": 0.9061393270553945,
+     "r21": 0.778062266134387
+    },
+    "keys/min/0": {
+     "kAtPass": 0.998690311166378,
+     "r7": 0.3932040957582227,
+     "r21": 0.23974212650393514
+    },
+    "keys/min/1": {
+     "kAtPass": 0.9998040304576041,
+     "r7": 0.5762646174897799,
+     "r21": 0.37707243555401715
+    },
+    "keys/min/2": {
+     "kAtPass": 0.9945668873489433,
+     "r7": 0.9451121322882813,
+     "r21": 0.8649468957874829
+    }
+   },
+   "falsePasses": [
+    "keys/min/0",
+    "keys/min/1"
+   ],
+   "falsePassRate": 0.3333333333333333,
+   "overScheduled": 0.6323529411764706,
+   "underScheduled": null,
+   "weakShare": 3.4656188605108063,
+   "calibration": {
+    "knowledge": 0.15428497719901835,
+    "recall": 0.08921682013967999
+   },
+   "helpByDay": [
+    2,
+    3,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    3,
+    3,
+    null,
+    null,
+    3,
+    3,
+    null,
+    3,
+    null,
+    null,
+    3,
+    null,
+    null,
+    3,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   "returnSlips": null,
+   "rePass": null,
+   "reviewShare": 0,
+   "warmupPicks": null,
+   "trueSkills": {
+    "seen": 9,
+    "meanK": 0.9874275049591278
+   },
+   "jamChords": 840
+  },
+  {
+   "driver": "v1",
+   "persona": "noodler",
+   "track": "keys",
+   "days": 28,
+   "seed": 5,
+   "answers": 285,
+   "sessions": 17,
+   "passed": [
+    "keys/maj/0",
+    "keys/maj/1",
+    "keys/maj/2",
+    "keys/min/0",
+    "keys/min/1",
+    "keys/min/2",
+    "keys/dim"
+   ],
+   "timeToPass": {
+    "keys/maj/0": {
+     "answers": 36,
+     "sessions": 3,
+     "days": 2
+    },
+    "keys/maj/1": {
+     "answers": 20,
+     "sessions": 2,
+     "days": 2
+    },
+    "keys/maj/2": {
+     "answers": 16,
+     "sessions": 2,
+     "days": 2
+    },
+    "keys/min/0": {
+     "answers": 17,
+     "sessions": 2,
+     "days": 1
+    },
+    "keys/min/1": {
+     "answers": 48,
+     "sessions": 4,
+     "days": 4
+    },
+    "keys/min/2": {
+     "answers": 33,
+     "sessions": 3,
+     "days": 3
+    },
+    "keys/dim": {
+     "answers": 73,
+     "sessions": 5,
+     "days": 12
+    }
+   },
+   "retention7": 0.4544237384833855,
+   "retention21": 0.29543875474662584,
+   "retentionByDrill": {
+    "keys/maj/0": {
+     "kAtPass": 0.9988933877301786,
+     "r7": 0.2611933329324937,
+     "r21": 0.1543590792270966
+    },
+    "keys/maj/1": {
+     "kAtPass": 0.9958125117522495,
+     "r7": 0.32516717097169473,
+     "r21": 0.1947859628361585
+    },
+    "keys/maj/2": {
+     "kAtPass": 0.9897766400201402,
+     "r7": 0.5885165244223725,
+     "r21": 0.38865555865297785
+    },
+    "keys/min/0": {
+     "kAtPass": 0.9633657597831616,
+     "r7": 0.2248752825539373,
+     "r21": 0.13225615014180356
+    },
+    "keys/min/1": {
+     "kAtPass": 0.9999537649842504,
+     "r7": 0.5176059404945805,
+     "r21": 0.32973757981817287
+    },
+    "keys/min/2": {
+     "kAtPass": 0.9997049989859332,
+     "r7": 0.5664901620959227,
+     "r21": 0.3689257656700657
+    },
+    "keys/dim": {
+     "kAtPass": 0.9862459287815225,
+     "r7": 0.6971177559126972,
+     "r21": 0.49935118688010555
+    }
+   },
+   "falsePasses": [
+    "keys/maj/0",
+    "keys/maj/1",
+    "keys/maj/2",
+    "keys/min/0",
+    "keys/min/1",
+    "keys/min/2"
+   ],
+   "falsePassRate": 0.8571428571428571,
+   "overScheduled": 0.37543859649122807,
+   "underScheduled": null,
+   "weakShare": 2.993014609231232,
+   "calibration": {
+    "knowledge": 0.17331455167067367,
+    "recall": 0.07034060597748557
+   },
+   "helpByDay": [
+    3,
+    3,
+    3,
+    3,
+    3,
+    null,
+    3,
+    3,
+    3,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    3,
+    3,
+    3,
+    3,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    3
+   ],
+   "returnSlips": null,
+   "rePass": null,
+   "reviewShare": 0,
+   "warmupPicks": null,
+   "trueSkills": {
+    "seen": 12,
+    "meanK": 0.9742939394791915
+   },
+   "jamChords": 840
+  }
+ ]
+}

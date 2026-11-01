@@ -1,11 +1,11 @@
 import { FretPos } from '../../guitar/fretboard';
-import { chord, chordPcs, chordSymbol, chordToneNames, chordType } from '../../theory/chord';
+import { SIMPLER_TYPE, chord, chordPcs, chordSymbol, chordToneNames, chordType, functionInChord } from '../../theory/chord';
 import { Degree, degreeSemitones, degreeToString, parseFormula } from '../../theory/interval';
-import { Midi, toPc } from '../../theory/pitch';
+import { Midi, PitchClass, toPc } from '../../theory/pitch';
 import { Note } from '../../theory/spelling';
 import { findVoicings, tab } from '../../voicing/voicing';
-import { assertFocus, pickChordRoot } from '../common';
-import { ExerciseFamily } from '../types';
+import { assertFocus, foreignDegree, pickChordRoot } from '../common';
+import { Diagnosis, ExerciseFamily } from '../types';
 
 /**
  * Neo-soul / jazz voicing on the keys: left hand plays the root, right hand the colour
@@ -51,6 +51,24 @@ export interface KeysVoicingFocus {
 /** Guide tones (3rd, 7th), every extension and any altered fifth are essential; root and plain 5th are not. */
 export const isEssential = (d: Degree): boolean =>
   d.number === 3 || d.number === 7 || d.number >= 9 || (d.number === 5 && d.acc !== 0);
+
+/** The guide tones among the essentials: what makes a chord major, minor or dominant at all. */
+const isGuide = (d: Degree): boolean => d.number === 3 || d.number === 7;
+
+/**
+ * What a voicing of `typeId` over `rootPc` must show: the lowest note is the root and every
+ * essential degree sounds above it. Foreign tones are not judged here (check() counts them);
+ * octaves and doublings are free. Shared by check(), the diagnosis and the play mapping.
+ */
+export function voicingComplete(rootPc: PitchClass, typeId: string, midis: Midi[]): boolean {
+  if (midis.length === 0) return false;
+  const bass = Math.min(...midis);
+  if (toPc(bass) !== toPc(rootPc)) return false;
+  const above = new Set(midis.filter((m) => m > bass).map(toPc));
+  return chordType(typeId).formula.filter(isEssential).every((d) => above.has(toPc(rootPc + degreeSemitones(d))));
+}
+
+const other = (): Diagnosis => ({ kind: 'other', credit: 0 });
 
 // Inside the 37 keys of an FLkey at its default octave (C3–C6): bass C3–B3, right hand from C4.
 /**
@@ -133,16 +151,57 @@ export const keysVoicing: ExerciseFamily<KeysVoicingParams, KeysVoicingSolution,
     const c = chord(ex.params.root, ex.params.typeId);
     const pcs = chordPcs(c);
     const sorted = [...r.midis].sort((a, b) => a - b);
-    const bassOk = toPc(sorted[0]) === pcs[0];
     const above = new Set(sorted.slice(1).map(toPc));
     const required = c.type.formula.filter(isEssential).map((d) => toPc(pcs[0] + degreeSemitones(d)));
     const wrong = [...above].filter((p) => !pcs.includes(p)).length;
     const hits = required.filter((p) => above.has(p)).length;
     const missed = required.length - hits;
-    return { correct: bassOk && wrong === 0 && missed === 0, hits, wrong, missed };
+    return { correct: voicingComplete(pcs[0], ex.params.typeId, r.midis) && wrong === 0, hits, wrong, missed };
   },
 
   solve: (ex) => ({ kind: 'notes', midis: ex.solution.notes }),
+
+  // ── Diagnosis ──
+
+  /**
+   * In order of what breaks the chord most: another tone in the bass, a guide tone missing,
+   * the colour missing (the simpler type is credited as an aside when its voicing is complete
+   * and nothing outside the simpler chord sounds), a foreign tone above the bass. Degrees are
+   * over the root; a foreign tone is spelled as the key pressed (foreignDegree).
+   */
+  diagnose(ex, r) {
+    if (r.kind !== 'notes') return other();
+    if (r.midis.length < 3) return { kind: 'incomplete', credit: 0 };
+    const { root, typeId } = ex.params;
+    const c = chord(root, typeId);
+    const pcs = chordPcs(c);
+    const rootPc = pcs[0];
+    const degreeOf = (pc: PitchClass): string => {
+      const fn = functionInChord(c, pc);
+      return fn ? degreeToString(fn) : foreignDegree(root, pc);
+    };
+    const sorted = [...r.midis].sort((a, b) => a - b);
+    const bassPc = toPc(sorted[0]);
+    if (bassPc !== rootPc) return { kind: 'bass', credit: 0.5, detail: { degree: degreeOf(bassPc) } };
+    const above = new Set(sorted.slice(1).map(toPc));
+    const has = (d: Degree): boolean => above.has(toPc(rootPc + degreeSemitones(d)));
+    const missingGuide = c.type.formula.filter(isGuide).find((d) => !has(d));
+    if (missingGuide) return { kind: 'missing-guide', credit: 0, detail: { degree: degreeToString(missingGuide) } };
+    const foreign = [...above].filter((p) => !pcs.includes(p));
+    const missingColour = c.type.formula.filter((d) => isEssential(d) && !isGuide(d)).find((d) => !has(d));
+    if (missingColour) {
+      // The simpler type is credited only where its own check() would pass: complete, and nothing
+      // above the bass outside the simpler chord (C E B♭ A asked as C13 has the 13, which C7 rejects).
+      const simpler = SIMPLER_TYPE[typeId];
+      const simplerPcs = simpler !== undefined && (VOICING_TYPES as readonly string[]).includes(simpler) ? chordPcs(chord(root, simpler)) : null;
+      const demonstrated = simpler !== undefined && simplerPcs !== null
+        && [...above].every((p) => simplerPcs.includes(p)) && voicingComplete(rootPc, simpler, r.midis);
+      const aside = demonstrated ? `voicing:${simpler}` : undefined;
+      return { kind: 'missing-colour', credit: 0.5, ...(aside ? { aside } : {}), nudge: aside ? [aside] : [], detail: { degree: degreeToString(missingColour) } };
+    }
+    if (foreign.length > 0) return { kind: 'wrong-tone', credit: 0.25, detail: { degree: degreeOf(foreign[0]) } };
+    return other();
+  },
 
   describe: (ex) => {
     const c = chord(ex.params.root, ex.params.typeId);

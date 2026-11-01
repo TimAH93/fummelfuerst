@@ -67,3 +67,37 @@ describe('rounds, tempo and variations', () => {
     expect(nudgeBpm(s, 4).bpm).toBe(84);
   });
 });
+
+describe('hit midis', () => {
+  const cfg = { chords: loop, ...DEFAULT_TRAINER };
+  it('starts empty, stores the keys that scored each slot and ignores non-hits', () => {
+    let s = startTrainer(cfg);
+    expect(s.hitMidis).toEqual([[], [], [], []]);
+    s = onPlayed(s, PAD.Fm9); // wrong chord for slot 0
+    expect(s.hitMidis[0]).toEqual([]);
+    s = onPlayed(s, [49, 53, 56]); // the plain Db triad counts
+    expect(s.hitMidis[0]).toEqual([49, 53, 56]);
+    s = onPlayed(s, PAD.Dbmaj9); // the slot is already hit: the first chord stays
+    expect(s.hitMidis[0]).toEqual([49, 53, 56]);
+    s = onSlot(s);
+    s = onPlayed(s, PAD.C7s9);
+    expect(s.hitMidis).toEqual([[49, 53, 56], PAD.C7s9, [], []]);
+    expect(s.hits).toEqual([true, true, false, false]);
+  });
+  it('keeps the round\'s midis until the wrap, then resets them', () => {
+    let s = startTrainer(cfg);
+    s = onPlayed(s, PAD.Dbmaj9);
+    for (let i = 0; i < loop.length - 1; i++) s = onSlot(s);
+    expect(s.index).toBe(loop.length - 1);
+    expect(s.hitMidis[0]).toEqual(PAD.Dbmaj9);
+    s = onSlot(s);
+    expect(s.round).toBe(2);
+    expect(s.hitMidis).toEqual([[], [], [], []]);
+  });
+  it('copies the played keys instead of keeping the caller\'s array', () => {
+    const played = [...PAD.Dbmaj9];
+    const s = onPlayed(startTrainer(cfg), played);
+    played.push(99);
+    expect(s.hitMidis[0]).toEqual(PAD.Dbmaj9);
+  });
+});

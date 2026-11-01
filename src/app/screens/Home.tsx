@@ -1,8 +1,9 @@
 import { useState } from 'preact/hooks';
-import { Drill, LearnerState, RANKS, SessionEntry, TRACKS, TrackId, drillProgress, hasSlipped, nextLabel, progressToNext, rankFor, recommendDrill, suggestTopic, weekExports } from '../../core';
+import { Drill, LearnerState, RANKS, SessionEntry, TRACKS, TrackId, drillProgress, hasSlipped, nextLabel, progressToNext, rankFor, recommendDrill, reviewDrills, suggestTopic, weekExports } from '../../core';
 import { Progress } from '../components/Progress';
+import { downloadBytes } from '../lib/download';
 import { curriculum } from '../lib/session';
-import { Settings } from '../lib/store';
+import { Settings, exportAttempts } from '../lib/store';
 import { useLink } from './Link';
 
 interface Props {
@@ -49,8 +50,16 @@ export function Home({ state, settings, onSettings, onStart, onTuner, onLink, on
   const path = curriculum.filter((d) => d.track === settings.track);
   const passed = path.filter((d) => state.passed[d.id] !== undefined).length;
   const progress = drill ? drillProgress(state, drill) : null;
+  // Passed drills of the track whose skills are fading: Start mixes them in as labelled review picks.
+  const reviews = drill ? reviewDrills(state, curriculum, drill, Date.now()).length : 0;
   const track = TRACKS.find((t) => t.id === settings.track);
   const setTrack = (id: TrackId) => { onSettings({ ...settings, track: id }); setPickTrack(false); };
+  /** Every logged answer as JSON – raw material for a later replay against the model. */
+  const exportAnswers = async () => {
+    const attempts = await exportAttempts();
+    const day = new Date().toISOString().slice(0, 10);
+    downloadBytes(`fummelfuerst-antworten-${day}.json`, 'application/json', new TextEncoder().encode(JSON.stringify(attempts)));
+  };
 
   return (
     <main class="screen home">
@@ -88,6 +97,9 @@ export function Home({ state, settings, onSettings, onStart, onTuner, onLink, on
             {RANKS.map((r) => (
               <span class={`rank${songs >= r.at ? ' reached' : ''}${r.at === rank.at ? ' now' : ''}`}>{r.emblem || '·'} {r.at} {r.name}</span>
             ))}
+          </div>
+          <div class="row wrap">
+            <button class="quiet small" onClick={() => void exportAnswers()} data-testid="export-attempts">Antworten exportieren</button>
           </div>
         </section>
       )}
@@ -147,6 +159,7 @@ export function Home({ state, settings, onSettings, onStart, onTuner, onLink, on
                 <Progress value={progress.progress} label="Fortschritt im Drill" />
                 <p class="meta">
                   {progress.comfortable} von {progress.total} sitzen · Drill {path.indexOf(drill) + 1} von {path.length} · {passed} / {path.length} geschafft
+                  {reviews > 0 && ` · mit Wiederholung aus ${reviews} Drill${reviews === 1 ? '' : 's'}`}
                 </p>
               </div>
               <button class="primary" onClick={() => onStart(drill)}>Start</button>

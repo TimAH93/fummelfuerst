@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'preact/hooks';
 import {
-  EMPTY_JAM, INVERSION_NAMES, loopOf, Key, KeyMode, MAJOR_TONICS, MINOR_TONICS, PadBank, PlayEntry, ProgChord, autoKey, chord, chordFunction, chordTones,
-  chordType, degreeSemitones, degreeToString, habits, identifyHeld, jamStep, keyScale, logChord, logCsv, melodyGuide, melodyNoteRole, melodyNotes,
-  nextChords, notePc, nudges, padFor, parseNote, pcToNote, spellInKey, suggestVoicing, toPc,
+  EMPTY_JAM, INVERSION_NAMES, loopOf, Key, KeyMode, MAJOR_TONICS, MINOR_TONICS, PadBank, PlayEntry, PlayEvent, ProgChord, autoKey, chord, chordFunction,
+  chordTones, chordType, degreeSemitones, degreeToString, habits, identifyHeld, jamEvent, jamStep, keyScale, logChord, logCsv, melodyGuide, melodyNoteRole,
+  melodyNotes, nextChords, notePc, nudges, padFor, parseNote, pcToNote, spellInKey, suggestVoicing, toPc,
 } from '../../core';
 import { DotKind, Piano, PianoMarks } from '../components/Piano';
 import { keyName, showChord, showDegree, showNote } from '../lib/names';
@@ -19,6 +19,8 @@ interface Props {
   /** What is on the FLkey pads, so the screen can say "Pad 3" and put a found chord on a free pad. */
   pads: PadBank;
   onPads: (b: PadBank) => void;
+  /** A chord played here is light evidence for the keys skill it shows (jam free / picked). */
+  onPlay: (ev: PlayEvent) => void;
   /** Practise the progression played so far with the click. */
   onTrain: (chords: ProgChord[]) => void;
   onExit: () => void;
@@ -34,7 +36,7 @@ const OVER_ROOT = ['1', 'b2', '2', 'b3', '3', '4', 'b5', '5', 'b6', '6', 'b7', '
  * what tends to come next. Melodie: which tones sit on the chord. The last two lean on a sticky
  * chord that survives the pad being released.
  */
-export function ChordMonitor({ settings, onSettings, pads, onPads, onTrain, onExit }: Props) {
+export function ChordMonitor({ settings, onSettings, pads, onPads, onPlay, onTrain, onExit }: Props) {
   useWakeLock();
   const [jam, setJam] = useState(EMPTY_JAM);
   const [auto, setAuto] = useState<Key | null>(null);
@@ -50,16 +52,23 @@ export function ChordMonitor({ settings, onSettings, pads, onPads, onTrain, onEx
   useEffect(() => setAuto((k) => autoKey(jam.history, k)), [jam.history]);
   useEffect(() => void loadFound().then(setFound), []);
   useEffect(() => void loadPlayLog().then(setPlayLog), []);
-  // Every chord that lands in the jam history is a habit.
+  // Every chord that lands in the jam history is a habit and play evidence (once per new chord; the history is capped,
+  // so the array identity, not its length, marks a new one). The evidence reads the settled keys, so a picked Cmaj7
+  // rolled up from C E G counts as the Cmaj7, not as the C major passing on the way; it is the picked chord's
+  // (stronger) event when the settled chord is the pick, the free one otherwise – one event per chord.
   useEffect(() => {
     const last = jam.history[jam.history.length - 1];
     if (!last) return;
+    const now = Date.now();
     setPlayLog((log) => {
-      const next = logChord(log, last, Date.now());
+      const next = logChord(log, last, now);
       if (next !== log) void savePlayLog(next);
       return next;
     });
-  }, [jam.history.length]);
+    const pcs = pick ? new Set(chordType(pick.typeId).formula.map((d) => toPc(pick.rootPc + degreeSemitones(d)))) : null;
+    const isPick = !!(pick && pcs && jam.chord && jam.chord.rootPc === pick.rootPc && jam.chordMidis.every((m) => pcs.has(toPc(m))));
+    onPlay(jamEvent(jam.chordMidis, now, isPick, padFor(pads, jam.chordMidis) !== null));
+  }, [jam.history]);
   // A kept chord shown from memory steps aside when keys are pressed; a picked suggestion stays until unpicked.
   useEffect(() => { if (midi.held.length) setShown(null); }, [midi.held.length]);
 
@@ -191,7 +200,7 @@ export function ChordMonitor({ settings, onSettings, pads, onPads, onTrain, onEx
             : mode === 'chords' && fn && key && (live || c) ? <><b>{fn.roman}</b> in {keyName(key.tonic, key.mode, style)} · {fn.role}</>
             : inversionLine ? inversionLine
             : midi.held.length || shown ? ' '
-            : midi.devices.length ? 'Taste, Akkord oder Pad drücken' : 'Kein Keyboard – am FLkey anschließen oder koppeln'}
+            : midi.devices.length ? 'Taste, Akkord oder Pad drücken' : 'Kein Keyboard – FLkey anschließen, koppeln oder FL Studio über loopMIDI schicken'}
         </div>
         <p class="meta" data-testid="chord-notes">{padNo !== null ? `Pad ${padNo + 1}  ·  ` : ''}{heldLine || (pick && pickNamed && !live ? chordTones(pickNamed).map((n, i) => `${showNote(n, style)} (${showDegree(degreeToString(pickNamed.type.formula[i]))})`).join('  ·  ') : shown ? shown.midis.map((m) => noteOf(toPc(m))).join('  ·  ') : '')}</p>
 

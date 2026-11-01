@@ -42,12 +42,30 @@ export function generateExercise<P = unknown, S = unknown>(
   return { id: `${family.id}#${s}`, family: family.id, seed: s, modes: family.modes, skills, context, params, solution };
 }
 
-const RATING_CORRECT: Record<SelfRating, boolean> = { miss: false, found: true, instant: true };
+const RATING_CORRECT: Record<SelfRating, boolean> = { miss: false, near: false, found: true, instant: true };
 
-/** Self-ratings are taken at face value; everything else goes through the family's own check. */
+/** Partial credit of a self-rated "≈ Fast"; mirrors ModelConfig.nearCredit. */
+const NEAR_CREDIT = 0.25;
+
+/**
+ * Self-ratings are taken at face value; everything else goes through the family's own check.
+ * Wrong answers carry a diagnosis when one is known: 'near' from the rating itself (with the
+ * family's confusables as nudge), auto-checked misses from the family's `diagnose`. `check()`
+ * output is otherwise untouched, and `error` is never present on a correct evaluation.
+ */
 export function evaluate(ex: Exercise, response: Response): Evaluation {
-  if (response.kind === 'self') return { correct: RATING_CORRECT[response.rating], rating: response.rating };
-  return getFamily(ex.family).check(ex, response);
+  if (response.kind === 'self') {
+    const evaluation: Evaluation = { correct: RATING_CORRECT[response.rating], rating: response.rating };
+    if (response.rating === 'near') {
+      evaluation.error = { kind: 'near', credit: NEAR_CREDIT, nudge: getFamily(ex.family).nearNeighbours?.(ex) ?? [] };
+    }
+    return evaluation;
+  }
+  const family = getFamily(ex.family);
+  const evaluation = family.check(ex, response);
+  if (evaluation.correct) return evaluation;
+  const error = family.diagnose?.(ex, response);
+  return error ? { ...evaluation, error } : evaluation;
 }
 
 export const solve = (ex: Exercise): AutoResponse => getFamily(ex.family).solve(ex);

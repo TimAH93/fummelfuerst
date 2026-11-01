@@ -144,6 +144,9 @@ button:disabled { opacity: 0.4; cursor: default; }
 
 /* ── Practice ─────────────────────────────────────────── */
 .question { text-align: center; display: flex; flex-direction: column; gap: 10px; padding-top: 2vh; }
+.question .quiet { align-self: center; }
+/* A review pick is labelled, never silent: the eyebrow names the drill it comes from. */
+.question .eyebrow.review { font-size: 18px; color: var(--accent); }
 .target { font-size: clamp(96px, 18vw, 220px); font-weight: 800; line-height: 1; letter-spacing: -0.02em; }
 .practice .target { font-size: clamp(72px, 13vw, 180px); }
 .context { font-size: clamp(28px, 4vw, 44px); color: var(--text); opacity: 0.85; }
@@ -177,13 +180,19 @@ button:disabled { opacity: 0.4; cursor: default; }
 
 .actions { margin-top: auto; display: flex; flex-direction: column; align-items: center; gap: 14px; }
 .focus .actions { margin-top: 0; flex-direction: row; flex-wrap: wrap; justify-content: center; }
-.rate { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; width: min(1000px, 100%); }
+.rate { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; width: min(1000px, 100%); }
 .rate-btn { min-height: 88px; font-size: 26px; font-weight: 700; border-radius: var(--radius); border: 2px solid var(--line); background: var(--surface); }
 .rate-btn.miss { color: var(--off); border-color: var(--off); }
+.rate-btn.near { color: var(--off); }
 .rate-btn.instant { color: var(--ok); border-color: var(--ok); }
+/* The 'found' rating shares its class name with the jam screen's .found list; keep the label centred. */
+.rate .rate-btn { display: flex; flex-direction: row; align-items: center; justify-content: center; gap: 0; }
 .verdict { margin: 0; font-size: 30px; font-weight: 700; }
 .verdict.ok { color: var(--ok); }
 .verdict.off { color: var(--off); }
+/* One short clause under the verdict: amber, never red – it explains, it does not scold. */
+.feedback { margin: 0; font-size: clamp(20px, 2.4vw, 26px); color: var(--off); text-align: center; }
+.keys .meta.pad-hint { color: var(--off); }
 
 /* ── Keys ─────────────────────────────────────────────── */
 .keys { width: 100%; max-width: 1400px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 8px; }
@@ -489,9 +498,9 @@ textarea.field-input { resize: vertical; }
 .cents { font-size: clamp(40px, 6vw, 64px); font-weight: 700; min-height: 1.2em; }
 
 
-/* Phone: tighter controls so three rating buttons fit side by side. */
+/* Phone: tighter controls so the rating buttons fit – two by two on a narrow screen. */
 @media (max-width: 700px) {
-  .rate { gap: 8px; }
+  .rate { gap: 8px; grid-template-columns: repeat(2, 1fr); }
   .rate-btn { min-height: 76px; font-size: 19px; min-width: 0; padding: 0 6px; }
   .primary { min-width: 100%; font-size: 24px; }
   .chips { grid-template-columns: repeat(4, 1fr); gap: 8px; }

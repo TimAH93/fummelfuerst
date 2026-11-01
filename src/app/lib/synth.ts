@@ -54,6 +54,29 @@ export async function playChord(midis: number[], seconds = 2.2): Promise<void> {
 }
 
 /**
+ * Sound prompts for the help levels: pitch groups one after another, `gapMs` apart – a single
+ * note, from → target, or one chord. Must follow a tap (autoplay rules).
+ */
+export async function playNotes(groups: number[][], gapMs = 600): Promise<void> {
+  const c = await context();
+  stopPlayback();
+  const master = c.createGain();
+  master.gain.value = 0.8;
+  const lp = c.createBiquadFilter();
+  lp.type = 'lowpass';
+  lp.frequency.value = 2600;
+  master.connect(lp).connect(c.destination);
+  const start = c.currentTime + 0.03;
+  const seconds = Math.max(1.2, gapMs / 1000) + 0.6;
+  groups.forEach((midis, i) => {
+    const at = start + (i * gapMs) / 1000;
+    const per = 0.9 / Math.sqrt(Math.max(1, midis.length));
+    [...midis].sort((a, b) => a - b).forEach((m, k) => voice(c, m, at + k * 0.025, seconds, per, master));
+  });
+  playing = { stop: () => { master.gain.setTargetAtTime(0, c.currentTime, 0.03); } };
+}
+
+/**
  * Chords one after another; `beats` per chord at `bpm`, looped `times`. Calls `onChord(index)`
  * as each one starts (-1 at the end) so the screen can follow along.
  */

@@ -1,4 +1,4 @@
-import { Arrangement, Attempt, KeyMode, LearnerState, PadBank, Part, PlayEntry, SessionEntry, Stuck, TrackId, emptyBank, emptyState, parseState } from '../../core';
+import { Arrangement, Attempt, KeyMode, LearnerState, PadBank, Part, PlayEntry, SCHEMA_VERSION, SessionEntry, Stuck, TrackId, emptyBank, emptyState, parseState } from '../../core';
 
 /** Local persistence: one IndexedDB database, a key-value store plus an append-only attempt log. */
 const DB_NAME = 'fummelfuerst';
@@ -51,13 +51,53 @@ async function tx<T>(store: string, mode: IDBTransactionMode, fn: (s: IDBObjectS
   });
 }
 
+/**
+ * Loads the learner state. Anything this build will not keep as it is gets backed up first,
+ * before parsing: the untouched raw string goes under `learner.v${old}` – or `learner.unreadable`
+ * when it is not JSON – written once, never overwritten. Then an older schema is migrated and
+ * saved back. A state that cannot be parsed falls back to emptyState(); the first save then
+ * replaces 'learner', but the backup keeps the only copy of what was there.
+ */
 export async function loadState(): Promise<LearnerState> {
+  let raw: string | undefined;
   try {
-    const raw = await tx<string | undefined>('kv', 'readonly', (s) => s.get('learner'));
-    return raw ? parseState(raw) : emptyState();
+    raw = await tx<string | undefined>('kv', 'readonly', (s) => s.get('learner'));
   } catch {
     return emptyState();
   }
+  if (!raw) return emptyState();
+  const stored = raw;
+  let old: unknown;
+  let json = true;
+  try {
+    old = (JSON.parse(stored) as { schemaVersion?: unknown }).schemaVersion;
+  } catch {
+    json = false;
+  }
+  let backedUp = true;
+  if (!json || old !== SCHEMA_VERSION) {
+    try {
+      const backupKey = json ? `learner.v${String(old)}` : 'learner.unreadable';
+      const existing = await tx<string | undefined>('kv', 'readonly', (s) => s.get(backupKey));
+      if (existing === undefined) await tx('kv', 'readwrite', (st) => st.put(stored, backupKey));
+    } catch {
+      backedUp = false;
+    }
+  }
+  let state: LearnerState;
+  try {
+    state = parseState(stored);
+  } catch {
+    return emptyState();
+  }
+  if (old !== SCHEMA_VERSION && backedUp) {
+    try {
+      await saveState(state);
+    } catch {
+      // Persistence failed: the migrated state still serves this session; the old string stays intact.
+    }
+  }
+  return state;
 }
 
 export const saveState = (s: LearnerState): Promise<IDBValidKey> => tx('kv', 'readwrite', (st) => st.put(JSON.stringify(s), 'learner'));
@@ -75,6 +115,15 @@ export const saveSettings = (s: Settings): Promise<IDBValidKey> => tx('kv', 'rea
 
 /** Raw attempts are kept for stage 7: tuning the model against real data. */
 export const logAttempt = (a: Attempt): Promise<IDBValidKey> => tx('attempts', 'readwrite', (st) => st.add(a));
+
+/** Every logged attempt in insertion order, for export. */
+export async function exportAttempts(): Promise<Attempt[]> {
+  try {
+    return (await tx<Attempt[]>('attempts', 'readonly', (st) => st.getAll())) ?? [];
+  } catch {
+    return [];
+  }
+}
 
 /** Song brief draft: kept so the brief survives closing the app between FL Studio sessions. */
 export interface BriefDraft {

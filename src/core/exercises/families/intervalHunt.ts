@@ -3,7 +3,7 @@ import { Degree, defaultDegree, degreeToString, intervalInfo, parseDegree, trans
 import { toPc } from '../../theory/pitch';
 import { Note, noteName } from '../../theory/spelling';
 import { assertFocus, drillSpellings, stringNo } from '../common';
-import { ExerciseFamily, checkPositions } from '../types';
+import { Diagnosis, ExerciseFamily, checkPositions } from '../types';
 
 export type Direction = 'up' | 'down';
 
@@ -32,6 +32,12 @@ export interface IntervalHuntFocus {
 }
 
 const MAX_TRIES = 500;
+
+/** Skill id of an interval between two strings (guitarist's numbers); nudges use the same template. */
+const intervalSkill = (semitones: number, direction: Direction, from: number, to: number): string =>
+  `interval:${intervalInfo(semitones).degree}/${direction}/strings:${from}-${to}`;
+
+const other = (): Diagnosis => ({ kind: 'other', credit: 0 });
 
 /**
  * Interval shapes are about the hand's grid, so the open string counts as fret 0 here:
@@ -81,9 +87,7 @@ export const intervalHunt: ExerciseFamily<IntervalHuntParams, IntervalHuntSoluti
       return {
         params: { from, fromNote, semitones, direction, targetString: position.string, degree },
         solution: { position, note: target },
-        skills: [
-          `interval:${intervalInfo(semitones).degree}/${direction}/strings:${stringNo(tuning, fromString)}-${stringNo(tuning, position.string)}`,
-        ],
+        skills: [intervalSkill(semitones, direction, stringNo(tuning, fromString), stringNo(tuning, position.string))],
       };
     }
     throw new Error(`interval-hunt: no in-position answer for focus ${JSON.stringify(focus)}`);
@@ -105,7 +109,7 @@ export const intervalHunt: ExerciseFamily<IntervalHuntParams, IntervalHuntSoluti
             }
             if (!feasible) continue;
             out.push({
-              skill: `interval:${intervalInfo(semitones).degree}/${direction}/strings:${stringNo(tuning, fromString)}-${stringNo(tuning, targetString)}`,
+              skill: intervalSkill(semitones, direction, stringNo(tuning, fromString), stringNo(tuning, targetString)),
               focus: { semitones, direction, fromString, targetString },
             });
           }
@@ -126,6 +130,54 @@ export const intervalHunt: ExerciseFamily<IntervalHuntParams, IntervalHuntSoluti
   },
 
   solve: (ex) => ({ kind: 'positions', positions: [ex.solution.position] }),
+
+  // ── Diagnosis ──
+
+  /**
+   * The first wrong position decides. Direction first (the interval the other way, on any
+   * string – for a tritone this also covers the octave below on the target string), then on
+   * the target string an octave or a semitone off, then the exact pitch on another string.
+   */
+  diagnose(ex, r) {
+    if (r.kind !== 'positions') return other();
+    const { tuning, range } = ex.context;
+    const { from, semitones, direction, targetString } = ex.params;
+    const base = pitchAt(tuning, from);
+    const step = direction === 'up' ? semitones : -semitones;
+    const wanted = base + step;
+    const isRight = (p: FretPos): boolean =>
+      p.string === targetString && p.fret >= range.minFret && p.fret <= range.maxFret && pitchAt(tuning, p) === wanted;
+    const wrong = r.positions.find((p) => !isRight(p));
+    if (!wrong) return other();
+    const pitch = pitchAt(tuning, wrong);
+    const a = stringNo(tuning, from.string);
+    const b = stringNo(tuning, targetString);
+    if (pitch === base - step) {
+      return { kind: 'direction', credit: 0.25, nudge: [intervalSkill(semitones, direction === 'up' ? 'down' : 'up', a, b)] };
+    }
+    if (wrong.string === targetString) {
+      if (Math.abs(pitch - wanted) === 12) return { kind: 'octave', credit: 0.5 };
+      if (Math.abs(pitch - wanted) === 1) {
+        // Semitones actually played in the asked direction: 0 (unison) … 13 (minor ninth). Only a simple
+        // interval is named – intervalInfo would fold the ninth onto a minor second.
+        const played = direction === 'up' ? pitch - base : base - pitch;
+        const nudge = played >= 1 && played <= 12 ? [intervalSkill(played, direction, a, b)] : [];
+        return { kind: 'off-by-one', credit: 0.25, nudge, ...(played >= 0 && played <= 12 ? { detail: { degree: intervalInfo(played).degree } } : {}) };
+      }
+      return other();
+    }
+    if (pitch === wanted) return { kind: 'wrong-string', credit: 0.5, detail: { string: stringNo(tuning, wrong.string) } };
+    return other();
+  },
+
+  /** "≈ Fast": the intervals a semitone smaller and larger on the same string pair. */
+  nearNeighbours(ex) {
+    const { from, semitones, direction, targetString } = ex.params;
+    const t = ex.context.tuning;
+    return [semitones - 1, semitones + 1]
+      .filter((s) => s >= 1 && s <= 12)
+      .map((s) => intervalSkill(s, direction, stringNo(t, from.string), stringNo(t, targetString)));
+  },
 
   describe: (ex) => {
     const { from, fromNote, semitones, direction, targetString, degree } = ex.params;

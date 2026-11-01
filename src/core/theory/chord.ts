@@ -57,6 +57,15 @@ export const chordType = (id: string): ChordType => {
   return t;
 };
 
+/**
+ * The next simpler chord type with the same colour: what a grip falls back to when the full
+ * chord has no easy shape, and what a shell voicing on the keys still proves (maj9 → maj7,
+ * m9 → m7, the dominant colours → dom7, the diminished family → dim).
+ */
+export const SIMPLER_TYPE: Readonly<Record<string, string>> = {
+  maj9: 'maj7', m9: 'm7', dom9: 'dom7', dom13: 'dom7', dom7s9: 'dom7', m7b5: 'dim', dim7: 'dim',
+};
+
 export interface Chord {
   root: Note;
   type: ChordType;

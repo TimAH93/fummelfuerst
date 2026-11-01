@@ -1,10 +1,11 @@
 import { FretPos } from '../../guitar/fretboard';
-import { chord, chordPcs, chordSymbol, chordToneNames } from '../../theory/chord';
+import { chord, chordPcs, chordSymbol, chordToneNames, identifyChordPcs } from '../../theory/chord';
+import { degreeToString } from '../../theory/interval';
 import { Midi, toPc } from '../../theory/pitch';
 import { Note } from '../../theory/spelling';
 import { INVERSION_NAMES, adjacentStringSets, findVoicings, tab } from '../../voicing/voicing';
-import { assertFocus, pickChordRoot, stringNo } from '../common';
-import { ExerciseFamily } from '../types';
+import { assertFocus, foreignDegree, pickChordRoot, stringNo } from '../common';
+import { Diagnosis, ExerciseFamily } from '../types';
 import { TRIAD_TYPES, TriadType } from './triadBuild';
 
 /**
@@ -35,6 +36,11 @@ export interface KeysChordFocus {
 const BASS_LOW = 57;
 
 const MAX_TRIES = 100;
+
+/** Skill id of a triad type and inversion on the keys; asides and nudges use the same template. */
+const keysSkill = (typeId: string, inversion: number): string => `keys:${typeId}/inv:${inversion}`;
+
+const other = (): Diagnosis => ({ kind: 'other', credit: 0 });
 
 export const keysChord: ExerciseFamily<KeysChordParams, KeysChordSolution, KeysChordFocus> = {
   id: 'keys-chord',
@@ -75,14 +81,14 @@ export const keysChord: ExerciseFamily<KeysChordParams, KeysChordSolution, KeysC
       return {
         params: { root, typeId, inversion },
         solution: { notes, tones: order.map((k) => chordToneNames(c)[k]), guitar },
-        skills: [`keys:${typeId}/inv:${inversion}`],
+        skills: [keysSkill(typeId, inversion)],
       };
     }
     throw new Error(`keys-chord: nothing spellable for focus ${JSON.stringify(focus)}`);
   },
 
   skillSpace: () =>
-    TRIAD_TYPES.flatMap((typeId) => [0, 1, 2].map((inversion) => ({ skill: `keys:${typeId}/inv:${inversion}`, focus: { typeId, inversion } }))),
+    TRIAD_TYPES.flatMap((typeId) => [0, 1, 2].map((inversion) => ({ skill: keysSkill(typeId, inversion), focus: { typeId, inversion } }))),
 
   // Pianists double notes, so doublings are fine: the pitch-class set must match and the bass must be right.
   check(ex, r) {
@@ -97,6 +103,43 @@ export const keysChord: ExerciseFamily<KeysChordParams, KeysChordSolution, KeysC
   },
 
   solve: (ex) => ({ kind: 'notes', midis: ex.solution.notes }),
+
+  // ── Diagnosis ──
+
+  /**
+   * Pitch-class set right but another chord tone in the bass (inversion, credited as an aside);
+   * all tones plus foreign ones (extra-tone); one tone short and nothing foreign (missing-tone);
+   * another three-note type over the asked root (wrong-type). Fewer than three notes is incomplete.
+   */
+  diagnose(ex, r) {
+    if (r.kind !== 'notes') return other();
+    if (r.midis.length < 3) return { kind: 'incomplete', credit: 0 };
+    const { root, typeId, inversion } = ex.params;
+    const c = chord(root, typeId);
+    const pcs = chordPcs(c);
+    const played = [...new Set(r.midis.map(toPc))];
+    const bassPc = toPc(Math.min(...r.midis));
+    const foreign = played.filter((p) => !pcs.includes(p));
+    const missing = pcs.filter((p) => !played.includes(p));
+    const asked = keysSkill(typeId, inversion);
+    if (foreign.length === 0 && missing.length === 0) {
+      const j = pcs.indexOf(bassPc);
+      if (j === inversion) return other();
+      const aside = keysSkill(typeId, j);
+      return { kind: 'inversion', credit: 0.5, aside, nudge: [asked, aside], detail: { inversion: j, note: chordToneNames(c)[j] } };
+    }
+    if (missing.length === 0) return { kind: 'extra-tone', credit: 0.5, detail: { degree: foreignDegree(root, foreign[0]) } };
+    if (foreign.length === 0 && missing.length === 1) {
+      return { kind: 'missing-tone', credit: 0.25, detail: { fn: degreeToString(c.type.formula[pcs.indexOf(missing[0])]) } };
+    }
+    const q = played.length === 3 ? identifyChordPcs(pcs[0], played) : undefined;
+    if (q && q.id !== typeId) {
+      const isTriad = (TRIAD_TYPES as readonly string[]).includes(q.id);
+      const aside = isTriad ? keysSkill(q.id, chordPcs(chord(root, q.id)).indexOf(bassPc)) : undefined;
+      return { kind: 'wrong-type', credit: 0, ...(aside ? { aside } : {}), nudge: aside ? [asked, aside] : [asked], detail: { type: q.id } };
+    }
+    return other();
+  },
 
   describe: (ex) => {
     const c = chord(ex.params.root, ex.params.typeId);

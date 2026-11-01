@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
-import { EMPTY_STATS, GOAL_LOOPS, Grid, Judgement, TimingStats, addJudgement, beatAt, chord, chordFromHeld, judgeChange, loopsInRow, pcToNote } from '../../core';
+import { EMPTY_STATS, GOAL_LOOPS, Grid, Judgement, PadBank, PlayEvent, TimingStats, addJudgement, beatAt, chord, chordFromHeld, judgeChange, loopsInRow, padFor, pcToNote, timingEvent } from '../../core';
 import { MetronomeHandle, startMetronome } from '../lib/metronome';
 import { useMidi } from '../lib/midi';
 import { showChord } from '../lib/names';
@@ -10,6 +10,10 @@ import { useWakeLock } from '../lib/wakeLock';
 interface Props {
   settings: Settings;
   onSettings: (s: Settings) => void;
+  /** Stored pads: a change played with a pad chord proves pad memory, not the skill. */
+  pads: PadBank;
+  /** Every judged chord change is light play evidence for the keys skill it shows, graded by the verdict. */
+  onPlay: (ev: PlayEvent) => void;
   onExit: () => void;
 }
 
@@ -21,7 +25,7 @@ const COLOUR: Record<Judgement['verdict'], string> = { genau: 'ok', früh: 'off'
  * Timing trainer – step 1 of the live-looping ladder: a click runs, every pad press is judged
  * against the bar line, four clean loops in a row pass the step.
  */
-export function Timing({ settings, onSettings, onExit }: Props) {
+export function Timing({ settings, onSettings, pads, onPlay, onExit }: Props) {
   useWakeLock();
   const [bpmText, setBpmText] = useState(String(settings.recBpm ?? 82));
   const [beatsPerChord, setBeatsPerChord] = useState(4);
@@ -33,6 +37,9 @@ export function Timing({ settings, onSettings, onExit }: Props) {
   const [error, setError] = useState('');
   const metro = useRef<MetronomeHandle | null>(null);
   const gridRef = useRef<Grid | null>(null);
+  /** Mirror of `stats` for the MIDI callback, so a judgement is folded and reported exactly once. */
+  const statsRef = useRef<TimingStats>(EMPTY_STATS);
+  const resetStats = () => { statsRef.current = EMPTY_STATS; setStats(EMPTY_STATS); };
   const onset = useRef<number | null>(null);
   const prevHeld = useRef<number[]>([]);
   const chordMidis = useRef<number[]>([]);
@@ -55,12 +62,19 @@ export function Timing({ settings, onSettings, onExit }: Props) {
     const j = judgeChange(g, at);
     const c = chordFromHeld(settled);
     setLast({ j, name: c ? showChord(chord(pcToNote(c.rootPc, 'flat'), c.typeId), settings.noteNames) : '' });
-    setStats((s) => addJudgement(s, j));
+    const prev = statsRef.current;
+    const next = addJudgement(prev, j);
+    // Accepted (a new slot): count it and let the learner model see the change; a re-hit of the same slot is neither.
+    if (next.lastSlot !== prev.lastSlot) {
+      statsRef.current = next;
+      setStats(next);
+      onPlay(timingEvent(settled, j.verdict, Date.now(), padFor(pads, settled) !== null));
+    }
   }, 3);
 
   const start = async () => {
     setError('');
-    setStats(EMPTY_STATS);
+    resetStats();
     setLast(null);
     try {
       const h = await startMetronome(bpm, (b) => setBeat(b), 1);
@@ -134,7 +148,7 @@ export function Timing({ settings, onSettings, onExit }: Props) {
           </div>
           {passed && <p class="eyebrow ok">Stufe 1 geschafft ✓</p>}
           <div class="row wrap center">
-            <button class="secondary" onClick={() => { setStats(EMPTY_STATS); setLast(null); }}>Zähler auf null</button>
+            <button class="secondary" onClick={() => { resetStats(); setLast(null); }}>Zähler auf null</button>
             <button class="primary" onClick={stop} data-testid="stop">■ Stopp</button>
           </div>
         </section>

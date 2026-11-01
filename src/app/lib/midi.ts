@@ -42,6 +42,8 @@ export function ensureLocalMidi(): void {
     if ((data[0] & 0x0f) === DRUM_CHANNEL) return;
     if (cmd === 0x90 && data[2] > 0) down.add(data[1]);
     else if (cmd === 0x80 || (cmd === 0x90 && data[2] === 0)) down.delete(data[1]);
+    // All Sound Off / All Notes Off: FL Studio sends these when playback stops mid-chord.
+    else if (cmd === 0xb0 && (data[1] === 120 || data[1] === 123)) down.clear();
     else return;
     setHeld('local', [...down].sort((a, b) => a - b));
   };
