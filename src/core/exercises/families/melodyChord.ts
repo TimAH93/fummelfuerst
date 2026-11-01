@@ -1,11 +1,11 @@
-import { chord, chordContains, chordSymbol } from '../../theory/chord';
+import { chord, chordContains, chordSymbol, degreeOverRoot, functionInChord } from '../../theory/chord';
 import { diatonicChordsContaining, harmonize } from '../../theory/harmony';
 import { degreeToString } from '../../theory/interval';
 import { Midi, toPc } from '../../theory/pitch';
 import { scale, scaleNotes } from '../../theory/scale';
 import { Note, noteName, notePc, parseNote } from '../../theory/spelling';
 import { MAJOR_TONICS, MINOR_TONICS, assertFocus } from '../common';
-import { ExerciseFamily } from '../types';
+import { Diagnosis, ExerciseFamily } from '../types';
 
 export type KeyMode = 'major' | 'naturalMinor';
 
@@ -44,6 +44,8 @@ export interface MelodyChordFocus {
 }
 
 const chipId = (degree: number): string => `deg:${degree}`;
+
+const other = (): Diagnosis => ({ kind: 'other', credit: 0 });
 
 export const melodyChord: ExerciseFamily<MelodyChordParams, MelodyChordSolution, MelodyChordFocus> = {
   id: 'melody-chord',
@@ -111,6 +113,33 @@ export const melodyChord: ExerciseFamily<MelodyChordParams, MelodyChordSolution,
   },
 
   solve: (ex) => ({ kind: 'choices', ids: ex.solution.chords.map((c) => c.id) }),
+
+  // ── Diagnosis ──
+
+  /**
+   * A chip that does not contain the note wins (extra-chord, with the note's degree over that
+   * root); otherwise fitting chords were left out (missed-chord, credit by the share found).
+   * Both are recomputed from the chips' chord tones, like check().
+   */
+  diagnose(ex, r) {
+    if (r.kind !== 'choices') return other();
+    const { note, choices } = ex.params;
+    const pc = notePc(note);
+    const fits = (c: ChordChoice): boolean => chordContains(chord(c.root, c.typeId), pc);
+    const given = [...new Set(r.ids)];
+    const extra = choices.find((c) => given.includes(c.id) && !fits(c));
+    if (extra) {
+      const degree = degreeToString(degreeOverRoot(chord(extra.root, extra.typeId), note));
+      return { kind: 'extra-chord', credit: 0.25, detail: { symbol: extra.symbol, degree } };
+    }
+    if (given.some((id) => !choices.some((c) => c.id === id))) return other();
+    const right = choices.filter(fits);
+    const missed = right.find((c) => !given.includes(c.id));
+    if (!missed) return other();
+    const hits = right.filter((c) => given.includes(c.id)).length;
+    const fn = degreeToString(functionInChord(chord(missed.root, missed.typeId), pc)!);
+    return { kind: 'missed-chord', credit: (0.5 * hits) / right.length, detail: { symbol: missed.symbol, fn } };
+  },
 
   describe: (ex) => {
     const { tonic, mode, note } = ex.params;

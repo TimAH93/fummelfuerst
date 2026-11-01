@@ -1,10 +1,12 @@
 import { FretPos, pcAt, pitchAt } from '../../guitar/fretboard';
-import { Chord, chord, chordPcs, chordSymbol, chordToneNames } from '../../theory/chord';
+import { Chord, chord, chordPcs, chordSymbol, chordToneNames, functionInChord, identifyChordPcs } from '../../theory/chord';
+import { degreeToString } from '../../theory/interval';
 import { toPc } from '../../theory/pitch';
 import { Note, noteName } from '../../theory/spelling';
 import { INVERSION_NAMES, adjacentStringSets, findVoicings, isShape, tab } from '../../voicing/voicing';
 import { assertFocus, drillSpellings, pickChordRoot, stringNo } from '../common';
-import { ExerciseFamily } from '../types';
+import { Diagnosis, ExerciseFamily } from '../types';
+import { Tuning } from '../../guitar/tuning';
 
 export const TRIAD_TYPES = ['maj', 'min', 'dim', 'aug'] as const;
 export type TriadType = (typeof TRIAD_TYPES)[number];
@@ -33,6 +35,14 @@ export interface TriadBuildFocus {
 }
 
 const MAX_TRIES = 200;
+
+/** String set as written in skill ids: guitarist's numbers, low string first ('4-3-2'). */
+const setLabel = (tuning: Tuning, strings: number[]): string => strings.map((s) => stringNo(tuning, s)).join('-');
+
+/** Skill id of a triad type and inversion on a string set; asides and nudges use the same template. */
+const triadSkill = (typeId: string, inversion: number, set: string): string => `triad:${typeId}/inv:${inversion}/strings:${set}`;
+
+const other = (): Diagnosis => ({ kind: 'other', credit: 0 });
 
 export const triadBuild: ExerciseFamily<TriadBuildParams, TriadBuildSolution, TriadBuildFocus> = {
   id: 'triad-build',
@@ -67,7 +77,7 @@ export const triadBuild: ExerciseFamily<TriadBuildParams, TriadBuildSolution, Tr
             tones: v.notes.map((n) => noteName(n.note)),
           })),
         },
-        skills: [`triad:${typeId}/inv:${inversion}/strings:${strings.map((s) => stringNo(tuning, s)).join('-')}`],
+        skills: [triadSkill(typeId, inversion, setLabel(tuning, strings))],
       };
     }
     throw new Error(`triad-build: nothing playable for focus ${JSON.stringify(focus)}`);
@@ -87,7 +97,7 @@ export const triadBuild: ExerciseFamily<TriadBuildParams, TriadBuildSolution, Tr
             }),
           );
           if (feasible) out.push({
-            skill: `triad:${typeId}/inv:${inversion}/strings:${strings.map((s) => stringNo(tuning, s)).join('-')}`,
+            skill: triadSkill(typeId, inversion, setLabel(tuning, strings)),
             focus: { typeId, inversion, lowString: strings[0] },
           });
         }
@@ -116,10 +126,74 @@ export const triadBuild: ExerciseFamily<TriadBuildParams, TriadBuildSolution, Tr
 
   solve: (ex) => ({ kind: 'positions', positions: ex.solution.shapes[0].positions }),
 
+  // ── Diagnosis ──
+
+  /**
+   * With the right three tones: on other strings (wrong-set), too wide (span) or with another
+   * chord tone in the bass (inversion). Otherwise another triad over the same root (wrong-type)
+   * before two-of-three (missing-tone), because every other triad on the root shares two tones.
+   * An aside is only given where the positions would pass that skill's own check.
+   */
+  diagnose(ex, r) {
+    if (r.kind !== 'positions') return other();
+    const given = r.positions.filter((p, i) => r.positions.findIndex((q) => q.string === p.string && q.fret === p.fret) === i);
+    if (given.length < 3) return { kind: 'incomplete', credit: 0 };
+    const { tuning, range, maxSpan } = ex.context;
+    const { root, typeId, inversion, strings } = ex.params;
+    const c = chord(root, typeId);
+    const pcs = chordPcs(c);
+    const set = setLabel(tuning, strings);
+    const asked = triadSkill(typeId, inversion, set);
+    const played = [...new Set(given.map((p) => pcAt(tuning, p)))];
+    const allTones = played.length === 3 && pcs.every((pc) => played.includes(pc));
+    const onSet = given.length === 3 && strings.every((s) => given.filter((p) => p.string === s).length === 1);
+    const bass = given.reduce((a, b) => (pitchAt(tuning, b) < pitchAt(tuning, a) ? b : a));
+    const bassPc = pcAt(tuning, bass);
+    const inRange = given.every((p) => p.fret >= range.minFret && p.fret <= range.maxFret);
+    const shapeOk = isShape(tuning, given, maxSpan);
+
+    if (allTones) {
+      const j = pcs.indexOf(bassPc);
+      if (!onSet) {
+        // The inversion actually built on three adjacent strings of the drill range is a catalog skill.
+        const playedStrings = given.map((p) => p.string).sort((x, y) => x - y);
+        const adjacent = given.length === 3 && playedStrings[1] === playedStrings[0] + 1 && playedStrings[2] === playedStrings[1] + 1;
+        const inDrill = !range.strings || playedStrings.every((s) => range.strings!.includes(s));
+        const aside = adjacent && inDrill && inRange && shapeOk ? triadSkill(typeId, j, setLabel(tuning, playedStrings)) : undefined;
+        return { kind: 'wrong-set', credit: 0.5, ...(aside ? { aside } : {}) };
+      }
+      if (j === inversion) return shapeOk ? other() : { kind: 'span', credit: 0.5 };
+      const aside = triadSkill(typeId, j, set);
+      return { kind: 'inversion', credit: 0.5, aside, nudge: [asked, aside], detail: { inversion: j, note: chordToneNames(c)[j] } };
+    }
+
+    const q = played.length === 3 ? identifyChordPcs(pcs[0], played) : undefined;
+    if (q && q.id !== typeId) {
+      const qc = chord(root, q.id);
+      const qPcs = chordPcs(qc);
+      const foreign = chordToneNames(qc).find((_, i) => !pcs.includes(qPcs[i])) ?? '';
+      const isTriad = (TRIAD_TYPES as readonly string[]).includes(q.id);
+      const aside = isTriad && onSet && inRange && shapeOk ? triadSkill(q.id, qPcs.indexOf(bassPc), set) : undefined;
+      return { kind: 'wrong-type', credit: 0, ...(aside ? { aside } : {}), nudge: aside ? [asked, aside] : [asked], detail: { type: q.id, note: foreign } };
+    }
+    if (pcs.filter((pc) => played.includes(pc)).length === 2) {
+      const missing = pcs.find((pc) => !played.includes(pc))!;
+      return { kind: 'missing-tone', credit: 0.25, detail: { fn: degreeToString(functionInChord(c, missing)!) } };
+    }
+    return other();
+  },
+
+  /** "≈ Fast": the other two inversions on the same string set. */
+  nearNeighbours(ex) {
+    const { typeId, inversion, strings } = ex.params;
+    const set = setLabel(ex.context.tuning, strings);
+    return [0, 1, 2].filter((j) => j !== inversion).map((j) => triadSkill(typeId, j, set));
+  },
+
   describe: (ex) => {
     const { root, typeId, inversion, strings } = ex.params;
     const c = chord(root, typeId);
-    return `${chordSymbol(c)} ${INVERSION_NAMES[inversion]} on strings ${strings.map((s) => stringNo(ex.context.tuning, s)).join('-')}` +
+    return `${chordSymbol(c)} ${INVERSION_NAMES[inversion]} on strings ${setLabel(ex.context.tuning, strings)}` +
       ` → ${ex.solution.shapes.map((s) => s.tab).join(' | ')}`;
   },
 };

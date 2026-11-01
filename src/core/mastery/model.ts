@@ -1,55 +1,67 @@
 import { Attempt, HelpLevel } from '../exercises/attempt';
+import { knowledge } from './belief';
+import { DEFAULT_MODEL, ModelConfig, RECENT_LENGTH } from './config';
+import { Evidence, evidenceOf, updateSkill } from './evidence';
+import { isLeafId } from './skillId';
 
 /**
- * Learner state: plain JSON, persisted as-is (IndexedDB later). Bump SCHEMA_VERSION
- * and add a migration whenever the shape changes.
+ * Learner state: plain JSON, persisted as-is (IndexedDB in the app). Bump SCHEMA_VERSION and
+ * add a migration (migrate.ts) whenever the shape changes. Only leaf skills are stored;
+ * group values (help fading) are computed on read.
  */
-export const SCHEMA_VERSION = 1;
+export const SCHEMA_VERSION = 2;
 
 export interface SkillStats {
-  /** Moving accuracy, 0..1 (EMA, α = ALPHA). */
-  acc: number;
-  /** Moving tempo score, 0..1 (1 = at or under the family's fast time). */
-  tempo: number;
-  /** Attempts seen. */
+  /** Weighted successes (direct evidence only), windowed by cfg.nMax / cfg.nLapse. */
+  a: number;
+  /** Weighted failures (direct evidence only), windowed by cfg.nMax / cfg.nLapse. */
+  b: number;
+  /** Quiz attempts. Aside and play evidence never count. */
   n: number;
-  /** Leitner box 0..5. */
-  box: number;
-  /** Epoch ms when the skill is due again. */
-  due: number;
-  lastSeen: number;
+  /** Fluency 0..1: EMA over correct answers (instant 1, found 0.5, timed by latency). Starts at 0.5. */
+  flu: number;
+  /** Memory half-life in ms; cfg.hl0 after the first success. */
+  hl: number;
+  /** Epoch ms of the last evidence of any kind (0 = none). */
+  last: number;
+  /** Epoch ms of the last full success (x = 1), any kind. Recall is measured from here. */
+  lastOk: number;
+  /** Quiz successes after a gap ≥ cfg.heldGap, capped at cfg.heldMax; −1 per quiz miss, never below 0. */
+  held: number;
+  /** Consecutive quiz misses since the last quiz success, capped at cfg.lapseMax. */
+  lapses: number;
 }
 
 export interface HelpState {
   level: HelpLevel;
   /** Consecutive good answers at this level. */
   good: number;
-  /** Consecutive misses. */
+  /** Weighted misses in a row (a near miss counts cfg.nearMissWeight). */
   misses: number;
 }
 
 export interface LearnerState {
-  schemaVersion: typeof SCHEMA_VERSION;
-  /** Leaf skills and every ancestor ('interval', 'interval:b3', 'interval:b3/up', …). */
+  schemaVersion: 2;
+  /** Leaf skills only – ancestors are no longer stored; group values are computed on read. */
   skills: Record<string, SkillStats>;
   /** Help level per skill group (first segment, e.g. 'interval:b3', 'triad:maj'). */
   help: Record<string, HelpState>;
-  /** Most recent leaf skills, newest first. */
+  /** Most recent leaf skills, newest first, ≤ RECENT_LENGTH. */
   recent: string[];
   /** Drill id → epoch ms when it first became comfortable. */
   passed: Record<string, number>;
+  /** Confusable skills to bring forward: skill id → epoch ms until which it is boosted. ≤ cfg.boostMax entries. */
+  boost: Record<string, number>;
+  /** Epoch ms of the last quiz attempt; drives the welcome-back warm-up. */
+  lastActive: number;
+  /** Review picks still owed in the current comeback session. */
+  warmup: number;
 }
 
-export const ALPHA = 0.3;
-const MIN = 60_000;
-const DAY = 86_400_000;
-/** Review interval per Leitner box: 0, 10 min, 1 d, 3 d, 7 d, 21 d. */
-export const LEITNER_MS = [0, 10 * MIN, DAY, 3 * DAY, 7 * DAY, 21 * DAY] as const;
-export const RECENT_LENGTH = 5;
-/** A new skill starts undecided rather than at zero. */
-const PRIOR = 0.5;
+export const emptyState = (): LearnerState =>
+  ({ schemaVersion: 2, skills: {}, help: {}, recent: [], passed: {}, boost: {}, lastActive: 0, warmup: 0 });
 
-export const emptyState = (): LearnerState => ({ schemaVersion: SCHEMA_VERSION, skills: {}, help: {}, recent: [], passed: {} });
+// ── Skill ids and groups ──
 
 /** 'interval:b3/up/strings:5-4' → ['interval', 'interval:b3', 'interval:b3/up', 'interval:b3/up/strings:5-4']. */
 export function skillPath(id: string): string[] {
@@ -62,93 +74,97 @@ export function skillPath(id: string): string[] {
 /** The skill group that carries a help level: the first segment ('interval:b3'). */
 export const helpGroup = (id: string): string => id.split('/')[0];
 
-/** Grows with evidence: 2 attempts → 0.5, 6 → 0.88, 10 → 0.97. */
-export const confidence = (n: number): number => 1 - 0.5 ** (n / 2);
+/** Compat aliases of the belief reads (select.ts and curriculum.ts import `mastery` from here). */
+export { knowledge, mastery } from './belief';
 
-/** Mastery = accuracy × confidence × tempo, 0..1. Unseen skills have 0. */
-export const mastery = (s: SkillStats | undefined): number => (s ? s.acc * confidence(s.n) * s.tempo : 0);
+// ── Help levels ──
 
-/** Tempo score of one answer: self-ratings map directly, timed answers interpolate fast → slow. */
-export function tempoScore(a: Attempt, tempo: { fastMs: number; slowMs: number }): number {
-  if (!a.evaluation.correct) return 0;
-  if (a.evaluation.rating === 'instant') return 1;
-  if (a.evaluation.rating === 'found') return 0.5;
-  const t = (tempo.slowMs - a.latencyMs) / (tempo.slowMs - tempo.fastMs);
-  return Math.max(0, Math.min(1, t));
+/** Help thresholds: group knowledge needed to drop to level 1, 2, 3 (alias of DEFAULT_MODEL.helpUp). */
+export const HELP_UP: readonly number[] = DEFAULT_MODEL.helpUp;
+/** Consecutive good answers needed before help is reduced (alias of DEFAULT_MODEL.helpUpStreak). */
+export const HELP_UP_STREAK = DEFAULT_MODEL.helpUpStreak;
+/** Weighted misses that bring help back (alias of DEFAULT_MODEL.helpDownMisses). */
+export const HELP_DOWN_MISSES = DEFAULT_MODEL.helpDownMisses;
+
+/** What the help hysteresis sees of one quiz answer. */
+export interface HelpOutcome {
+  /** x === 1. */
+  correct: boolean;
+  /** Correct and reasonably fluent (f ≥ 0.5): found counts, a slow timed answer does not. */
+  good: boolean;
+  /** 1 for a plain miss, cfg.nearMissWeight for a near miss. */
+  missWeight: number;
 }
 
-const ema = (old: number, x: number): number => ALPHA * x + (1 - ALPHA) * old;
-
-/** Good = right and reasonably quick. Only good answers move a skill up a box. */
-const isGood = (a: Attempt, tempo: number): boolean => a.evaluation.correct && tempo >= 0.5;
-
-function updateStats(s: SkillStats | undefined, a: Attempt, tempo: number, leaf: boolean): SkillStats {
-  const prev = s ?? { acc: PRIOR, tempo: PRIOR, n: 0, box: 0, due: a.at, lastSeen: a.at };
-  const next: SkillStats = {
-    ...prev,
-    acc: ema(prev.acc, a.evaluation.correct ? 1 : 0),
-    tempo: ema(prev.tempo, tempo),
-    n: prev.n + 1,
-    lastSeen: a.at,
-  };
-  if (leaf) {
-    // A box is earned only when the skill was due: ten right answers in one sitting
-    // prove short-term memory, not that it sticks.
-    if (!a.evaluation.correct) next.box = 0;
-    else if (isGood(a, tempo) && a.at >= prev.due) next.box = Math.min(5, prev.box + 1);
-    else next.box = Math.max(1, prev.box);
-    // Early practice keeps the schedule; only a due or wrong answer reschedules.
-    if (!s || !a.evaluation.correct || a.at >= prev.due) next.due = a.at + LEITNER_MS[next.box];
-  }
-  return next;
+/** Mean knowledge over the stored leaves of a group that have quiz evidence (ids sorted); 0 if none. */
+export function groupMastery(skills: Record<string, SkillStats>, group: string): number {
+  const ids = Object.keys(skills).filter((id) => (id === group || id.startsWith(`${group}/`)) && skills[id].n > 0).sort();
+  if (ids.length === 0) return 0;
+  return ids.reduce((sum, id) => sum + knowledge(skills[id]), 0) / ids.length;
 }
-
-/** Help thresholds: mastery of the group needed to drop to level 1, 2, 3. */
-export const HELP_UP: readonly number[] = [0.5, 0.65, 0.8];
-/** Consecutive good answers needed before help is reduced. */
-export const HELP_UP_STREAK = 4;
-/** Consecutive misses that bring help back. */
-export const HELP_DOWN_MISSES = 2;
 
 /**
- * Hysteresis: help fades only after a streak *and* enough mastery, and returns only after
- * repeated misses – so one slip or one lucky answer never flips the level.
+ * Hysteresis: help fades only after a streak *and* enough group knowledge, and returns only
+ * after repeated misses – so one slip or one lucky answer never flips the level.
  */
-export function updateHelp(h: HelpState | undefined, a: Attempt, tempo: number, groupMastery: number): HelpState {
+export function updateHelp(h: HelpState | undefined, o: HelpOutcome, groupMastery: number, cfg: ModelConfig = DEFAULT_MODEL): HelpState {
   const prev = h ?? { level: 0 as HelpLevel, good: 0, misses: 0 };
-  if (!a.evaluation.correct) {
-    const misses = prev.misses + 1;
-    if (misses >= HELP_DOWN_MISSES && prev.level > 0) return { level: (prev.level - 1) as HelpLevel, good: 0, misses: 0 };
+  if (!o.correct) {
+    const misses = prev.misses + o.missWeight;
+    if (misses >= cfg.helpDownMisses && prev.level > 0) return { level: (prev.level - 1) as HelpLevel, good: 0, misses: 0 };
     return { ...prev, good: 0, misses };
   }
-  if (!isGood(a, tempo)) return { ...prev, misses: 0 };
+  if (!o.good) return { ...prev, misses: 0 };
   const good = prev.good + 1;
-  if (prev.level < 3 && good >= HELP_UP_STREAK && groupMastery >= HELP_UP[prev.level]) {
+  if (prev.level < 3 && good >= cfg.helpUpStreak && groupMastery >= cfg.helpUp[prev.level]) {
     return { level: (prev.level + 1) as HelpLevel, good: 0, misses: 0 };
   }
   return { ...prev, good, misses: 0 };
 }
 
-/** Pure update: returns a new state; the old one is untouched. */
-export function applyAttempt(state: LearnerState, a: Attempt, tempo: { fastMs: number; slowMs: number }): LearnerState {
-  const t = tempoScore(a, tempo);
-  const skills = { ...state.skills };
-  const help = { ...state.help };
-  const recent = [...state.recent];
-  for (const leafId of a.skills) {
-    const path = skillPath(leafId);
-    path.forEach((id, i) => (skills[id] = updateStats(skills[id], a, t, i === path.length - 1)));
-    const group = helpGroup(leafId);
-    help[group] = updateHelp(help[group], a, t, mastery(skills[group]));
-    recent.unshift(leafId);
-  }
-  return { ...state, skills, help, recent: [...new Set(recent)].slice(0, RECENT_LENGTH) };
-}
-
 export const helpLevelFor = (state: LearnerState, skill: string): HelpLevel => state.help[helpGroup(skill)]?.level ?? 0;
 
-export function parseState(json: string): LearnerState {
-  const s = JSON.parse(json) as LearnerState;
-  if (s.schemaVersion !== SCHEMA_VERSION) throw new Error(`Unsupported learner state version ${String(s.schemaVersion)}`);
-  return s;
+// ── Reducers ──
+
+/** Fold evidence into the skills only; evidence worth nothing (w ≤ 0) carries no information and is skipped. */
+export function applyEvidence(state: LearnerState, evs: Evidence[], cfg: ModelConfig = DEFAULT_MODEL): LearnerState {
+  const skills = { ...state.skills };
+  for (const ev of evs) if (ev.w > 0) skills[ev.skill] = updateSkill(skills[ev.skill], ev, cfg);
+  return { ...state, skills };
 }
+
+/** Boost record after one attempt: expired entries dropped, nudged skills added, the cfg.boostMax latest kept. */
+function nextBoost(boost: Record<string, number>, nudge: string[] | undefined, at: number, cfg: ModelConfig): Record<string, number> {
+  const live = Object.entries(boost).filter(([, until]) => until > at);
+  const added = (nudge ?? []).filter(isLeafId).map((id): [string, number] => [id, at + cfg.boostMs]);
+  const merged = new Map<string, number>([...live, ...added]);
+  const kept = [...merged.entries()].sort((p, q) => q[1] - p[1]).slice(0, cfg.boostMax);
+  return Object.fromEntries(kept);
+}
+
+/** Pure update for one answered exercise: returns a new state; the old one is untouched. */
+export function applyAttempt(state: LearnerState, a: Attempt, tempo: { fastMs: number; slowMs: number }, cfg: ModelConfig = DEFAULT_MODEL): LearnerState {
+  // 1. evidence → skills
+  const evs = evidenceOf(a, tempo, cfg);
+  const { skills } = applyEvidence(state, evs, cfg);
+  // 2. help per asked leaf, from its quiz evidence and the updated group
+  const help = { ...state.help };
+  for (const leaf of a.skills) {
+    const ev = evs.find((e) => e.kind === 'quiz' && e.skill === leaf);
+    if (!ev) continue;
+    const group = helpGroup(leaf);
+    const outcome: HelpOutcome = { correct: ev.x === 1, good: ev.x === 1 && ev.f >= 0.5, missWeight: ev.missWeight };
+    help[group] = updateHelp(help[group], outcome, groupMastery(skills, group), cfg);
+  }
+  // 3. recent
+  const recent = [...new Set([...a.skills, ...state.recent])].slice(0, RECENT_LENGTH);
+  // 4. boost
+  const boost = nextBoost(state.boost, a.evaluation.error?.nudge, a.at, cfg);
+  // 5. warm-up bookkeeping
+  const warmup = state.lastActive > 0 && a.at - state.lastActive >= cfg.warmupGap ? cfg.warmupN - 1 : Math.max(0, state.warmup - 1);
+  return { ...state, skills, help, recent, boost, lastActive: a.at, warmup };
+}
+
+/** Review picks still owed: the first pick after a break counts, so a long gap means the full warm-up. */
+export const warmupLeft = (state: LearnerState, now: number, cfg: ModelConfig = DEFAULT_MODEL): number =>
+  state.lastActive > 0 && now - state.lastActive >= cfg.warmupGap ? cfg.warmupN : state.warmup;

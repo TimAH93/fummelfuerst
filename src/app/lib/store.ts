@@ -1,4 +1,4 @@
-import { Arrangement, Attempt, KeyMode, LearnerState, PadBank, Part, PlayEntry, SessionEntry, Stuck, TrackId, emptyBank, emptyState, parseState } from '../../core';
+import { Arrangement, Attempt, KeyMode, LearnerState, PadBank, Part, PlayEntry, SCHEMA_VERSION, SessionEntry, Stuck, TrackId, emptyBank, emptyState, parseState } from '../../core';
 
 /** Local persistence: one IndexedDB database, a key-value store plus an append-only attempt log. */
 const DB_NAME = 'fummelfuerst';
@@ -51,13 +51,38 @@ async function tx<T>(store: string, mode: IDBTransactionMode, fn: (s: IDBObjectS
   });
 }
 
+/**
+ * Loads the learner state. An older schema is migrated on read: the untouched raw string is kept
+ * under `learner.v${old}` (written once, never overwritten), then the migrated state is saved back.
+ * A state that cannot be parsed falls back to emptyState() without touching the stored string.
+ */
 export async function loadState(): Promise<LearnerState> {
+  let raw: string | undefined;
   try {
-    const raw = await tx<string | undefined>('kv', 'readonly', (s) => s.get('learner'));
-    return raw ? parseState(raw) : emptyState();
+    raw = await tx<string | undefined>('kv', 'readonly', (s) => s.get('learner'));
   } catch {
     return emptyState();
   }
+  if (!raw) return emptyState();
+  let state: LearnerState;
+  let old: unknown;
+  try {
+    old = (JSON.parse(raw) as { schemaVersion?: unknown }).schemaVersion;
+    state = parseState(raw);
+  } catch {
+    return emptyState();
+  }
+  if (old !== SCHEMA_VERSION) {
+    try {
+      const backupKey = `learner.v${String(old)}`;
+      const existing = await tx<string | undefined>('kv', 'readonly', (s) => s.get(backupKey));
+      if (existing === undefined) await tx('kv', 'readwrite', (st) => st.put(raw, backupKey));
+      await saveState(state);
+    } catch {
+      // Persistence failed: the migrated state still serves this session; the old string stays intact.
+    }
+  }
+  return state;
 }
 
 export const saveState = (s: LearnerState): Promise<IDBValidKey> => tx('kv', 'readwrite', (st) => st.put(JSON.stringify(s), 'learner'));
@@ -75,6 +100,15 @@ export const saveSettings = (s: Settings): Promise<IDBValidKey> => tx('kv', 'rea
 
 /** Raw attempts are kept for stage 7: tuning the model against real data. */
 export const logAttempt = (a: Attempt): Promise<IDBValidKey> => tx('attempts', 'readwrite', (st) => st.add(a));
+
+/** Every logged attempt in insertion order, for export. */
+export async function exportAttempts(): Promise<Attempt[]> {
+  try {
+    return (await tx<Attempt[]>('attempts', 'readonly', (st) => st.getAll())) ?? [];
+  } catch {
+    return [];
+  }
+}
 
 /** Song brief draft: kept so the brief survives closing the app between FL Studio sessions. */
 export interface BriefDraft {

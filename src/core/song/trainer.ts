@@ -45,6 +45,8 @@ export interface TrainerState {
   index: number;
   /** Hit per chord in this round. */
   hits: boolean[];
+  /** The keys that scored each hit this round ([] until hit); play evidence reads them per slot. */
+  hitMidis: Midi[][];
   cleanRounds: number;
   /** Index into VARIATIONS; stays at 0 until the target tempo is reached. */
   variation: number;
@@ -56,8 +58,11 @@ export interface TrainerState {
 
 export const DEFAULT_TRAINER: Omit<TrainerConfig, 'chords'> = { startBpm: 50, targetBpm: 90, stepBpm: 4, beatsPerChord: 4 };
 
+const noHits = (config: TrainerConfig): boolean[] => config.chords.map(() => false);
+const noMidis = (config: TrainerConfig): Midi[][] => config.chords.map(() => []);
+
 export function startTrainer(config: TrainerConfig): TrainerState {
-  return { config, bpm: config.startBpm, round: 1, index: 0, hits: config.chords.map(() => false), cleanRounds: 0, variation: 0, done: false, lastRound: null };
+  return { config, bpm: config.startBpm, round: 1, index: 0, hits: noHits(config), hitMidis: noMidis(config), cleanRounds: 0, variation: 0, done: false, lastRound: null };
 }
 
 /** The keys make the target chord: same root, every tone inside the chord, at least a triad. */
@@ -70,7 +75,7 @@ export function matchesChord(target: ProgChord, midis: Midi[]): boolean {
 
 export function onPlayed(s: TrainerState, midis: Midi[]): TrainerState {
   if (s.done || s.hits[s.index] || !matchesChord(s.config.chords[s.index], midis)) return s;
-  return { ...s, hits: s.hits.map((h, i) => (i === s.index ? true : h)) };
+  return { ...s, hits: s.hits.map((h, i) => (i === s.index ? true : h)), hitMidis: s.hitMidis.map((m, i) => (i === s.index ? [...midis] : m)) };
 }
 
 /** The click reached the next chord slot. At the wrap, the round is judged. */
@@ -88,7 +93,7 @@ export function onSlot(s: TrainerState): TrainerState {
     else if (variation + 1 < VARIATIONS.length) variation++;
     else done = true;
   }
-  return { ...s, index: 0, round: s.round + 1, hits: s.config.chords.map(() => false), bpm, variation, cleanRounds, done, lastRound: clean ? 'clean' : 'missed' };
+  return { ...s, index: 0, round: s.round + 1, hits: noHits(s.config), hitMidis: noMidis(s.config), bpm, variation, cleanRounds, done, lastRound: clean ? 'clean' : 'missed' };
 }
 
 /** Manual tempo nudge between rounds. */
