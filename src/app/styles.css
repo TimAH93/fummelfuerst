@@ -185,6 +185,8 @@ button:disabled { opacity: 0.4; cursor: default; }
 .rate-btn.miss { color: var(--off); border-color: var(--off); }
 .rate-btn.near { color: var(--off); }
 .rate-btn.instant { color: var(--ok); border-color: var(--ok); }
+/* The 'found' rating shares its class name with the jam screen's .found list; keep the label centred. */
+.rate .rate-btn { display: flex; flex-direction: row; align-items: center; justify-content: center; gap: 0; }
 .verdict { margin: 0; font-size: 30px; font-weight: 700; }
 .verdict.ok { color: var(--ok); }
 .verdict.off { color: var(--off); }
