@@ -4,6 +4,7 @@
 
 ## Datei
 - `09-fantasy-battle.mid` – Tracks Ostinato, Akkorde; 33 Takte ≈ 53 s
+- `09-fantasy-battle-melodie.mid` – dasselbe + Melodie (A Takt 5–12, A' 13–20, Höhepunkt B 21–28 bis C7, A-Anfang 29–32, Schluss auf F)
 
 ## Aufbau
 | Takte | Ostinato | Akkorde |
@@ -18,5 +19,5 @@ Fm A♭3 C4 F4 · D♭ A♭3 D♭4 F4 · E♭ B♭3 E♭4 G4 · B♭m B♭3 D♭
 
 ## Stand
 - [ ] Sounds: Ostinato Strings/Synth-Bass, Akkorde Brass oder Strings-Stabs
-- [ ] Melodie drüber (F minor, über C das E)
+- [ ] Melodie lernen: erst A (Takt 5–12), dann A', dann B
 - [ ] Drums, MP3 exportieren
