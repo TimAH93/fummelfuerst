@@ -53,7 +53,9 @@ export function ChordMonitor({ settings, onSettings, pads, onPads, onPlay, onTra
   useEffect(() => void loadFound().then(setFound), []);
   useEffect(() => void loadPlayLog().then(setPlayLog), []);
   // Every chord that lands in the jam history is a habit and play evidence (once per new chord; the history is capped,
-  // so the array identity, not its length, marks a new one).
+  // so the array identity, not its length, marks a new one). The evidence reads the settled keys, so a picked Cmaj7
+  // rolled up from C E G counts as the Cmaj7, not as the C major passing on the way; it is the picked chord's
+  // (stronger) event when the settled chord is the pick, the free one otherwise – one event per chord.
   useEffect(() => {
     const last = jam.history[jam.history.length - 1];
     if (!last) return;
@@ -63,7 +65,9 @@ export function ChordMonitor({ settings, onSettings, pads, onPads, onPlay, onTra
       if (next !== log) void savePlayLog(next);
       return next;
     });
-    onPlay(jamEvent(jam.chordMidis, now, false, padFor(pads, jam.chordMidis) !== null));
+    const pcs = pick ? new Set(chordType(pick.typeId).formula.map((d) => toPc(pick.rootPc + degreeSemitones(d)))) : null;
+    const isPick = !!(pick && pcs && jam.chord && jam.chord.rootPc === pick.rootPc && jam.chordMidis.every((m) => pcs.has(toPc(m))));
+    onPlay(jamEvent(jam.chordMidis, now, isPick, padFor(pads, jam.chordMidis) !== null));
   }, [jam.history]);
   // A kept chord shown from memory steps aside when keys are pressed; a picked suggestion stays until unpicked.
   useEffect(() => { if (midi.held.length) setShown(null); }, [midi.held.length]);
@@ -107,10 +111,6 @@ export function ChordMonitor({ settings, onSettings, pads, onPads, onPlay, onTra
   const pickPcs = pick ? new Set(chordType(pick.typeId).formula.map((d) => toPc(pick.rootPc + degreeSemitones(d)))) : null;
   const pickHit = !!(pick && pickPcs && live && live.rootPc === pick.rootPc && [...new Set(midi.held.map(toPc))].every((pc) => pickPcs.has(pc)));
   const pickOnKeys = pick && pickPcs ? midi.held.filter((m) => pickPcs.has(toPc(m))) : [];
-  // Hitting the picked chord is the strongest jam evidence: the player found a named chord on request.
-  useEffect(() => {
-    if (pickHit) onPlay(jamEvent(midi.held, Date.now(), true, padFor(pads, midi.held) !== null));
-  }, [pick, pickHit]);
 
   const guide = mode === 'melody' && c ? melodyGuide(key, c) : null;
   const melody = mode === 'melody' ? melodyNotes(jam, midi.held) : [];

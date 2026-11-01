@@ -52,9 +52,11 @@ async function tx<T>(store: string, mode: IDBTransactionMode, fn: (s: IDBObjectS
 }
 
 /**
- * Loads the learner state. An older schema is migrated on read: the untouched raw string is kept
- * under `learner.v${old}` (written once, never overwritten), then the migrated state is saved back.
- * A state that cannot be parsed falls back to emptyState() without touching the stored string.
+ * Loads the learner state. Anything this build will not keep as it is gets backed up first,
+ * before parsing: the untouched raw string goes under `learner.v${old}` – or `learner.unreadable`
+ * when it is not JSON – written once, never overwritten. Then an older schema is migrated and
+ * saved back. A state that cannot be parsed falls back to emptyState(); the first save then
+ * replaces 'learner', but the backup keeps the only copy of what was there.
  */
 export async function loadState(): Promise<LearnerState> {
   let raw: string | undefined;
@@ -64,19 +66,32 @@ export async function loadState(): Promise<LearnerState> {
     return emptyState();
   }
   if (!raw) return emptyState();
-  let state: LearnerState;
+  const stored = raw;
   let old: unknown;
+  let json = true;
   try {
-    old = (JSON.parse(raw) as { schemaVersion?: unknown }).schemaVersion;
-    state = parseState(raw);
+    old = (JSON.parse(stored) as { schemaVersion?: unknown }).schemaVersion;
+  } catch {
+    json = false;
+  }
+  let backedUp = true;
+  if (!json || old !== SCHEMA_VERSION) {
+    try {
+      const backupKey = json ? `learner.v${String(old)}` : 'learner.unreadable';
+      const existing = await tx<string | undefined>('kv', 'readonly', (s) => s.get(backupKey));
+      if (existing === undefined) await tx('kv', 'readwrite', (st) => st.put(stored, backupKey));
+    } catch {
+      backedUp = false;
+    }
+  }
+  let state: LearnerState;
+  try {
+    state = parseState(stored);
   } catch {
     return emptyState();
   }
-  if (old !== SCHEMA_VERSION) {
+  if (old !== SCHEMA_VERSION && backedUp) {
     try {
-      const backupKey = `learner.v${String(old)}`;
-      const existing = await tx<string | undefined>('kv', 'readonly', (s) => s.get(backupKey));
-      if (existing === undefined) await tx('kv', 'readwrite', (st) => st.put(raw, backupKey));
       await saveState(state);
     } catch {
       // Persistence failed: the migrated state still serves this session; the old string stays intact.

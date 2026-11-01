@@ -1,5 +1,7 @@
 import { describe, expect, it } from './expect';
-import { LearnerState, TrackId, createRng, isComfortable, knowledge, markPassed } from '../src/core';
+import {
+  LearnerState, TrackId, applyAttempt, createRng, getFamily, isComfortable, knowledge, markPassed, nextDrillExercise, recordAttempt, solve,
+} from '../src/core';
 import { Drill } from '../src/core/curriculum/curriculum';
 import { v1Driver, v2Driver } from './sim/drivers';
 import { DAY, SimReport, SimTrace, buildReport } from './sim/metrics';
@@ -10,12 +12,13 @@ import { World } from './sim/world';
 /*
  * Acceptance tests of the calibrated learner model (spec §9.4): the v2 driver against the
  * simulated learners of tests/sim, five seeds each. The thresholds were derived from the final
- * constants (DEFAULT_MODEL after `npm run calibrate`, WP9 run of 2026-11-01, seeds 11–15) by
- * measuring seeds 1–5 – out of sample – and are only ever tighter than the spec's initial
- * numbers, except where a spec number is infeasible under the principles (comfortMastery 0.75,
- * comfortN 3, heldGap 10 min with a world whose fresh memories fade within a day): there the
- * measured value is pinned with a margin and the comment names the spec number and the
- * measurement. Runs are cached, so each scenario is simulated once.
+ * constants (DEFAULT_MODEL after `npm run calibrate` – the re-run of 2026-11-01 after the world
+ * made prior knowledge durable, seeds 11–15) by measuring seeds 1–5 – out of sample. Where the
+ * spec's initial number is feasible it is pinned or tightened; where it is infeasible under the
+ * principles (comfortMastery 0.75, comfortN 3, heldGap 10 min, in a world where knowledge gained
+ * in the app fades within a day until spaced recall consolidates it) the measured value is
+ * pinned with a margin and the comment names the spec number and the measurement. Runs are
+ * cached, so each scenario is simulated once.
  */
 
 const SEEDS = [1, 2, 3, 4, 5];
@@ -55,19 +58,20 @@ const helpAfter = (t: SimTrace, k: number): number => t.helpByDay[t.sessions[k -
 const atLeast = <T>(n: number, xs: T[], ok: (x: T) => boolean): boolean => xs.filter(ok).length >= n;
 
 describe('time to pass', () => {
-  it('a quick learner passes the first fretboard drill within 220 answers and 13 sessions in at least 4 of 5 seeds', () => {
-    // spec ≤ 70 answers / ≤ 3 sessions – infeasible: seven skills need ≥ 6 clean answers each plus a
-    // success after a break, and the world forgets a fresh skill overnight. Measured: 161–203 answers, 9–12 sessions, 5/5.
+  it('a quick learner passes the first fretboard drill within 160 answers and 10 sessions in at least 4 of 5 seeds', () => {
+    // spec ≤ 70 answers / ≤ 3 sessions – infeasible: seven skills need ≥ 6 clean answers each plus a success after
+    // ≥ 10 minutes, and the 0.3 the quick learner still has to learn fades overnight (its prior 0.7 does not).
+    // Measured: 91–138 answers, 6–8 sessions, 5/5 (161–203 / 9–12 while the world forgot prior knowledge overnight).
     const ttp = reports(P('quick'), 'fretboard', 28).map((r) => r.timeToPass[FIRST_FRETBOARD]);
-    expect(atLeast(4, ttp, (t) => t !== undefined && t.answers <= 220 && t.sessions <= 13)).toBe(true);
+    expect(atLeast(4, ttp, (t) => t !== undefined && t.answers <= 160 && t.sessions <= 10)).toBe(true);
   });
   it('a steady learner passes at least one fretboard and two interval drills in 28 days (median)', () => {
-    // spec ≥ 4 fretboard and ≥ 3 interval drills – infeasible. Measured medians 1 (1 0 1 1 1) and 2 (4 2 2 2 3).
+    // spec ≥ 4 fretboard and ≥ 3 interval drills – infeasible. Measured medians 1 (1 0 1 0 1) and 2 (5 2 2 2 2).
     expect(median(reports(P('steady'), 'fretboard', 28).map((r) => r.passed.length)) >= 1).toBe(true);
     expect(median(reports(P('steady'), 'intervals', 28).map((r) => r.passed.length)) >= 2).toBe(true);
   });
   it('a found-only learner passes the first fretboard drill within 20 sessions in at least 4 of 5 seeds; v1 never did', () => {
-    // spec within 6 sessions – infeasible (as for quick). Measured 11–18 sessions, 4/5 within 42 days. The defect is gone:
+    // spec within 6 sessions – infeasible (as for quick). Measured 11–17 sessions, 4/5 within 42 days. The defect is gone:
     const ttp = reports(P('foundOnly'), 'fretboard', 42).map((r) => r.timeToPass[FIRST_FRETBOARD]);
     expect(atLeast(4, ttp, (t) => t !== undefined && t.sessions <= 20)).toBe(true);
     const v1 = v1Driver();
@@ -85,11 +89,12 @@ describe('time to pass', () => {
 describe('false passes', () => {
   it('steady and quick pass no fretboard drill they do not know, and the optimist stays at or below 10 %', () => {
     for (const r of [...reports(P('steady'), 'fretboard', 28), ...reports(P('quick'), 'fretboard', 28)]) expect(r.falsePasses).toEqual([]);
-    expect(pooledFalsePassRate(reports(P('optimist'), 'fretboard', 28)) <= 0.1).toBe(true); // measured 0 of 4
+    expect(pooledFalsePassRate(reports(P('optimist'), 'fretboard', 28)) <= 0.1).toBe(true); // measured 0 of 3
   });
   it('on intervals a steady learner false-passes at most 45 % of drills, mostly the one-skill G/B drill', () => {
     // spec 0 – infeasible: a one-skill drill passes in two sessions (≈ 10–20 answers, the spec's own target is 10) and
-    // the world's memory of it is a day old, so its true recall a week later is < 0.6. Measured 5 of 13 (0.38).
+    // the world's memory of it is a day old, so its true recall a week later is < 0.6. Measured 5 of 13 (0.38): four
+    // times 'intervals/5/up/adjacent-gb', once its mirror.
     const rs = reports(P('steady'), 'intervals', 28);
     expect(pooledFalsePassRate(rs) <= 0.45).toBe(true);
     const fp = rs.flatMap((r) => r.falsePasses);
@@ -98,58 +103,58 @@ describe('false passes', () => {
 });
 
 describe('retention', () => {
-  it('a steady learner keeps passed fretboard drills: 85 % a week later, 75 % after three weeks', () => {
-    // Tighter than spec (≥ 0.70 / ≥ 0.50). Measured means 0.91 / 0.81.
+  it('a steady learner keeps passed fretboard drills: 85 % a week later, 70 % after three weeks', () => {
+    // Tighter than spec (≥ 0.70 / ≥ 0.50). Measured means 0.89 / 0.77.
     const rs = reports(P('steady'), 'fretboard', 28);
     expect(meanOf(rs.map((r) => r.retention7)) >= 0.85).toBe(true);
-    expect(meanOf(rs.map((r) => r.retention21)) >= 0.75).toBe(true);
+    expect(meanOf(rs.map((r) => r.retention21)) >= 0.7).toBe(true);
   });
   it('on intervals a steady learner keeps 55 % a week later and 40 % after three weeks', () => {
-    // spec ≥ 0.70 / ≥ 0.50 – infeasible for the same one-skill drills as above. Measured means 0.61 / 0.46.
+    // spec ≥ 0.70 / ≥ 0.50 – infeasible for the same one-skill drills as above. Measured means 0.59 / 0.43.
     const rs = reports(P('steady'), 'intervals', 28);
     expect(meanOf(rs.map((r) => r.retention7)) >= 0.55).toBe(true);
     expect(meanOf(rs.map((r) => r.retention21)) >= 0.4).toBe(true);
   });
   it('a forgetful learner keeps 75 % of a passed drill a week later', () => {
-    // Tighter than spec (≥ 0.55). Measured mean 0.80 (two seeds pass in 28 days).
+    // Tighter than spec (≥ 0.55). Measured mean 0.82 (two seeds pass in 28 days).
     expect(meanOf(reports(P('forgetful'), 'fretboard', 28).map((r) => r.retention7)) >= 0.75).toBe(true);
   });
 });
 
 describe('belief calibration', () => {
-  it('a steady learner\'s knowledge is within 0.24 of the true k and recall within 0.08 of the true R', () => {
+  it('a steady learner\'s knowledge is within 0.25 of the true k and recall within 0.08 of the true R', () => {
     // |knowledge − k|: spec ≤ 0.20 – infeasible, knowledge is a lower bound one sd below the mean by design.
-    // Measured 0.211 (fretboard) and 0.220 (intervals). |recall − R|: tighter than spec (≤ 0.25); measured 0.009 / 0.052.
+    // Measured 0.216 (fretboard) and 0.230 (intervals). |recall − R|: tighter than spec (≤ 0.25); measured 0.021 / 0.057.
     for (const track of ['fretboard', 'intervals'] as const) {
       const rs = reports(P('steady'), track, 28);
-      expect(meanOf(rs.map((r) => r.calibration?.knowledge ?? null)) <= 0.24).toBe(true);
+      expect(meanOf(rs.map((r) => r.calibration?.knowledge ?? null)) <= 0.25).toBe(true);
       expect(meanOf(rs.map((r) => r.calibration?.recall ?? null)) <= 0.08).toBe(true);
     }
   });
 });
 
 describe('scheduling', () => {
-  it('a steady learner spends at most 52 % of picks on skills it already knows and recalls', () => {
+  it('a steady learner spends at most 50 % of picks on skills it already knows and recalls', () => {
     // spec ≤ 0.30 – infeasible: the gate needs ≈ 8 answers per skill, most of them in-session repeats the world already
-    // recalls (R > 0.95 within minutes). Measured means 0.469 (fretboard) and 0.437 (intervals).
+    // recalls (R > 0.95 within minutes). Measured means 0.437 (fretboard) and 0.436 (intervals).
     for (const track of ['fretboard', 'intervals'] as const) {
-      expect(meanOf(reports(P('steady'), track, 28).map((r) => r.overScheduled)) <= 0.52).toBe(true);
+      expect(meanOf(reports(P('steady'), track, 28).map((r) => r.overScheduled)) <= 0.5).toBe(true);
     }
   });
   it('never leaves a forgotten passed interval skill unasked for a week of sessions', () => {
-    // Tighter than spec (≤ 0.15). Measured 0 in both seeds with data (fretboard passes come too late to have any).
+    // Tighter than spec (≤ 0.15). Measured 0 in the three seeds with data (fretboard passes come too late to have any).
     const under = reports(P('steady'), 'intervals', 28).map((r) => r.underScheduled).filter((u): u is number => u !== null);
     expect(under.length >= 1).toBe(true);
     for (const u of under) expect(u <= 0.05).toBe(true);
   });
   it('mixes labelled reviews into a steady learner\'s interval sessions: between 2 % and 50 % of picks', () => {
     // spec 0.15 ≤ reviewShare ≤ 0.50 – the lower bound is infeasible in 28 days: only drills passed earlier are
-    // reviewed and only once they fade below 90 % recall. Measured mean 0.062 (0.028–0.095); fretboard 0.
+    // reviewed and only once they fade below 90 % recall. Measured mean 0.062 (0.033–0.088); fretboard 0.
     const share = meanOf(reports(P('steady'), 'intervals', 28).map((r) => r.reviewShare));
     expect(share >= 0.02 && share <= 0.5).toBe(true);
   });
   it('spends at least three times its share on weak G/B intervals over 400 answers and more', () => {
-    // Tighter than spec (≥ 1.5). Measured 3.71–6.16 over 70 days (576–1047 answers).
+    // Tighter than spec (≥ 1.5). Measured 4.29–6.53 over 70 days (576–1047 answers).
     for (const r of reports(P('gbWeak'), 'intervals', 70)) {
       expect(r.answers >= 400).toBe(true);
       expect(r.weakShare! >= 3).toBe(true);
@@ -158,16 +163,18 @@ describe('scheduling', () => {
 });
 
 describe('comeback', () => {
-  // The spec's 'returning' breaks after day 12, before a steady learner has passed anything under the calibrated
-  // model (first fretboard pass ≈ day 20), so nothing could be reviewed or slip. The same persona breaks after
-  // day 20 on intervals here, where every seed has passed one to three drills by then.
+  // The spec's 'returning' breaks after day 12, before a steady learner has passed anything in most seeds under the
+  // calibrated model (first fretboard pass on day 15–22, in three of five seeds), so nothing could be reviewed or slip.
+  // The same persona breaks after day 20 on intervals here, where every seed has passed one to three drills by then.
   const returning: Persona = { ...P('returning'), breakEvery: 20 };
-  it('a two-week break slips nothing, opens with five review picks and leaves nothing to re-pass', () => {
+  it('a two-week break slips nothing, opens with at least four review picks and leaves nothing to re-pass', () => {
     for (const t of traces(returning, 'intervals', 42)) {
       const r = buildReport(t);
       expect(t.passes.some((p) => p.at < t.breakAt!)).toBe(true);
       expect(r.returnSlips).toBe(0);
-      expect(r.warmupPicks).toBe(5); // tighter than spec (≥ 4 of 5)
+      // spec ≥ 4 of 5. Measured 5 in four seeds; in seed 5 both reviewed drills are back above 90 % recall after four
+      // review picks, so nothing is left to review and the fifth pick is the drill.
+      expect(r.warmupPicks! >= 4).toBe(true);
       expect(r.rePass!.rePassed).toBe(r.rePass!.slipped);
       expect((r.rePass!.sessions ?? 0) <= 2).toBe(true);
     }
@@ -177,7 +184,7 @@ describe('comeback', () => {
 describe('help fading', () => {
   it('a quick learner is past full help on the first drill within six sessions, every seed', () => {
     // spec level ≥ 2 within 3 sessions – infeasible: level 2 needs group knowledge ≥ helpUp[1] = 0.75, the comfort bar,
-    // which the drill reaches after ≈ 10 sessions. Measured mean level after session 3: 0.14–0.86; after 6: 1.0–2.1.
+    // which the drill reaches after 5–8 sessions. Measured mean level after session 3: 0.29–1.00; after 6: 1.57–2.43.
     for (const t of traces(P('quick'), 'fretboard', 28)) expect(helpAfter(t, 6) >= 1).toBe(true);
   });
   it('a p = 0.5 learner never gets past level 1', () => {
@@ -211,6 +218,21 @@ describe('play evidence', () => {
       for (const s of Object.values(state.skills)) expect([s.n, s.held, s.lapses]).toEqual([0, 0, 0]);
       expect(markPassed(state, driver.curriculum as Drill[], T0 + 28 * DAY).passed).toEqual({});
       for (const d of keysDrills) expect(d.skills.some((id) => isComfortable(state.skills[id]))).toBe(false);
+    }
+  });
+  it('after four weeks of jamming, quiz answers seconds apart still pass no keys drill: the break is quiz to quiz', () => {
+    const drill = keysDrills.find((d) => d.id === 'keys/maj/0')!;
+    for (const seed of SEEDS) {
+      let state = jamOnly(0.7, seed);
+      const rng = createRng(seed);
+      for (let i = 0; i < 5; i++) {
+        const at = T0 + 31 * DAY + i * 5000;
+        const { exercise, helpLevel } = nextDrillExercise(state, drill, drill.entries, rng, at);
+        const a = recordAttempt(exercise, solve(exercise), { mode: 'tap', latencyMs: 2000, helpLevel, at });
+        state = markPassed(applyAttempt(state, a, getFamily(exercise.family).tempo), driver.curriculum as Drill[], at);
+      }
+      expect(state.skills['keys:maj/inv:0'].held).toBe(0);
+      expect(state.passed).toEqual({});
     }
   });
   it('chords played from stored pads leave every keys skill at its initial belief', () => {

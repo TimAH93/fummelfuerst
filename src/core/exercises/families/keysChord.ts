@@ -1,10 +1,10 @@
 import { FretPos } from '../../guitar/fretboard';
 import { chord, chordPcs, chordSymbol, chordToneNames, identifyChordPcs } from '../../theory/chord';
-import { degreeToString, intervalInfo } from '../../theory/interval';
+import { degreeToString } from '../../theory/interval';
 import { Midi, toPc } from '../../theory/pitch';
 import { Note } from '../../theory/spelling';
 import { INVERSION_NAMES, adjacentStringSets, findVoicings, tab } from '../../voicing/voicing';
-import { assertFocus, pickChordRoot, stringNo } from '../common';
+import { assertFocus, foreignDegree, pickChordRoot, stringNo } from '../common';
 import { Diagnosis, ExerciseFamily } from '../types';
 import { TRIAD_TYPES, TriadType } from './triadBuild';
 
@@ -128,7 +128,7 @@ export const keysChord: ExerciseFamily<KeysChordParams, KeysChordSolution, KeysC
       const aside = keysSkill(typeId, j);
       return { kind: 'inversion', credit: 0.5, aside, nudge: [asked, aside], detail: { inversion: j, note: chordToneNames(c)[j] } };
     }
-    if (missing.length === 0) return { kind: 'extra-tone', credit: 0.5, detail: { degree: intervalInfo(toPc(foreign[0] - pcs[0])).degree } };
+    if (missing.length === 0) return { kind: 'extra-tone', credit: 0.5, detail: { degree: foreignDegree(root, foreign[0]) } };
     if (foreign.length === 0 && missing.length === 1) {
       return { kind: 'missing-tone', credit: 0.25, detail: { fn: degreeToString(c.type.formula[pcs.indexOf(missing[0])]) } };
     }

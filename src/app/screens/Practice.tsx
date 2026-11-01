@@ -44,6 +44,8 @@ interface Props {
   onExit: () => void;
   /** Stored pads: a chord equal to one is still accepted, but the meta line says so. */
   pads?: PadBank;
+  /** The screen was opened by a tap (Start, Nächster), so the first exercise's sound prompt may play too. */
+  autoplay?: boolean;
 }
 
 type Phase = 'ask' | 'revealed' | 'checked';
@@ -60,7 +62,7 @@ const RATINGS: readonly { rating: SelfRating; label: string }[] = [
   { rating: 'instant', label: '✓ Sofort' },
 ];
 
-export function Practice({ drill, state, settings, onState, onDrill, onExit, pads }: Props) {
+export function Practice({ drill, state, settings, onState, onDrill, onExit, pads, autoplay = false }: Props) {
   useWakeLock();
   const [round, setRound] = useState(0);
   // The plan is recomputed per round: the recommended drill plus labelled review picks from the same track.
@@ -81,8 +83,9 @@ export function Practice({ drill, state, settings, onState, onDrill, onExit, pad
   const [played, setPlayed] = useState<number[]>([]);
   const [padHit, setPadHit] = useState(false);
   const isKeys = KEY_FAMILIES.includes(exercise.family);
-  // Sound prompts may only start after a tap (autoplay rules): armed by the first rating/Weiter, never on mount.
-  const armed = useRef(false);
+  // Sound prompts may only start after a tap (autoplay rules): armed on mount when a tap opened the screen,
+  // otherwise by the first rating/Weiter – never on a mount nobody tapped for.
+  const armed = useRef(autoplay);
 
   useEffect(() => {
     setPhase('ask');
@@ -100,8 +103,9 @@ export function Practice({ drill, state, settings, onState, onDrill, onExit, pad
   // Help level 3 hides the name while asking; the reveal shows it again.
   const shownMain = prompt.hideName && phase !== 'ask' ? promptFor(exercise, 0, style).main : prompt.main;
 
+  // Not behind "Sitzt": the round a passing rating bumps is never shown; "Weiter üben" plays the one it asks.
   useEffect(() => {
-    if (armed.current && prompt.sound) void playNotes(prompt.sound);
+    if (armed.current && !justPassed && prompt.sound) void playNotes(prompt.sound);
   }, [exercise.id, round]);
   const progress = drillProgress(state, drill);
   // Tap families only: one amber clause under the verdict; self-rated (play) answers never get one.

@@ -126,6 +126,16 @@ describe('interval-hunt diagnosis', () => {
   it('names the string when the exact pitch is on another one', () => {
     expect(errorOf(ex, positions([2, 9]))).toEqual({ kind: 'wrong-string', credit: 0.5, detail: { string: 4 } });
   });
+  it('names no interval one fret past the octave: a minor ninth is not a minor second', () => {
+    // Octave up from the open A string (A2 = 45) onto the G string: A3 = fret 2. Fret 3 is 13 semitones up.
+    const octave = exerciseWhere<IntervalHuntParams, IntervalHuntSolution>(
+      'interval-hunt', { semitones: 12, direction: 'up', fromString: 1, targetString: 3 }, (e) => e.params.from.fret === 0,
+    );
+    expect(octave.skills).toEqual(['interval:8/up/strings:5-3']);
+    expect(errorOf(octave, positions([3, 3]))).toEqual({ kind: 'off-by-one', credit: 0.25, nudge: [] });
+    // One fret under the octave is still named: the major seventh.
+    expect(errorOf(octave, positions([3, 1]))).toEqual({ kind: 'off-by-one', credit: 0.25, nudge: ['interval:7/up/strings:5-3'], detail: { degree: '7' } });
+  });
   it('has no opinion on an unrelated pitch', () => {
     expect(errorOf(ex, positions([4, 5]))).toEqual({ kind: 'other', credit: 0 });
   });
@@ -178,6 +188,16 @@ describe('triad-build diagnosis', () => {
     // A (D string 7), F (G string 10), C (B string 1): pitches do not rise string by string.
     expect(errorOf(ex, positions([2, 7], [3, 10], [4, 1]))).toEqual({ kind: 'span', credit: 0.5 });
   });
+  it('credits another inversion as an aside only when the grip would pass that inversion\'s own check', () => {
+    // C major root position on 4-3-2; E (D string 2), G (G string 12), C (B string 1) is the 1st inversion's tones, 11 frets wide.
+    const c0 = generateExercise<TriadBuildParams, TriadBuildSolution>('triad-build', 1, ctx, { typeId: 'maj', inversion: 0, lowString: 2, pc: 0 });
+    const c1 = generateExercise<TriadBuildParams, TriadBuildSolution>('triad-build', 1, ctx, { typeId: 'maj', inversion: 1, lowString: 2, pc: 0 });
+    const wide = positions([2, 2], [3, 12], [4, 1]);
+    expect(errorOf(c1, wide)).toEqual({ kind: 'span', credit: 0.5 }); // asked as the 1st inversion it fails as too wide
+    expect(errorOf(c0, wide)).toEqual({ kind: 'inversion', credit: 0.5, nudge: ['triad:maj/inv:0/strings:4-3-2'], detail: { inversion: 1, note: 'E' } });
+    // The playable 1st inversion E G C = xx201x is credited.
+    expect(errorOf(c0, positions([2, 2], [3, 0], [4, 1])).aside).toBe('triad:maj/inv:1/strings:4-3-2');
+  });
   it('names the missing tone by its function', () => {
     // A C A: the root is missing.
     expect(errorOf(ex, positions([2, 7], [3, 5], [4, 10]))).toEqual({ kind: 'missing-tone', credit: 0.25, detail: { fn: '1' } });
@@ -221,6 +241,18 @@ describe('keys-chord diagnosis', () => {
   it('names the degree of a foreign tone over the root', () => {
     expect(errorOf(ex, notes(60, 64, 67, 70))).toEqual({ kind: 'extra-tone', credit: 0.5, detail: { degree: 'b7' } });
   });
+  it('spells a foreign tone as the key pressed, also over a flat or sharp root', () => {
+    // Db major + D: ♯1 (D), not ♭2 (E𝄫). C# minor + C: ♭8 (C), not 7 (B♯).
+    const db = generateExercise<KeysChordParams, KeysChordSolution>('keys-chord', 1, ctx, { typeId: 'maj', inversion: 0, pc: 1 });
+    expect([db.params.root, db.solution.notes]).toEqual([{ letter: 1, acc: -1 }, [61, 65, 68]]);
+    expect(errorOf(db, notes(61, 62, 65, 68))).toEqual({ kind: 'extra-tone', credit: 0.5, detail: { degree: '#1' } });
+    const csm = generateExercise<KeysChordParams, KeysChordSolution>('keys-chord', 1, ctx, { typeId: 'min', inversion: 0, pc: 1 });
+    expect([csm.params.root, csm.solution.notes]).toEqual([{ letter: 0, acc: 1 }, [61, 64, 68]]);
+    expect(errorOf(csm, notes(61, 64, 68, 72))).toEqual({ kind: 'extra-tone', credit: 0.5, detail: { degree: 'b8' } });
+    // A plain degree that already names the key stays: Db + B is ♭7 = C♭; ties keep it too (C + F# is ♭5).
+    expect(errorOf(db, notes(61, 65, 68, 71))).toEqual({ kind: 'extra-tone', credit: 0.5, detail: { degree: 'b7' } });
+    expect(errorOf(ex, notes(60, 64, 66, 67))).toEqual({ kind: 'extra-tone', credit: 0.5, detail: { degree: 'b5' } });
+  });
   it('names the missing tone by its function', () => {
     expect(errorOf(ex, notes(60, 67, 72))).toEqual({ kind: 'missing-tone', credit: 0.25, detail: { fn: '3' } });
   });
@@ -260,11 +292,17 @@ describe('keys-voicing diagnosis', () => {
     expect(errorOf(fm9, notes(53, 68, 72, 75))).toEqual({ kind: 'missing-colour', credit: 0.5, aside: 'voicing:m7', nudge: ['voicing:m7'], detail: { degree: '9' } });
     // With a foreign tone the m7 is not demonstrated either.
     expect(errorOf(fm9, notes(53, 68, 72, 75, 78))).toEqual({ kind: 'missing-colour', credit: 0.5, nudge: [], detail: { degree: '9' } });
-    // C13: Bb D E A over C; 13 or 9 missing still proves the C7.
+    // C13: Bb D E A over C. Its colour missing proves the C7 only where C7's own check passes: C E Bb does,
+    // but the 9 or the 13 left in (C Bb D E, C Bb E A, C E Bb A) is a wrong tone for C7 – no aside.
     const c13 = gen('dom13', 0);
+    const c7 = gen('dom7', 0);
     expect(c13.solution.notes).toEqual([48, 70, 74, 76, 81]);
-    expect(errorOf(c13, notes(48, 70, 74, 76))).toEqual({ kind: 'missing-colour', credit: 0.5, aside: 'voicing:dom7', nudge: ['voicing:dom7'], detail: { degree: '13' } });
-    expect(errorOf(c13, notes(48, 70, 76, 81))).toEqual({ kind: 'missing-colour', credit: 0.5, aside: 'voicing:dom7', nudge: ['voicing:dom7'], detail: { degree: '9' } });
+    expect(errorOf(c13, notes(48, 64, 70))).toEqual({ kind: 'missing-colour', credit: 0.5, aside: 'voicing:dom7', nudge: ['voicing:dom7'], detail: { degree: '9' } });
+    expect(evaluate(c7, notes(48, 64, 70)).correct).toBe(true);
+    expect(errorOf(c13, notes(48, 70, 74, 76))).toEqual({ kind: 'missing-colour', credit: 0.5, nudge: [], detail: { degree: '13' } });
+    expect(errorOf(c13, notes(48, 70, 76, 81))).toEqual({ kind: 'missing-colour', credit: 0.5, nudge: [], detail: { degree: '9' } });
+    expect(errorOf(c13, notes(48, 64, 70, 69))).toEqual({ kind: 'missing-colour', credit: 0.5, nudge: [], detail: { degree: '9' } });
+    for (const ms of [[48, 70, 74, 76], [48, 70, 76, 81], [48, 64, 70, 69]]) expect(evaluate(c7, notes(...ms)).correct).toBe(false);
     // Dm7b5 without its b5: the simpler type (dim) is no voicing skill.
     const dm7b5 = gen('m7b5', 2);
     expect(dm7b5.solution.notes).toEqual([50, 65, 68, 72]);
@@ -272,6 +310,13 @@ describe('keys-voicing diagnosis', () => {
   });
   it('names the degree of a foreign tone above a complete voicing', () => {
     expect(errorOf(fm9, notes(53, 68, 75, 78, 79))).toEqual({ kind: 'wrong-tone', credit: 0.25, detail: { degree: 'b2' } });
+  });
+  it('spells a foreign tone or bass over a flat root as the key pressed', () => {
+    // Dbmaj7: Db3 | F4 Ab4 C5. A stray D is ♯1 = D, not ♭2 = E𝄫 – above the bass and in it.
+    const dbmaj7 = gen('maj7', 1);
+    expect([dbmaj7.params.root, dbmaj7.solution.notes]).toEqual([{ letter: 1, acc: -1 }, [49, 65, 68, 72]]);
+    expect(errorOf(dbmaj7, notes(49, 65, 68, 72, 74))).toEqual({ kind: 'wrong-tone', credit: 0.25, detail: { degree: '#1' } });
+    expect(errorOf(dbmaj7, notes(50, 65, 68, 72))).toEqual({ kind: 'bass', credit: 0.5, detail: { degree: '#1' } });
   });
   it('calls fewer than three notes incomplete', () => {
     expect(errorOf(fm9, notes(53, 68))).toEqual({ kind: 'incomplete', credit: 0 });

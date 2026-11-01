@@ -1,10 +1,12 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from './expect';
 import {
+  ACC_SEED_COMFORT,
   DEFAULT_MODEL,
   LearnerStateV1,
   N_SEED_COMFORT,
   SkillStats,
+  SkillStatsV1,
   TRACKS,
   buildCatalog,
   buildCurriculum,
@@ -81,6 +83,33 @@ describe('migration v1 → v2', () => {
     const many = migrated.skills['note:E/string:6']; // n 18 > seed: its own count is kept
     expect(many.a + many.b).toBeCloseTo(18);
   });
+  it('seeds a v1-comfortable skill below 0.9 accuracy at 0.9, so it stays comfortable too', () => {
+    // v1's gate needs acc ≈ 0.76 once n ≥ 10: acc 0.887 · 0.978 · tempo 0.869 = 0.754 and 0.78 · 1 · 1 both pass it.
+    const at = 1_760_000_000_000;
+    const leaf = (acc: number, tempo: number, n: number, box: number): SkillStatsV1 => ({ acc, tempo, n, box, due: at + DAY, lastSeen: at });
+    const v1State: LearnerStateV1 = {
+      schemaVersion: 1,
+      skills: {
+        'note:C/string:6': leaf(0.887, 0.869, 11, 2),
+        'note:D/string:6': leaf(0.78, 1, 30, 3),
+        'note:E/string:6': leaf(0.78, 1, 30, 1), // box 1: not comfortable in v1, so not seeded
+      },
+      help: {}, recent: [], passed: {},
+    };
+    const out = migrateV1(v1State);
+    const before = (v1State as unknown as LearnerStateV1Frozen).skills;
+    for (const id of ['note:C/string:6', 'note:D/string:6']) {
+      expect(v1.isComfortable(before[id])).toBe(true);
+      expect(comfortableV2(out.skills[id])).toBe(true);
+      expect(out.skills[id].a / (out.skills[id].a + out.skills[id].b)).toBeCloseTo(ACC_SEED_COMFORT);
+    }
+    expect(out.skills['note:C/string:6'].a + out.skills['note:C/string:6'].b).toBeCloseTo(N_SEED_COMFORT);
+    expect(out.skills['note:D/string:6'].a + out.skills['note:D/string:6'].b).toBeCloseTo(DEFAULT_MODEL.nMax);
+    const plain = out.skills['note:E/string:6'];
+    expect(v1.isComfortable(before['note:E/string:6'])).toBe(false);
+    expect([plain.a, plain.b]).toEqual([0.78 * DEFAULT_MODEL.nMax, (1 - 0.78) * DEFAULT_MODEL.nMax]);
+    expect(comfortableV2(plain)).toBe(false);
+  });
   it('keeps comfortable skills comfortable and the others not: upgrade day changes nothing', () => {
     for (const id of Object.keys(migrated.skills)) {
       const before = v1.isComfortable(asV1.skills[id]);
@@ -111,9 +140,13 @@ describe('migration v1 → v2', () => {
     expect(recommendDrill(migrated, curriculum, 'fretboard')!.id).toBe('fretboard/5/all');
     expect(recommendDrill(migrated, curriculum, 'intervals')!.id).toBe('intervals/5/up/adjacent');
   });
-  it('carries help, recent and passed over and starts boost, warm-up and lastActive fresh', () => {
+  it('carries help (at level 1 at most), recent and passed over and starts boost, warm-up and lastActive fresh', () => {
     expect(migrated.schemaVersion).toBe(2);
-    expect(migrated.help).toEqual(fixture.help);
+    // v1 showed levels 1–3 alike; v2's 2 and 3 play the sound and hide the name, so they are earned again from level 1.
+    expect(Object.keys(migrated.help).sort()).toEqual(Object.keys(fixture.help).sort());
+    for (const [group, h] of Object.entries(fixture.help)) expect(migrated.help[group]).toEqual({ level: Math.min(h.level, 1), good: 0, misses: 0 });
+    expect(Object.values(fixture.help).some((h) => h.level === 3)).toBe(true);
+    expect(Math.max(...Object.values(migrated.help).map((h) => h.level))).toBe(1);
     expect(migrated.recent).toEqual(fixture.recent);
     expect(migrated.boost).toEqual({});
     expect(migrated.warmup).toBe(0);
@@ -123,9 +156,16 @@ describe('migration v1 → v2', () => {
   it('does not modify its input', () => {
     expect(JSON.stringify(fixture)).toBe(JSON.stringify(JSON.parse(fixtureJson)));
   });
+  it('takes the last v1 answer as the last quiz answer', () => {
+    for (const [id, s] of Object.entries(migrated.skills)) expect(s.lastQ).toBe(fixture.skills[id].lastSeen);
+  });
   it('round-trips through JSON; parseState migrates v1 on read and still rejects unknown versions', () => {
     expect(parseState(JSON.stringify(migrated))).toEqual(migrated);
     expect(parseState(fixtureJson)).toEqual(migrated);
+    // A v2 state written before lastQ existed reads it as `last`.
+    const { lastQ: _dropped, ...old } = migrated.skills['note:E/string:6'];
+    const early = parseState(JSON.stringify({ ...migrated, skills: { 'note:E/string:6': { ...old, last: 123 } } }));
+    expect(early.skills['note:E/string:6'].lastQ).toBe(123);
     expect(() => parseState('{"schemaVersion":99}')).toThrow(/Unsupported/);
     expect(() => parseState('{}')).toThrow(/Unsupported/);
   });

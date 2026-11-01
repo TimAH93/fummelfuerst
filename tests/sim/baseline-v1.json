@@ -71,26 +71,26 @@
    "days": 28,
    "answers": 285,
    "sessions": 17,
-   "passed": 2,
+   "passed": 3,
    "firstDrill": {
     "id": "fretboard/6/naturals",
     "passedIn": 5,
-    "answers": 96,
-    "sessions": 6
+    "answers": 74,
+    "sessions": 5
    },
-   "falsePassRate": 0.16666666666666666,
-   "retention7": 0.7826797723475718,
-   "retention21": 0.61844968433167,
-   "overScheduled": 0.39638079106835666,
-   "underScheduled": 0.3333333333333333,
-   "weakShare": 2.418861457581435,
-   "calibrationK": 0.21961258488309593,
-   "calibrationR": 0.06660453009681977,
-   "helpFinal": 2.4285714285714284,
+   "falsePassRate": 0,
+   "retention7": 0.7860952884054646,
+   "retention21": 0.6335770163564937,
+   "overScheduled": 0.4158759589739896,
+   "underScheduled": 0,
+   "weakShare": 3.6371403969057234,
+   "calibrationK": 0.19416200699935612,
+   "calibrationR": 0.08266915334414013,
+   "helpFinal": 2.8285714285714283,
    "reviewShare": 0,
    "returnSlips": null,
    "warmupPicks": null,
-   "meanTrueK": 0.9757595684615528
+   "meanTrueK": 0.9753027410682948
   },
   {
    "persona": "steady",
@@ -106,18 +106,18 @@
     "sessions": 8
    },
    "falsePassRate": 0,
-   "retention7": 0.7508341837495982,
-   "retention21": 0.5849426490187002,
-   "overScheduled": 0.23220483668124844,
+   "retention7": 0.7450503188587732,
+   "retention21": 0.579500619570877,
+   "overScheduled": 0.22681064580987914,
    "underScheduled": null,
-   "weakShare": 2.3916942430224,
-   "calibrationK": 0.1679800012763031,
-   "calibrationR": 0.045458609786615964,
-   "helpFinal": 2.457142857142857,
+   "weakShare": 2.444264896650976,
+   "calibrationK": 0.16668720840874365,
+   "calibrationR": 0.03740686606425099,
+   "helpFinal": 2.6,
    "reviewShare": 0,
    "returnSlips": null,
    "warmupPicks": null,
-   "meanTrueK": 0.9177255038383618
+   "meanTrueK": 0.9253255870528383
   },
   {
    "persona": "steady",
@@ -132,19 +132,19 @@
     "answers": 69,
     "sessions": 5
    },
-   "falsePassRate": 0.75,
-   "retention7": 0.5101036768380454,
-   "retention21": 0.34461299791364625,
-   "overScheduled": 0.2581504327032668,
+   "falsePassRate": 0.782608695652174,
+   "retention7": 0.5101223478912563,
+   "retention21": 0.34439128302167415,
+   "overScheduled": 0.2597104959074085,
    "underScheduled": 1,
-   "weakShare": 0.9058119942387914,
-   "calibrationK": 0.1698305848863492,
-   "calibrationR": 0.2773353938643662,
-   "helpFinal": 2.2,
+   "weakShare": 0.9476929453965062,
+   "calibrationK": 0.17370221000797376,
+   "calibrationR": 0.27057738545677623,
+   "helpFinal": 1.8,
    "reviewShare": 0,
    "returnSlips": null,
    "warmupPicks": null,
-   "meanTrueK": 0.9309803632061808
+   "meanTrueK": 0.926730258020241
   },
   {
    "persona": "slow",
@@ -166,7 +166,7 @@
    "underScheduled": 0,
    "weakShare": 1.406688115880566,
    "calibrationK": 0.1952845749656908,
-   "calibrationR": 0.026549553910866087,
+   "calibrationR": 0.02653741808806457,
    "helpFinal": 1.9714285714285715,
    "reviewShare": 0,
    "returnSlips": null,
@@ -192,8 +192,8 @@
    "overScheduled": 0,
    "underScheduled": null,
    "weakShare": 1,
-   "calibrationK": 0.19063862435229847,
-   "calibrationR": 0.014910299845855074,
+   "calibrationK": 0.1906385371135813,
+   "calibrationR": 0.014860999580213882,
    "helpFinal": 0,
    "reviewShare": 0,
    "returnSlips": null,
@@ -220,7 +220,7 @@
    "underScheduled": null,
    "weakShare": null,
    "calibrationK": 0.5010081336722456,
-   "calibrationR": 0.0006775985616586372,
+   "calibrationR": 0.0006775985616586362,
    "helpFinal": 0,
    "reviewShare": 0,
    "returnSlips": null,
@@ -237,22 +237,22 @@
    "firstDrill": {
     "id": "fretboard/6/naturals",
     "passedIn": 5,
-    "answers": 138,
+    "answers": 132,
     "sessions": 8
    },
-   "falsePassRate": 0.125,
-   "retention7": 0.7050313723447101,
-   "retention21": 0.5350082773537841,
-   "overScheduled": 0.1999449453976609,
+   "falsePassRate": 0.1111111111111111,
+   "retention7": 0.7090365687913256,
+   "retention21": 0.5414426897884643,
+   "overScheduled": 0.19411664472527002,
    "underScheduled": 0.5,
-   "weakShare": 1.9538953410610205,
-   "calibrationK": 0.16362526053546117,
-   "calibrationR": 0.058230353807934156,
-   "helpFinal": 2.4,
+   "weakShare": 2.02006449300061,
+   "calibrationK": 0.16115415240218567,
+   "calibrationR": 0.04959724969266439,
+   "helpFinal": 2.314285714285714,
    "reviewShare": 0,
    "returnSlips": null,
    "warmupPicks": null,
-   "meanTrueK": 0.9349127261358776
+   "meanTrueK": 0.924000409872091
   },
   {
    "persona": "forgetful",
@@ -267,19 +267,19 @@
     "answers": 135,
     "sessions": 9
    },
-   "falsePassRate": 0.14285714285714285,
-   "retention7": 0.6679698156392843,
-   "retention21": 0.4787501233826218,
-   "overScheduled": 0.21373906319511948,
+   "falsePassRate": 0.25,
+   "retention7": 0.6624685716900965,
+   "retention21": 0.47396732343679027,
+   "overScheduled": 0.20668512128640576,
    "underScheduled": 0.3333333333333333,
-   "weakShare": 1.868911913638545,
-   "calibrationK": 0.20540265909315267,
-   "calibrationR": 0.06055209240316643,
-   "helpFinal": 2.371428571428571,
+   "weakShare": 1.9155809299819304,
+   "calibrationK": 0.2067786406172029,
+   "calibrationR": 0.05599063452742621,
+   "helpFinal": 2.4857142857142858,
    "reviewShare": 0,
    "returnSlips": null,
    "warmupPicks": null,
-   "meanTrueK": 0.8691107821578156
+   "meanTrueK": 0.8613304965502497
   },
   {
    "persona": "returning",
@@ -295,18 +295,18 @@
     "sessions": 9
    },
    "falsePassRate": 0,
-   "retention7": 0.8107292797696756,
-   "retention21": 0.6752513370251243,
-   "overScheduled": 0.22852974066961637,
+   "retention7": 0.8111250107852944,
+   "retention21": 0.6755837421010155,
+   "overScheduled": 0.2280524137006426,
    "underScheduled": null,
-   "weakShare": 2.2565760975796345,
-   "calibrationK": 0.17614744278190536,
-   "calibrationR": 0.042054457038870736,
-   "helpFinal": 2.6285714285714286,
+   "weakShare": 2.28731258374406,
+   "calibrationK": 0.1766992293754523,
+   "calibrationR": 0.03711492604360646,
+   "helpFinal": 2.657142857142857,
    "reviewShare": 0,
    "returnSlips": 0,
    "warmupPicks": 0,
-   "meanTrueK": 0.8664069554942749
+   "meanTrueK": 0.8679904457889395
   },
   {
    "persona": "gbWeak",
@@ -321,26 +321,26 @@
     "answers": 69,
     "sessions": 5
    },
-   "falsePassRate": 0.7272727272727273,
-   "retention7": 0.49353300864786753,
-   "retention21": 0.33555946652559016,
-   "overScheduled": 0.21105557094055225,
+   "falsePassRate": 0.6666666666666666,
+   "retention7": 0.4959043848551504,
+   "retention21": 0.3401906289570418,
+   "overScheduled": 0.21492519177036407,
    "underScheduled": 1,
-   "weakShare": 0.6299068725167294,
-   "calibrationK": 0.12743755002395693,
-   "calibrationR": 0.40487793813654793,
+   "weakShare": 0.6457704889377696,
+   "calibrationK": 0.1246413568577425,
+   "calibrationR": 0.39249712085942945,
    "helpFinal": 3,
    "reviewShare": 0,
    "returnSlips": null,
    "warmupPicks": null,
-   "meanTrueK": 0.9490028944564646
+   "meanTrueK": 0.944504334619815
   },
   {
    "persona": "noodler",
    "track": "keys",
    "days": 28,
    "answers": 267,
-   "sessions": 16,
+   "sessions": 17,
    "passed": 7,
    "firstDrill": {
     "id": "keys/maj/0",
@@ -349,18 +349,18 @@
     "sessions": 2
    },
    "falsePassRate": 0.5833333333333334,
-   "retention7": 0.605286834615562,
-   "retention21": 0.4497278936816209,
-   "overScheduled": 0.46463506979556213,
+   "retention7": 0.6064218379841262,
+   "retention21": 0.4506241719416553,
+   "overScheduled": 0.46823063616485106,
    "underScheduled": null,
-   "weakShare": 3.4175784043712647,
-   "calibrationK": 0.15855651528584785,
-   "calibrationR": 0.06457314038550911,
+   "weakShare": 3.4438701026348904,
+   "calibrationK": 0.15752021248743833,
+   "calibrationR": 0.06531200962057122,
    "helpFinal": 3,
    "reviewShare": 0,
    "returnSlips": null,
    "warmupPicks": null,
-   "meanTrueK": 0.9754103616314336
+   "meanTrueK": 0.9765889829395918
   }
  ],
  "runs": [
@@ -386,93 +386,91 @@
      "days": 4
     },
     "fretboard/6/all": {
-     "answers": 92,
+     "answers": 84,
      "sessions": 7,
      "days": 8
     },
     "fretboard/5/naturals": {
-     "answers": 125,
-     "sessions": 9,
+     "answers": 96,
+     "sessions": 7,
      "days": 7
     },
     "fretboard/5/all": {
-     "answers": 83,
-     "sessions": 6,
-     "days": 6
+     "answers": 59,
+     "sessions": 4,
+     "days": 2
     },
     "fretboard/4/naturals": {
-     "answers": 98,
-     "sessions": 7,
-     "days": 5
+     "answers": 101,
+     "sessions": 8,
+     "days": 7
     }
    },
-   "retention7": 0.714542867939957,
-   "retention21": 0.5359422427352409,
+   "retention7": 0.7567432931636907,
+   "retention21": 0.5878045289476809,
    "retentionByDrill": {
     "fretboard/6/naturals": {
-     "kAtPass": 0.9861328410558584,
-     "r7": 0.491648928755481,
-     "r21": 0.3110624847128717
+     "kAtPass": 0.9906306725822868,
+     "r7": 0.6802616062492238,
+     "r21": 0.4944951814109375
     },
     "fretboard/6/all": {
-     "kAtPass": 0.9951294127674206,
-     "r7": 0.8221706811344056,
-     "r21": 0.6685617087313895
+     "kAtPass": 0.9931311447544888,
+     "r7": 0.8367415277967837,
+     "r21": 0.6982119145657507
     },
     "fretboard/5/naturals": {
-     "kAtPass": 0.99971645062668,
-     "r7": 0.7586473826891632,
-     "r21": 0.5641033626674995
+     "kAtPass": 0.9984476205676899,
+     "r7": 0.7764389093781482,
+     "r21": 0.6160301451108346
     },
     "fretboard/5/all": {
-     "kAtPass": 0.9976948004205646,
-     "r7": 0.7934053288282638,
-     "r21": 0.6244160545189296
+     "kAtPass": 0.9935120458972349,
+     "r7": 0.7629246556953198,
+     "r21": 0.5932933970358057
     },
     "fretboard/4/naturals": {
-     "kAtPass": 0.997433017235623,
-     "r7": 0.7068420182924713,
-     "r21": 0.5115676030455149
+     "kAtPass": 0.9985968240319968,
+     "r7": 0.7273497666989782,
+     "r21": 0.536992006615076
     }
    },
-   "falsePasses": [
-    "fretboard/6/naturals"
-   ],
-   "falsePassRate": 0.2,
-   "overScheduled": 0.3630705394190871,
-   "underScheduled": 0.3333333333333333,
-   "weakShare": 2.861032409888809,
+   "falsePasses": [],
+   "falsePassRate": 0,
+   "overScheduled": 0.4170124481327801,
+   "underScheduled": 0,
+   "weakShare": 7.095558799981172,
    "calibration": {
-    "knowledge": 0.19169658826185812,
-    "recall": 0.11718603393573229
+    "knowledge": 0.16454026218733092,
+    "recall": 0.10966939491392391
    },
    "helpByDay": [
     0,
-    0,
-    0.14285714285714285,
-    1.1428571428571428,
-    1.2857142857142858,
-    1.2857142857142858,
-    null,
-    1.2857142857142858,
+    0.42857142857142855,
+    0.7142857142857143,
     1.8571428571428572,
+    1.8571428571428572,
+    1.7142857142857142,
+    null,
     2,
-    2,
-    2.4285714285714284,
-    2.142857142857143,
     2.2857142857142856,
-    null,
     2.4285714285714284,
-    3,
-    3,
+    2.7142857142857144,
+    2.7142857142857144,
+    2.5714285714285716,
+    2.5714285714285716,
     null,
-    3,
-    3,
+    2.7142857142857144,
     2.857142857142857,
-    1.8571428571428572,
-    1.5714285714285714,
-    1.2857142857142858,
-    2.4285714285714284,
+    2.857142857142857,
+    null,
+    2.7142857142857144,
+    2.5714285714285716,
+    2.7142857142857144,
+    2.857142857142857,
+    2.857142857142857,
+    2.857142857142857,
+    3,
     null,
     null
    ],
@@ -482,7 +480,7 @@
    "warmupPicks": null,
    "trueSkills": {
     "seen": 36,
-    "meanK": 0.9699757730167653
+    "meanK": 0.9934870612765372
    },
    "jamChords": 0
   },
@@ -495,39 +493,50 @@
    "answers": 211,
    "sessions": 13,
    "passed": [
-    "fretboard/6/naturals"
+    "fretboard/6/naturals",
+    "fretboard/6/all"
    ],
    "timeToPass": {
     "fretboard/6/naturals": {
-     "answers": 147,
-     "sessions": 10,
-     "days": 18
+     "answers": 65,
+     "sessions": 5,
+     "days": 13
+    },
+    "fretboard/6/all": {
+     "answers": 96,
+     "sessions": 6,
+     "days": 6
     }
    },
-   "retention7": 0.8181057260047401,
-   "retention21": 0.6612803071650722,
+   "retention7": 0.7545818077802665,
+   "retention21": 0.6167260429295884,
    "retentionByDrill": {
     "fretboard/6/naturals": {
-     "kAtPass": 0.999804912107162,
-     "r7": 0.8181057260047401,
-     "r21": 0.6612803071650722
+     "kAtPass": 0.9857194028845082,
+     "r7": 0.6847612964604065,
+     "r21": 0.5601498490569277
+    },
+    "fretboard/6/all": {
+     "kAtPass": 0.9953366220218879,
+     "r7": 0.8244023191001265,
+     "r21": 0.6733022368022493
     }
    },
    "falsePasses": [],
    "falsePassRate": 0,
-   "overScheduled": 0.44549763033175355,
+   "overScheduled": 0.3791469194312796,
    "underScheduled": null,
-   "weakShare": 1.8260869565217392,
+   "weakShare": 1.984442927460211,
    "calibration": {
-    "knowledge": 0.22850125585842856,
-    "recall": 0.05141100707533805
+    "knowledge": 0.23500233853981498,
+    "recall": 0.0908379552126421
    },
    "helpByDay": [
     0,
     0.7142857142857143,
     null,
     null,
-    0.8571428571428571,
+    1.5714285714285714,
     null,
     null,
     null,
@@ -535,21 +544,21 @@
     null,
     null,
     null,
-    1.4285714285714286,
+    1.8571428571428572,
+    2.142857142857143,
+    null,
     2.2857142857142856,
-    null,
     2.5714285714285716,
     2.857142857142857,
-    3,
     null,
     null,
     null,
     null,
     null,
     null,
-    3,
+    2.4285714285714284,
     null,
-    3,
+    2.142857142857143,
     null
    ],
    "returnSlips": null,
@@ -557,8 +566,8 @@
    "reviewShare": 0,
    "warmupPicks": null,
    "trueSkills": {
-    "seen": 12,
-    "meanK": 0.9822264060572179
+    "seen": 19,
+    "meanK": 0.9858985960287923
    },
    "jamChords": 0
   },
@@ -572,80 +581,91 @@
    "sessions": 18,
    "passed": [
     "fretboard/6/naturals",
-    "fretboard/6/all"
+    "fretboard/6/all",
+    "fretboard/5/naturals"
    ],
    "timeToPass": {
     "fretboard/6/naturals": {
-     "answers": 111,
-     "sessions": 7,
-     "days": 13
+     "answers": 67,
+     "sessions": 4,
+     "days": 3
     },
     "fretboard/6/all": {
-     "answers": 115,
-     "sessions": 8,
+     "answers": 78,
+     "sessions": 5,
      "days": 12
+    },
+    "fretboard/5/naturals": {
+     "answers": 77,
+     "sessions": 5,
+     "days": 11
     }
    },
-   "retention7": 0.8077681417617888,
-   "retention21": 0.6346231058639517,
+   "retention7": 0.7543440418774888,
+   "retention21": 0.5807778835988717,
    "retentionByDrill": {
     "fretboard/6/naturals": {
-     "kAtPass": 0.9986126027337825,
-     "r7": 0.7631344863697407,
-     "r21": 0.5681265492081672
+     "kAtPass": 0.9841768376102479,
+     "r7": 0.643058880324981,
+     "r21": 0.460569070058005
     },
     "fretboard/6/all": {
-     "kAtPass": 0.9982769890176133,
-     "r7": 0.8524017971538368,
-     "r21": 0.7011196625197361
+     "kAtPass": 0.9916039836112174,
+     "r7": 0.8505536410025435,
+     "r21": 0.701985098196804
+    },
+    "fretboard/5/naturals": {
+     "kAtPass": 0.9955828735974508,
+     "r7": 0.769419604304942,
+     "r21": 0.579779482541806
     }
    },
    "falsePasses": [],
    "falsePassRate": 0,
-   "overScheduled": 0.39603960396039606,
+   "overScheduled": 0.43234323432343236,
    "underScheduled": null,
-   "weakShare": 2.673833374053262,
+   "weakShare": 3.3993610223642166,
    "calibration": {
-    "knowledge": 0.23001444591943426,
-    "recall": 0.07041032535014444
+    "knowledge": 0.1817925817684082,
+    "recall": 0.09888578436958814
    },
    "helpByDay": [
     0,
-    0.8571428571428571,
-    1.4285714285714286,
+    1,
+    1.7142857142857142,
     null,
     null,
     null,
     null,
     null,
     null,
-    1.8571428571428572,
+    1.7142857142857142,
     null,
     null,
-    2.857142857142857,
+    2.4285714285714284,
+    2.7142857142857144,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    2.4285714285714284,
+    2.5714285714285716,
     3,
     null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
     3,
     3,
-    3,
-    null,
-    2.142857142857143,
-    1.5714285714285714,
-    2
+    3
    ],
    "returnSlips": null,
    "rePass": null,
    "reviewShare": 0,
    "warmupPicks": null,
    "trueSkills": {
-    "seen": 19,
-    "meanK": 0.9958394652948567
+    "seen": 24,
+    "meanK": 0.9944742604823952
    },
    "jamChords": 0
   },
@@ -663,59 +683,59 @@
    ],
    "timeToPass": {
     "fretboard/6/naturals": {
-     "answers": 96,
+     "answers": 90,
      "sessions": 6,
      "days": 13
     },
     "fretboard/6/all": {
-     "answers": 103,
+     "answers": 108,
      "sessions": 7,
      "days": 10
     }
    },
-   "retention7": 0.8424767045571766,
-   "retention21": 0.6898785540760646,
+   "retention7": 0.8561796805422852,
+   "retention21": 0.7221011351018409,
    "retentionByDrill": {
     "fretboard/6/naturals": {
-     "kAtPass": 0.9959081178532007,
-     "r7": 0.8285760587685633,
-     "r21": 0.6584716660199809
+     "kAtPass": 0.9958213573437199,
+     "r7": 0.8485664547635112,
+     "r21": 0.6985650675519437
     },
     "fretboard/6/all": {
-     "kAtPass": 0.9971501767486551,
-     "r7": 0.85637735034579,
-     "r21": 0.7212854421321482
+     "kAtPass": 0.9986783201894035,
+     "r7": 0.8637929063210592,
+     "r21": 0.745637202651738
     }
    },
    "falsePasses": [],
    "falsePassRate": 0,
-   "overScheduled": 0.45098039215686275,
+   "overScheduled": 0.5,
    "underScheduled": null,
-   "weakShare": 1.9203675344563529,
+   "weakShare": 1.7999999999999998,
    "calibration": {
-    "knowledge": 0.2166005799145532,
-    "recall": 0.024080634683342983
+    "knowledge": 0.197738904461363,
+    "recall": 0.012037919712977635
    },
    "helpByDay": [
     0,
-    0.2857142857142857,
+    0.42857142857142855,
     null,
     null,
     null,
     null,
     null,
     null,
-    0.5714285714285714,
-    1.1428571428571428,
+    0.8571428571428571,
+    1.7142857142857142,
     null,
     null,
-    2.142857142857143,
-    2.2857142857142856,
-    null,
+    2.4285714285714284,
     2.5714285714285716,
     null,
+    2.7142857142857144,
     null,
-    2.857142857142857,
+    null,
+    2.7142857142857144,
     null,
     null,
     3,
@@ -731,8 +751,8 @@
    "reviewShare": 0,
    "warmupPicks": null,
    "trueSkills": {
-    "seen": 17,
-    "meanK": 0.9375471835872857
+    "seen": 18,
+    "meanK": 0.9282855467929356
    },
    "jamChords": 0
   },
@@ -746,55 +766,75 @@
    "sessions": 17,
    "passed": [
     "fretboard/6/naturals",
-    "fretboard/6/all"
+    "fretboard/6/all",
+    "fretboard/5/naturals"
    ],
    "timeToPass": {
     "fretboard/6/naturals": {
-     "answers": 77,
+     "answers": 74,
      "sessions": 5,
      "days": 4
     },
     "fretboard/6/all": {
-     "answers": 144,
-     "sessions": 10,
-     "days": 16
+     "answers": 89,
+     "sessions": 6,
+     "days": 5
+    },
+    "fretboard/5/naturals": {
+     "answers": 103,
+     "sessions": 8,
+     "days": 21
     }
    },
-   "retention7": 0.7305054214741962,
-   "retention21": 0.5705242118180203,
+   "retention7": 0.8086276186635916,
+   "retention21": 0.6604754912044862,
    "retentionByDrill": {
     "fretboard/6/naturals": {
-     "kAtPass": 0.9894314092707631,
-     "r7": 0.5744037977286379,
-     "r21": 0.38166396798614205
+     "kAtPass": 0.9912160871506732,
+     "r7": 0.6932155213938473,
+     "r21": 0.5101242221706223
     },
     "fretboard/6/all": {
-     "kAtPass": 0.9989883275232941,
-     "r7": 0.8866070452197543,
-     "r21": 0.7593844556498984
+     "kAtPass": 0.9958130192022785,
+     "r7": 0.8278028999950671,
+     "r21": 0.6740301415898581
+    },
+    "fretboard/5/naturals": {
+     "kAtPass": 0.9984669157012332,
+     "r7": 0.9048644346018604,
+     "r21": 0.7972721098529781
     }
    },
-   "falsePasses": [
-    "fretboard/6/naturals"
-   ],
-   "falsePassRate": 0.5,
-   "overScheduled": 0.3263157894736842,
+   "falsePasses": [],
+   "falsePassRate": 0,
+   "overScheduled": 0.3508771929824561,
    "underScheduled": null,
-   "weakShare": 2.8129870129870116,
+   "weakShare": 3.9063392347230175,
    "calibration": {
-    "knowledge": 0.23125005446120545,
-    "recall": 0.06993464943954111
+    "knowledge": 0.19173594803986363,
+    "recall": 0.10191471251156889
    },
    "helpByDay": [
     0.14285714285714285,
-    0.7142857142857143,
-    1.4285714285714286,
+    1.1428571428571428,
+    1.7142857142857142,
+    2,
+    2.4285714285714284,
+    null,
+    2.5714285714285716,
+    2.7142857142857144,
+    2.4285714285714284,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    2,
     2,
     2.142857142857143,
-    null,
-    2.2857142857142856,
     2.7142857142857144,
-    2.857142857142857,
     null,
     null,
     null,
@@ -802,26 +842,15 @@
     null,
     null,
     null,
-    2.857142857142857,
-    2.857142857142857,
-    3,
-    2.2857142857142856,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    1.7142857142857142
+    3
    ],
    "returnSlips": null,
    "rePass": null,
    "reviewShare": 0,
    "warmupPicks": null,
    "trueSkills": {
-    "seen": 19,
-    "meanK": 0.9932090143516376
+    "seen": 24,
+    "meanK": 0.9743682407608142
    },
    "jamChords": 0
   },
@@ -850,13 +879,13 @@
      "days": 9
     },
     "fretboard/5/naturals": {
-     "answers": 175,
-     "sessions": 12,
-     "days": 9
+     "answers": 123,
+     "sessions": 9,
+     "days": 7
     }
    },
-   "retention7": 0.7681897615329905,
-   "retention21": 0.6029906403459493,
+   "retention7": 0.7392704370788654,
+   "retention21": 0.5757804931068327,
    "retentionByDrill": {
     "fretboard/6/naturals": {
      "kAtPass": 0.9609240030374172,
@@ -869,19 +898,19 @@
      "r21": 0.6653990083418536
     },
     "fretboard/5/naturals": {
-     "kAtPass": 0.99341511858084,
-     "r7": 0.7435570127031425,
-     "r21": 0.5589400128574628
+     "kAtPass": 0.9806638165549589,
+     "r7": 0.6567990393407673,
+     "r21": 0.47730957114011285
     }
    },
    "falsePasses": [],
    "falsePassRate": 0,
-   "overScheduled": 0.26348547717842324,
+   "overScheduled": 0.23651452282157676,
    "underScheduled": null,
-   "weakShare": 3.7923998167233894,
+   "weakShare": 4.092894684172477,
    "calibration": {
-    "knowledge": 0.16094780968518213,
-    "recall": 0.08691001898031432
+    "knowledge": 0.16579607822112816,
+    "recall": 0.07288359823080877
    },
    "helpByDay": [
     0,
@@ -900,14 +929,14 @@
     2.857142857142857,
     null,
     2.857142857142857,
-    2.142857142857143,
-    1.5714285714285714,
-    null,
-    1.2857142857142858,
-    1.2857142857142858,
-    1.7142857142857142,
-    2.4285714285714284,
     2.2857142857142856,
+    1.7142857142857142,
+    null,
+    1.7142857142857142,
+    2,
+    2.4285714285714284,
+    2.5714285714285716,
+    2.5714285714285716,
     2.7142857142857144,
     2.857142857142857,
     null,
@@ -919,7 +948,7 @@
    "warmupPicks": null,
    "trueSkills": {
     "seen": 24,
-    "meanK": 0.9450204895604215
+    "meanK": 0.9733098796006671
    },
    "jamChords": 0
   },
@@ -957,7 +986,7 @@
    "weakShare": 2.057160472331717,
    "calibration": {
     "knowledge": 0.17608289413294637,
-    "recall": 0.016005896673430206
+    "recall": 0.014340746572415424
    },
    "helpByDay": [
     0,
@@ -1028,12 +1057,12 @@
    "retentionByDrill": {
     "fretboard/6/naturals": {
      "kAtPass": 0.9692286942218139,
-     "r7": 0.7113448045990657,
+     "r7": 0.7113448045990655,
      "r21": 0.5272758986467843
     },
     "fretboard/6/all": {
      "kAtPass": 0.9520824346545601,
-     "r7": 0.7969774922926658,
+     "r7": 0.7969774922926659,
      "r21": 0.6542908281357004
     }
    },
@@ -1041,10 +1070,10 @@
    "falsePassRate": 0,
    "overScheduled": 0.19141914191419143,
    "underScheduled": null,
-   "weakShare": 2.293829292181722,
+   "weakShare": 2.2561876928755136,
    "calibration": {
-    "knowledge": 0.2116783397139065,
-    "recall": 0.08951003390708924
+    "knowledge": 0.20036610684016315,
+    "recall": 0.06678996353006203
    },
    "helpByDay": [
     0,
@@ -1073,8 +1102,8 @@
     2.5714285714285716,
     null,
     2.5714285714285716,
-    1.7142857142857142,
-    1.1428571428571428
+    1.8571428571428572,
+    1.8571428571428572
    ],
    "returnSlips": null,
    "rePass": null,
@@ -1082,7 +1111,7 @@
    "warmupPicks": null,
    "trueSkills": {
     "seen": 19,
-    "meanK": 0.9173191301833684
+    "meanK": 0.9270301562155048
    },
    "jamChords": 0
   },
@@ -1120,7 +1149,7 @@
    "weakShare": 2.073063753926257,
    "calibration": {
     "knowledge": 0.16079818987288555,
-    "recall": 0.014033707015324338
+    "recall": 0.012895721403106167
    },
    "helpByDay": [
     0,
@@ -1196,7 +1225,7 @@
    "weakShare": 1.7420178799489154,
    "calibration": {
     "knowledge": 0.13039277297659502,
-    "recall": 0.020833392356921745
+    "recall": 0.02012430058486257
    },
    "helpByDay": [
     0,
@@ -1252,8 +1281,7 @@
     "intervals/5/up/skip",
     "intervals/5/down/adjacent",
     "intervals/5/down/adjacent-gb",
-    "intervals/5/down/skip",
-    "intervals/4/up/adjacent"
+    "intervals/5/down/skip"
    ],
    "timeToPass": {
     "intervals/5/up/adjacent": {
@@ -1282,18 +1310,13 @@
      "days": 1
     },
     "intervals/5/down/skip": {
-     "answers": 81,
-     "sessions": 6,
-     "days": 6
-    },
-    "intervals/4/up/adjacent": {
-     "answers": 92,
+     "answers": 101,
      "sessions": 7,
-     "days": 5
+     "days": 7
     }
    },
-   "retention7": 0.49660587732596745,
-   "retention21": 0.34091626016027915,
+   "retention7": 0.47842740450364074,
+   "retention21": 0.3247560615655674,
    "retentionByDrill": {
     "intervals/5/up/adjacent": {
      "kAtPass": 0.9059177646525667,
@@ -1307,13 +1330,13 @@
     },
     "intervals/5/up/skip": {
      "kAtPass": 0.9628902880807866,
-     "r7": 0.5719845400324696,
+     "r7": 0.5719845400324695,
      "r21": 0.38018730751373253
     },
     "intervals/5/down/adjacent": {
-     "kAtPass": 0.9907503947745211,
-     "r7": 0.7687000176758483,
-     "r21": 0.6165122080460104
+     "kAtPass": 0.9909474790265029,
+     "r7": 0.766151080091654,
+     "r21": 0.612109153673
     },
     "intervals/5/down/adjacent-gb": {
      "kAtPass": 0.9996333100319033,
@@ -1321,14 +1344,9 @@
      "r21": 0.24680498079492705
     },
     "intervals/5/down/skip": {
-     "kAtPass": 0.9853883999072812,
-     "r7": 0.450689879960942,
-     "r21": 0.29052197171273186
-    },
-    "intervals/4/up/adjacent": {
-     "kAtPass": 0.9851232957481247,
-     "r7": 0.6301259619117653,
-     "r21": 0.4532079419527647
+     "kAtPass": 0.9937887676234004,
+     "r7": 0.4776880651969743,
+     "r21": 0.3102555163099574
     }
    },
    "falsePasses": [
@@ -1338,13 +1356,13 @@
     "intervals/5/down/adjacent-gb",
     "intervals/5/down/skip"
    ],
-   "falsePassRate": 0.7142857142857143,
-   "overScheduled": 0.3153526970954357,
+   "falsePassRate": 0.8333333333333334,
+   "overScheduled": 0.3070539419087137,
    "underScheduled": 1,
-   "weakShare": 0.6154869939173964,
+   "weakShare": 0.674533761241846,
    "calibration": {
-    "knowledge": 0.13212332247085687,
-    "recall": 0.3470970047219501
+    "knowledge": 0.13760622851082807,
+    "recall": 0.3489493873751838
    },
    "helpByDay": [
     1,
@@ -1364,15 +1382,15 @@
     null,
     1,
     1,
-    1,
+    3,
     null,
     1,
     3,
-    3,
-    3,
-    3,
-    3,
-    3,
+    1,
+    2,
+    2,
+    2,
+    2,
     null,
     null
    ],
@@ -1381,8 +1399,8 @@
    "reviewShare": 0,
    "warmupPicks": null,
    "trueSkills": {
-    "seen": 23,
-    "meanK": 0.9696281064595746
+    "seen": 22,
+    "meanK": 0.9685395669671725
    },
    "jamChords": 0
   },
@@ -1416,12 +1434,12 @@
      "days": 11
     }
    },
-   "retention7": 0.5976054939380379,
+   "retention7": 0.597605493938038,
    "retention21": 0.4088107861445136,
    "retentionByDrill": {
     "intervals/5/up/adjacent": {
      "kAtPass": 0.9639132768439056,
-     "r7": 0.6952501285259441,
+     "r7": 0.695250128525944,
      "r21": 0.49997832838372375
     },
     "intervals/5/up/adjacent-gb": {
@@ -1431,7 +1449,7 @@
     },
     "intervals/5/up/skip": {
      "kAtPass": 0.9636656535138033,
-     "r7": 0.594482265423713,
+     "r7": 0.5944822654237132,
      "r21": 0.4078810636885028
     }
    },
@@ -1442,10 +1460,10 @@
    "falsePassRate": 0.6666666666666666,
    "overScheduled": 0.3222748815165877,
    "underScheduled": null,
-   "weakShare": 1.6155626357533652,
+   "weakShare": 1.6223352045885087,
    "calibration": {
     "knowledge": 0.22103776379904916,
-    "recall": 0.15483150707212598
+    "recall": 0.15400612969111363
    },
    "helpByDay": [
     1,
@@ -1519,22 +1537,22 @@
      "days": 11
     },
     "intervals/5/down/adjacent": {
-     "answers": 41,
-     "sessions": 3,
-     "days": 2
+     "answers": 64,
+     "sessions": 5,
+     "days": 5
     },
     "intervals/5/down/adjacent-gb": {
-     "answers": 34,
-     "sessions": 4,
-     "days": 4
+     "answers": 25,
+     "sessions": 3,
+     "days": 2
     }
    },
-   "retention7": 0.46172296924544487,
-   "retention21": 0.306600700166859,
+   "retention7": 0.4901112256748478,
+   "retention21": 0.3278597139307762,
    "retentionByDrill": {
     "intervals/5/up/adjacent": {
      "kAtPass": 0.9573484353202076,
-     "r7": 0.3684010047959667,
+     "r7": 0.36840100479596666,
      "r21": 0.26074726448681584
     },
     "intervals/5/up/adjacent-gb": {
@@ -1548,14 +1566,14 @@
      "r21": 0.5180675887003887
     },
     "intervals/5/down/adjacent": {
-     "kAtPass": 0.9226748836942118,
-     "r7": 0.333269558645392,
-     "r21": 0.20137925465941314
+     "kAtPass": 0.9696816150790093,
+     "r7": 0.48926197180172987,
+     "r21": 0.3170982915347853
     },
     "intervals/5/down/adjacent-gb": {
-     "kAtPass": 0.999542281167858,
-     "r7": 0.39353953317090157,
-     "r21": 0.23994664746262337
+     "kAtPass": 0.996589728950396,
+     "r7": 0.3794884021615783,
+     "r21": 0.23052267940683713
     }
    },
    "falsePasses": [
@@ -1567,10 +1585,10 @@
    "falsePassRate": 0.8,
    "overScheduled": 0.2871287128712871,
    "underScheduled": 1,
-   "weakShare": 0.6899953240385621,
+   "weakShare": 0.7604854056108327,
    "calibration": {
-    "knowledge": 0.14983450449350683,
-    "recall": 0.33968468227093573
+    "knowledge": 0.15389330260714162,
+    "recall": 0.31880681729971105
    },
    "helpByDay": [
     1,
@@ -1596,11 +1614,11 @@
     null,
     1,
     2,
-    3,
+    1,
     null,
     3,
-    2,
-    0
+    3,
+    2
    ],
    "returnSlips": null,
    "rePass": null,
@@ -1608,7 +1626,7 @@
    "warmupPicks": null,
    "trueSkills": {
     "seen": 18,
-    "meanK": 0.9324025577051989
+    "meanK": 0.919015314333275
    },
    "jamChords": 0
   },
@@ -1643,17 +1661,17 @@
      "days": 4
     },
     "intervals/5/down/adjacent": {
-     "answers": 51,
+     "answers": 57,
      "sessions": 4,
      "days": 7
     }
    },
-   "retention7": 0.5164025333393144,
-   "retention21": 0.342885456540318,
+   "retention7": 0.506286104998293,
+   "retention21": 0.3366780669112519,
    "retentionByDrill": {
     "intervals/5/up/adjacent": {
      "kAtPass": 0.9282578199900897,
-     "r7": 0.6773844149538287,
+     "r7": 0.6773844149538288,
      "r21": 0.49162721711778756
     },
     "intervals/5/up/adjacent-gb": {
@@ -1667,9 +1685,9 @@
      "r21": 0.25839807814710625
     },
     "intervals/5/down/adjacent": {
-     "kAtPass": 0.9332260719007979,
-     "r7": 0.49566982891893374,
-     "r21": 0.32083905438893384
+     "kAtPass": 0.9575765581731672,
+     "r7": 0.45520411555484797,
+     "r21": 0.29600949587266967
     }
    },
    "falsePasses": [
@@ -1678,12 +1696,12 @@
     "intervals/5/down/adjacent"
    ],
    "falsePassRate": 0.75,
-   "overScheduled": 0.15196078431372548,
+   "overScheduled": 0.1715686274509804,
    "underScheduled": 1,
-   "weakShare": 1.067650898588572,
+   "weakShare": 1.076362985990668,
    "calibration": {
-    "knowledge": 0.17823184887101712,
-    "recall": 0.21192534796824575
+    "knowledge": 0.18273638098875367,
+    "recall": 0.19897020350135622
    },
    "helpByDay": [
     0,
@@ -1704,10 +1722,10 @@
     1,
     null,
     null,
-    0,
+    2,
     null,
     null,
-    3,
+    2,
     null,
     null,
     null,
@@ -1721,7 +1739,7 @@
    "warmupPicks": null,
    "trueSkills": {
     "seen": 14,
-    "meanK": 0.9336819759127711
+    "meanK": 0.9330166761963115
    },
    "jamChords": 0
   },
@@ -1773,11 +1791,11 @@
     "intervals/5/up/adjacent": {
      "kAtPass": 0.9704775374201473,
      "r7": 0.45318626688423036,
-     "r21": 0.2935043987733308
+     "r21": 0.29350439877333073
     },
     "intervals/5/up/adjacent-gb": {
      "kAtPass": 0.965762174278697,
-     "r7": 0.10050532195965807,
+     "r7": 0.10050532195965806,
      "r21": 0.05823739705370541
     },
     "intervals/5/up/skip": {
@@ -1803,12 +1821,12 @@
     "intervals/5/down/adjacent-gb"
    ],
    "falsePassRate": 0.8,
-   "overScheduled": 0.21403508771929824,
+   "overScheduled": 0.21052631578947367,
    "underScheduled": 1,
-   "weakShare": 0.5403641188960617,
+   "weakShare": 0.6047473695506753,
    "calibration": {
-    "knowledge": 0.16792548479731595,
-    "recall": 0.33313842728857346
+    "knowledge": 0.17323737413409618,
+    "recall": 0.33215438941651665
    },
    "helpByDay": [
     0,
@@ -1838,7 +1856,7 @@
     null,
     null,
     null,
-    3
+    1
    ],
    "returnSlips": null,
    "rePass": null,
@@ -1846,7 +1864,7 @@
    "warmupPicks": null,
    "trueSkills": {
     "seen": 18,
-    "meanK": 0.9602633076634718
+    "meanK": 0.9541538643145587
    },
    "jamChords": 0
   },
@@ -1884,7 +1902,7 @@
    "weakShare": 1.740002899407019,
    "calibration": {
     "knowledge": 0.12483711251947593,
-    "recall": 0.02316247243926149
+    "recall": 0.02310179332525401
    },
    "helpByDay": [
     0,
@@ -1946,7 +1964,7 @@
    "weakShare": 1.2415094339622623,
    "calibration": {
     "knowledge": 0.2273838533845521,
-    "recall": 0.026539543473804692
+    "recall": 0.02653954347380465
    },
    "helpByDay": [
     0,
@@ -2008,7 +2026,7 @@
    "weakShare": 1.4528301886792467,
    "calibration": {
     "knowledge": 0.1865370391719934,
-    "recall": 0.0287601903188407
+    "recall": 0.02876019031884066
    },
    "helpByDay": [
     0,
@@ -2132,7 +2150,7 @@
    "weakShare": 1.4076086956521752,
    "calibration": {
     "knowledge": 0.1931649403394658,
-    "recall": 0.011950173090358182
+    "recall": 0.011950173090358148
    },
    "helpByDay": [
     0,
@@ -2194,7 +2212,7 @@
    "weakShare": 1,
    "calibration": {
     "knowledge": 0.16472579612218186,
-    "recall": 0.01458487608938094
+    "recall": 0.014585018290309544
    },
    "helpByDay": [
     0,
@@ -2284,7 +2302,7 @@
    "weakShare": 1,
    "calibration": {
     "knowledge": 0.1861965677494725,
-    "recall": 0.02282296956303309
+    "recall": 0.02258696483421686
    },
    "helpByDay": [
     0,
@@ -2373,7 +2391,7 @@
    "underScheduled": null,
    "weakShare": 1,
    "calibration": {
-    "knowledge": 0.18699597928348144,
+    "knowledge": 0.18699631334548253,
     "recall": 0.010798112563003876
    },
    "helpByDay": [
@@ -2553,8 +2571,8 @@
    "underScheduled": null,
    "weakShare": 1,
    "calibration": {
-    "knowledge": 0.19025820154581646,
-    "recall": 0.0016206113986234566
+    "knowledge": 0.19025743129022948,
+    "recall": 0.0016099725983051351
    },
    "helpByDay": [
     0,
@@ -2644,7 +2662,7 @@
    "weakShare": null,
    "calibration": {
     "knowledge": 0.4994553190362821,
-    "recall": 0.00019427045897736837
+    "recall": 0.0001942704589773713
    },
    "helpByDay": [
     0,
@@ -2720,7 +2738,7 @@
    "weakShare": null,
    "calibration": {
     "knowledge": 0.519040599842103,
-    "recall": 0.003072054916732115
+    "recall": 0.003072054916732107
    },
    "helpByDay": [
     0,
@@ -2796,7 +2814,7 @@
    "weakShare": null,
    "calibration": {
     "knowledge": 0.4981296640377722,
-    "recall": 0.00006764989030969767
+    "recall": 0.00006764989030969279
    },
    "helpByDay": [
     0,
@@ -2948,7 +2966,7 @@
    "weakShare": null,
    "calibration": {
     "knowledge": 0.49991165666790544,
-    "recall": 0.0000393012672024232
+    "recall": 0.00003930126720242875
    },
    "helpByDay": [
     0,
@@ -3015,7 +3033,8 @@
    "passed": [
     "fretboard/6/naturals",
     "fretboard/6/all",
-    "fretboard/5/naturals"
+    "fretboard/5/naturals",
+    "fretboard/5/all"
    ],
    "timeToPass": {
     "fretboard/6/naturals": {
@@ -3032,10 +3051,15 @@
      "answers": 125,
      "sessions": 9,
      "days": 8
+    },
+    "fretboard/5/all": {
+     "answers": 91,
+     "sessions": 7,
+     "days": 6
     }
    },
-   "retention7": 0.7176844056729913,
-   "retention21": 0.5431772420394905,
+   "retention7": 0.7282530033219439,
+   "retention21": 0.5554952836751438,
    "retentionByDrill": {
     "fretboard/6/naturals": {
      "kAtPass": 0.9773060547854054,
@@ -3048,19 +3072,24 @@
      "r21": 0.57224613887824
     },
     "fretboard/5/naturals": {
-     "kAtPass": 0.9819261575088652,
-     "r7": 0.6666298777731084,
-     "r21": 0.4711015358483242
+     "kAtPass": 0.982113199610782,
+     "r7": 0.652697622970912,
+     "r21": 0.45905667478062057
+    },
+    "fretboard/5/all": {
+     "kAtPass": 0.9656972948417389,
+     "r7": 0.7738910510709981,
+     "r21": 0.6044942696498071
     }
    },
    "falsePasses": [],
    "falsePassRate": 0,
-   "overScheduled": 0.26556016597510373,
+   "overScheduled": 0.21991701244813278,
    "underScheduled": 1,
-   "weakShare": 1.5548631859002966,
+   "weakShare": 1.9212948224259214,
    "calibration": {
-    "knowledge": 0.142423092219617,
-    "recall": 0.11043730399242946
+    "knowledge": 0.1521677663483929,
+    "recall": 0.1094892950347333
    },
    "helpByDay": [
     0,
@@ -3084,11 +3113,11 @@
     null,
     2.2857142857142856,
     2.4285714285714284,
-    2.5714285714285716,
+    2.7142857142857144,
     2.857142857142857,
     2.857142857142857,
     2.857142857142857,
-    3,
+    2.2857142857142856,
     null,
     null
    ],
@@ -3097,8 +3126,8 @@
    "reviewShare": 0,
    "warmupPicks": null,
    "trueSkills": {
-    "seen": 24,
-    "meanK": 0.9630987676175131
+    "seen": 31,
+    "meanK": 0.9047474255676597
    },
    "jamChords": 0
   },
@@ -3136,7 +3165,7 @@
    "weakShare": 1.860232059251836,
    "calibration": {
     "knowledge": 0.1480652049152377,
-    "recall": 0.009581066055908017
+    "recall": 0.008828861707424803
    },
    "helpByDay": [
     0,
@@ -3192,42 +3221,42 @@
    ],
    "timeToPass": {
     "fretboard/6/naturals": {
-     "answers": 138,
+     "answers": 132,
      "sessions": 8,
      "days": 14
     },
     "fretboard/6/all": {
-     "answers": 103,
-     "sessions": 7,
-     "days": 11
+     "answers": 119,
+     "sessions": 8,
+     "days": 13
     }
    },
-   "retention7": 0.7498899121072102,
-   "retention21": 0.5758039718640537,
+   "retention7": 0.7593472966913346,
+   "retention21": 0.5956579924018021,
    "retentionByDrill": {
     "fretboard/6/naturals": {
-     "kAtPass": 0.9651871540480113,
-     "r7": 0.7250914060344597,
-     "r21": 0.5358847837912777
+     "kAtPass": 0.9613042942161625,
+     "r7": 0.6910181658214126,
+     "r21": 0.5066854824726895
     },
     "fretboard/6/all": {
-     "kAtPass": 0.9455895660597458,
-     "r7": 0.7746884181799608,
-     "r21": 0.6157231599368299
+     "kAtPass": 0.9604236849732565,
+     "r7": 0.8276764275612565,
+     "r21": 0.6846305023309146
     }
    },
    "falsePasses": [],
    "falsePassRate": 0,
-   "overScheduled": 0.1848184818481848,
+   "overScheduled": 0.20132013201320131,
    "underScheduled": null,
-   "weakShare": 2.5349674860428624,
+   "weakShare": 2.4993816092151877,
    "calibration": {
-    "knowledge": 0.20711383858766824,
-    "recall": 0.10507985333294813
+    "knowledge": 0.18501362379251485,
+    "recall": 0.065731857429885
    },
    "helpByDay": [
     0,
-    0,
+    0.2857142857142857,
     0.8571428571428571,
     null,
     null,
@@ -3238,22 +3267,22 @@
     0.7142857142857143,
     null,
     null,
-    1.4285714285714286,
-    2.142857142857143,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
+    1.7142857142857142,
     2.2857142857142856,
-    2.142857142857143,
-    2.4285714285714284,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
     null,
     2.4285714285714284,
-    1.2857142857142858,
-    1
+    2.5714285714285716,
+    3,
+    null,
+    3,
+    1.8571428571428572,
+    1.2857142857142858
    ],
    "returnSlips": null,
    "rePass": null,
@@ -3261,7 +3290,7 @@
    "warmupPicks": null,
    "trueSkills": {
     "seen": 19,
-    "meanK": 0.9112256028098855
+    "meanK": 0.9150153635408059
    },
    "jamChords": 0
   },
@@ -3299,7 +3328,7 @@
    "weakShare": 1.8194139741101065,
    "calibration": {
     "knowledge": 0.18334167476639818,
-    "recall": 0.046827891930237876
+    "recall": 0.04527260813627735
    },
    "helpByDay": [
     0,
@@ -3377,7 +3406,7 @@
    "weakShare": 2,
    "calibration": {
     "knowledge": 0.13718249218838477,
-    "recall": 0.01922565372814726
+    "recall": 0.018663626155001493
    },
    "helpByDay": [
     0,
@@ -3429,7 +3458,8 @@
    "sessions": 30,
    "passed": [
     "fretboard/6/naturals",
-    "fretboard/6/all"
+    "fretboard/6/all",
+    "fretboard/5/naturals"
    ],
    "timeToPass": {
     "fretboard/6/naturals": {
@@ -3441,10 +3471,15 @@
      "answers": 163,
      "sessions": 11,
      "days": 9
+    },
+    "fretboard/5/naturals": {
+     "answers": 141,
+     "sessions": 10,
+     "days": 9
     }
    },
-   "retention7": 0.584069474923985,
-   "retention21": 0.4018817667267092,
+   "retention7": 0.5565632551780464,
+   "retention21": 0.37796776699755186,
    "retentionByDrill": {
     "fretboard/6/naturals": {
      "kAtPass": 0.967315064223216,
@@ -3455,18 +3490,24 @@
      "kAtPass": 0.985872615374316,
      "r7": 0.6632560676423913,
      "r21": 0.4790876765172385
+    },
+    "fretboard/5/naturals": {
+     "kAtPass": 0.9896001680328401,
+     "r7": 0.5015508156861693,
+     "r21": 0.3301397675392371
     }
    },
    "falsePasses": [
-    "fretboard/6/naturals"
+    "fretboard/6/naturals",
+    "fretboard/5/naturals"
    ],
-   "falsePassRate": 0.5,
-   "overScheduled": 0.23443983402489627,
+   "falsePassRate": 0.6666666666666666,
+   "overScheduled": 0.1991701244813278,
    "underScheduled": 1,
-   "weakShare": 1.4998319224108718,
+   "weakShare": 1.7347793061793395,
    "calibration": {
-    "knowledge": 0.15546191978545676,
-    "recall": 0.12283500902492145
+    "knowledge": 0.16352787797537033,
+    "recall": 0.11229004470316878
    },
    "helpByDay": [
     0,
@@ -3486,15 +3527,15 @@
     null,
     2.857142857142857,
     3,
-    2.7142857142857144,
-    null,
-    1.8571428571428572,
-    1.7142857142857142,
-    2,
-    2.4285714285714284,
-    2.5714285714285716,
     2.857142857142857,
-    2.2857142857142856,
+    null,
+    2.7142857142857144,
+    2.7142857142857144,
+    2.5714285714285716,
+    2.7142857142857144,
+    2.857142857142857,
+    3,
+    3,
     null,
     null
    ],
@@ -3503,8 +3544,8 @@
    "reviewShare": 0,
    "warmupPicks": null,
    "trueSkills": {
-    "seen": 19,
-    "meanK": 0.9896153163600062
+    "seen": 24,
+    "meanK": 0.9494933729753182
    },
    "jamChords": 0
   },
@@ -3542,7 +3583,7 @@
    "weakShare": 2.135171696650796,
    "calibration": {
     "knowledge": 0.19650872715577192,
-    "recall": 0.003935210360521434
+    "recall": 0.002818633355623785
    },
    "helpByDay": [
     0,
@@ -3626,10 +3667,10 @@
    "falsePassRate": 0,
    "overScheduled": 0.2145214521452145,
    "underScheduled": 0,
-   "weakShare": 2.0171267855651878,
+   "weakShare": 2.0155244835136465,
    "calibration": {
-    "knowledge": 0.19690052973860744,
-    "recall": 0.08544813018607858
+    "knowledge": 0.19571447916894538,
+    "recall": 0.07592070163930066
    },
    "helpByDay": [
     0,
@@ -3659,7 +3700,7 @@
     null,
     2.4285714285714284,
     2.7142857142857144,
-    2.142857142857143
+    2
    ],
    "returnSlips": null,
    "rePass": null,
@@ -3667,7 +3708,7 @@
    "warmupPicks": null,
    "trueSkills": {
     "seen": 19,
-    "meanK": 0.8749439507711286
+    "meanK": 0.8761644661179874
    },
    "jamChords": 0
   },
@@ -3705,7 +3746,7 @@
    "weakShare": 1.9964831597457058,
    "calibration": {
     "knowledge": 0.20489707093425874,
-    "recall": 0.0313746395953862
+    "recall": 0.030479140701685736
    },
    "helpByDay": [
     0,
@@ -3781,7 +3822,7 @@
    "weakShare": 1.6959460038201624,
    "calibration": {
     "knowledge": 0.2732450478516683,
-    "recall": 0.05916747284892449
+    "recall": 0.05844465223735207
    },
    "helpByDay": [
     0,
@@ -3848,13 +3889,13 @@
      "days": 26
     },
     "fretboard/5/naturals": {
-     "answers": 107,
+     "answers": 109,
      "sessions": 8,
      "days": 9
     }
    },
-   "retention7": 0.7773120023726948,
-   "retention21": 0.6202526090796038,
+   "retention7": 0.779290657450789,
+   "retention21": 0.621914634459059,
    "retentionByDrill": {
     "fretboard/6/naturals": {
      "kAtPass": 0.9609240030374172,
@@ -3867,19 +3908,19 @@
      "r21": 0.7614345703135768
     },
     "fretboard/5/naturals": {
-     "kAtPass": 0.9647150498037212,
-     "r7": 0.7086405923837316,
-     "r21": 0.5146903570867026
+     "kAtPass": 0.9704613944199469,
+     "r7": 0.7145765576180142,
+     "r21": 0.5196764332250685
     }
    },
    "falsePasses": [],
    "falsePassRate": 0,
-   "overScheduled": 0.2553699284009546,
+   "overScheduled": 0.2529832935560859,
    "underScheduled": null,
-   "weakShare": 3.173152872405541,
+   "weakShare": 3.278887224853106,
    "calibration": {
-    "knowledge": 0.18580878451446067,
-    "recall": 0.07702363929106273
+    "knowledge": 0.18898289701149334,
+    "recall": 0.06060806613890932
    },
    "helpByDay": [
     0,
@@ -3918,12 +3959,12 @@
     2.4285714285714284,
     null,
     null,
-    1.2857142857142858,
+    2,
     null,
-    1.1428571428571428,
     1.5714285714285714,
-    1.5714285714285714,
-    2.2857142857142856
+    1.4285714285714286,
+    1.8571428571428572,
+    2.4285714285714284
    ],
    "returnSlips": 0,
    "rePass": {
@@ -3935,7 +3976,7 @@
    "warmupPicks": 0,
    "trueSkills": {
     "seen": 24,
-    "meanK": 0.9114847668733114
+    "meanK": 0.9172643037326423
    },
    "jamChords": 0
   },
@@ -3963,17 +4004,17 @@
      "days": 7
     }
    },
-   "retention7": 0.7758036448286595,
+   "retention7": 0.7758036448286594,
    "retention21": 0.6244926165568143,
    "retentionByDrill": {
     "fretboard/6/naturals": {
      "kAtPass": 0.9694315170419723,
-     "r7": 0.8184984667510242,
+     "r7": 0.8184984667510239,
      "r21": 0.6599488527234688
     },
     "fretboard/6/all": {
      "kAtPass": 0.9522772788627499,
-     "r7": 0.7331088229062948,
+     "r7": 0.7331088229062949,
      "r21": 0.5890363803901599
     }
    },
@@ -3984,7 +4025,7 @@
    "weakShare": 2.12957817284122,
    "calibration": {
     "knowledge": 0.19797117146957277,
-    "recall": 0.038705970025615224
+    "recall": 0.03577657112510952
    },
    "helpByDay": [
     0,
@@ -4078,7 +4119,7 @@
    "weakShare": 1.9597682745771579,
    "calibration": {
     "knowledge": 0.1551075689810048,
-    "recall": 0.03221637757188495
+    "recall": 0.030219479950111434
    },
    "helpByDay": [
     0,
@@ -4172,7 +4213,7 @@
    "weakShare": 1.7913080846347844,
    "calibration": {
     "knowledge": 0.2003308619479975,
-    "recall": 0.04248295289149934
+    "recall": 0.04120844832385871
    },
    "helpByDay": [
     0,
@@ -4274,10 +4315,10 @@
    "falsePassRate": 0,
    "overScheduled": 0.25696594427244585,
    "underScheduled": null,
-   "weakShare": 2.2290730834394705,
+   "weakShare": 2.2770211618140346,
    "calibration": {
-    "knowledge": 0.141518826996491,
-    "recall": 0.019843345414291412
+    "knowledge": 0.14110364746719312,
+    "recall": 0.01776206468004335
    },
    "helpByDay": [
     0,
@@ -4333,7 +4374,7 @@
    "warmupPicks": 0,
    "trueSkills": {
     "seen": 19,
-    "meanK": 0.8760937254244856
+    "meanK": 0.8782316400384779
    },
    "jamChords": 0
   },
@@ -4356,8 +4397,7 @@
     "intervals/4/up/adjacent-gb",
     "intervals/4/down/adjacent",
     "intervals/4/down/adjacent-gb",
-    "intervals/8/up/skip",
-    "intervals/8/down/skip"
+    "intervals/8/up/skip"
    ],
    "timeToPass": {
     "intervals/5/up/adjacent": {
@@ -4376,53 +4416,48 @@
      "days": 8
     },
     "intervals/5/down/adjacent": {
-     "answers": 48,
-     "sessions": 3,
-     "days": 1
+     "answers": 102,
+     "sessions": 7,
+     "days": 5
     },
     "intervals/5/down/adjacent-gb": {
-     "answers": 24,
-     "sessions": 2,
+     "answers": 30,
+     "sessions": 3,
      "days": 3
     },
     "intervals/5/down/skip": {
-     "answers": 66,
-     "sessions": 5,
-     "days": 4
-    },
-    "intervals/4/up/adjacent": {
-     "answers": 78,
+     "answers": 77,
      "sessions": 6,
      "days": 4
     },
+    "intervals/4/up/adjacent": {
+     "answers": 119,
+     "sessions": 8,
+     "days": 10
+    },
     "intervals/4/up/adjacent-gb": {
-     "answers": 26,
-     "sessions": 3,
-     "days": 4
+     "answers": 47,
+     "sessions": 4,
+     "days": 3
     },
     "intervals/4/down/adjacent": {
-     "answers": 76,
+     "answers": 57,
      "sessions": 5,
-     "days": 4
+     "days": 7
     },
     "intervals/4/down/adjacent-gb": {
-     "answers": 28,
-     "sessions": 3,
-     "days": 5
+     "answers": 15,
+     "sessions": 2,
+     "days": 2
     },
     "intervals/8/up/skip": {
-     "answers": 103,
-     "sessions": 8,
-     "days": 9
-    },
-    "intervals/8/down/skip": {
-     "answers": 105,
-     "sessions": 8,
-     "days": 5
+     "answers": 164,
+     "sessions": 12,
+     "days": 11
     }
    },
-   "retention7": 0.4336373559687658,
-   "retention21": 0.2794984105851787,
+   "retention7": 0.475741292838199,
+   "retention21": 0.3211471828444462,
    "retentionByDrill": {
     "intervals/5/up/adjacent": {
      "kAtPass": 0.9059177646525667,
@@ -4432,7 +4467,7 @@
     "intervals/5/up/adjacent-gb": {
      "kAtPass": 0.9997567050310804,
      "r7": 0.5216933748228417,
-     "r21": 0.33293048944861886
+     "r21": 0.3329304894486189
     },
     "intervals/5/up/skip": {
      "kAtPass": 0.9380427122994808,
@@ -4440,71 +4475,63 @@
      "r21": 0.29001035603743186
     },
     "intervals/5/down/adjacent": {
-     "kAtPass": 0.9407720553240488,
-     "r7": 0.34155734827120793,
-     "r21": 0.20648515067626727
+     "kAtPass": 0.992007394066561,
+     "r7": 0.6040120366646293,
+     "r21": 0.4201417960351275
     },
     "intervals/5/down/adjacent-gb": {
-     "kAtPass": 0.9448199036090433,
-     "r7": 0.3248572748443946,
-     "r21": 0.1954150391488969
+     "kAtPass": 0.9627469822294328,
+     "r7": 0.3697631402071926,
+     "r21": 0.22482347985239565
     },
     "intervals/5/down/skip": {
-     "kAtPass": 0.9216915584099936,
-     "r7": 0.46784952598537616,
-     "r21": 0.3019281922794985
+     "kAtPass": 0.947692773644401,
+     "r7": 0.42791307698163844,
+     "r21": 0.28232561241052523
     },
     "intervals/4/up/adjacent": {
-     "kAtPass": 0.967299396328305,
-     "r7": 0.47629371499555945,
-     "r21": 0.30527943153775444
+     "kAtPass": 0.9865833673102058,
+     "r7": 0.6462583730019429,
+     "r21": 0.5012476289806823
     },
     "intervals/4/up/adjacent-gb": {
-     "kAtPass": 0.8149585259043283,
-     "r7": 0.1630286787653665,
-     "r21": 0.0954059109488248
+     "kAtPass": 0.9884672598339979,
+     "r7": 0.37629447532827304,
+     "r21": 0.22857594570525047
     },
     "intervals/4/down/adjacent": {
-     "kAtPass": 0.9806860701755054,
-     "r7": 0.5012104649832005,
-     "r21": 0.32868792869138647
+     "kAtPass": 0.9687052030018055,
+     "r7": 0.5784471601159282,
+     "r21": 0.3983105058905767
     },
     "intervals/4/down/adjacent-gb": {
-     "kAtPass": 0.9571075954202327,
-     "r7": 0.48573968666558104,
-     "r21": 0.308142518590543
+     "kAtPass": 0.863543864007311,
+     "r7": 0.21445836206989494,
+     "r21": 0.12644441281549063
     },
     "intervals/8/up/skip": {
-     "kAtPass": 0.9497509798882662,
-     "r7": 0.6003420377169314,
-     "r21": 0.4211712585710679
-    },
-    "intervals/8/down/skip": {
-     "kAtPass": 0.9719269032378811,
-     "r7": 0.4764309947064084,
-     "r21": 0.31248966102785414
+     "kAtPass": 0.9853214369733234,
+     "r7": 0.6496690521595271,
+     "r21": 0.47177379404880915
     }
    },
    "falsePasses": [
     "intervals/5/up/adjacent",
     "intervals/5/up/adjacent-gb",
     "intervals/5/up/skip",
-    "intervals/5/down/adjacent",
     "intervals/5/down/adjacent-gb",
     "intervals/5/down/skip",
-    "intervals/4/up/adjacent",
     "intervals/4/up/adjacent-gb",
     "intervals/4/down/adjacent",
-    "intervals/4/down/adjacent-gb",
-    "intervals/8/down/skip"
+    "intervals/4/down/adjacent-gb"
    ],
-   "falsePassRate": 0.9166666666666666,
-   "overScheduled": 0.19640852974186307,
+   "falsePassRate": 0.7272727272727273,
+   "overScheduled": 0.25813692480359146,
    "underScheduled": 1,
-   "weakShare": 0.5379740355876871,
+   "weakShare": 0.5369950102900901,
    "calibration": {
-    "knowledge": 0.10785948921644717,
-    "recall": 0.526124371917306
+    "knowledge": 0.10244420782554109,
+    "recall": 0.4727990944593605
    },
    "helpByDay": [
     1,
@@ -4523,14 +4550,14 @@
     3,
     null,
     3,
-    3,
     2,
+    3,
     null,
+    2,
+    2,
+    3,
     1,
-    3,
-    3,
-    3,
-    3,
+    1,
     3,
     3,
     null,
@@ -4569,8 +4596,8 @@
    "reviewShare": 0,
    "warmupPicks": null,
    "trueSkills": {
-    "seen": 40,
-    "meanK": 0.947458879493567
+    "seen": 36,
+    "meanK": 0.9377511323013373
    },
    "jamChords": 0
   },
@@ -4621,17 +4648,17 @@
    "retentionByDrill": {
     "intervals/5/up/adjacent": {
      "kAtPass": 0.9639132768439056,
-     "r7": 0.6952501285259441,
+     "r7": 0.695250128525944,
      "r21": 0.49997832838372375
     },
     "intervals/5/up/adjacent-gb": {
      "kAtPass": 0.952240884018221,
      "r7": 0.14421413721677945,
-     "r21": 0.0839060381706851
+     "r21": 0.08390603817068508
     },
     "intervals/5/up/skip": {
      "kAtPass": 0.9262042060653615,
-     "r7": 0.6061020574871055,
+     "r7": 0.6061020574871054,
      "r21": 0.429212632979853
     },
     "intervals/5/down/adjacent": {
@@ -4642,7 +4669,7 @@
     "intervals/5/down/adjacent-gb": {
      "kAtPass": 0.9665429169244542,
      "r7": 0.3681950179872737,
-     "r21": 0.2236720706151187
+     "r21": 0.22367207061511873
     }
    },
    "falsePasses": [
@@ -4652,10 +4679,10 @@
    "falsePassRate": 0.4,
    "overScheduled": 0.22193877551020408,
    "underScheduled": 1,
-   "weakShare": 0.5394923997436677,
+   "weakShare": 0.5636123961315438,
    "calibration": {
-    "knowledge": 0.1752484117284463,
-    "recall": 0.3145476594526632
+    "knowledge": 0.17494406057638598,
+    "recall": 0.31364042384687557
    },
    "helpByDay": [
     1,
@@ -4705,7 +4732,7 @@
     null,
     null,
     1,
-    2,
+    3,
     null,
     null,
     3,
@@ -4721,7 +4748,7 @@
    "warmupPicks": null,
    "trueSkills": {
     "seen": 18,
-    "meanK": 0.9483994457717481
+    "meanK": 0.9459094276670919
    },
    "jamChords": 0
   },
@@ -4744,7 +4771,9 @@
     "intervals/4/up/adjacent-gb",
     "intervals/4/down/adjacent",
     "intervals/4/down/adjacent-gb",
-    "intervals/8/up/skip"
+    "intervals/8/up/skip",
+    "intervals/8/down/skip",
+    "intervals/3/up/adjacent"
    ],
    "timeToPass": {
     "intervals/5/up/adjacent": {
@@ -4763,123 +4792,144 @@
      "days": 11
     },
     "intervals/5/down/adjacent": {
-     "answers": 125,
-     "sessions": 9,
-     "days": 7
+     "answers": 103,
+     "sessions": 8,
+     "days": 6
     },
     "intervals/5/down/adjacent-gb": {
-     "answers": 44,
-     "sessions": 4,
-     "days": 4
+     "answers": 16,
+     "sessions": 2,
+     "days": 2
     },
     "intervals/5/down/skip": {
-     "answers": 91,
-     "sessions": 7,
-     "days": 7
+     "answers": 129,
+     "sessions": 9,
+     "days": 10
     },
     "intervals/4/up/adjacent": {
-     "answers": 84,
-     "sessions": 6,
-     "days": 7
+     "answers": 63,
+     "sessions": 5,
+     "days": 4
     },
     "intervals/4/up/adjacent-gb": {
-     "answers": 48,
+     "answers": 53,
+     "sessions": 4,
+     "days": 5
+    },
+    "intervals/4/down/adjacent": {
+     "answers": 52,
      "sessions": 4,
      "days": 3
     },
-    "intervals/4/down/adjacent": {
-     "answers": 62,
-     "sessions": 4,
-     "days": 2
-    },
     "intervals/4/down/adjacent-gb": {
-     "answers": 86,
+     "answers": 28,
+     "sessions": 3,
+     "days": 1
+    },
+    "intervals/8/up/skip": {
+     "answers": 98,
      "sessions": 7,
      "days": 6
     },
-    "intervals/8/up/skip": {
-     "answers": 106,
-     "sessions": 8,
-     "days": 4
+    "intervals/8/down/skip": {
+     "answers": 61,
+     "sessions": 5,
+     "days": 2
+    },
+    "intervals/3/up/adjacent": {
+     "answers": 63,
+     "sessions": 5,
+     "days": 3
     }
    },
-   "retention7": 0.47242660406373566,
-   "retention21": 0.3151788608647077,
+   "retention7": 0.44127041828897146,
+   "retention21": 0.29569827328217985,
    "retentionByDrill": {
     "intervals/5/up/adjacent": {
      "kAtPass": 0.9573484353202076,
-     "r7": 0.3684010047959667,
+     "r7": 0.36840100479596666,
      "r21": 0.26074726448681584
     },
     "intervals/5/up/adjacent-gb": {
      "kAtPass": 0.9310387466872009,
-     "r7": 0.4299529669171101,
+     "r7": 0.42995296691711016,
      "r21": 0.268015741002688
     },
     "intervals/5/up/skip": {
      "kAtPass": 0.9019179647725906,
-     "r7": 0.6926151918073045,
+     "r7": 0.6926151918073044,
      "r21": 0.5133712260709896
     },
     "intervals/5/down/adjacent": {
-     "kAtPass": 0.9961593919768073,
-     "r7": 0.4948833939667392,
-     "r21": 0.326370649915813
+     "kAtPass": 0.9902151918531285,
+     "r7": 0.6285907106521994,
+     "r21": 0.449090746799098
     },
     "intervals/5/down/adjacent-gb": {
-     "kAtPass": 0.9886932630122984,
-     "r7": 0.3894745019920728,
-     "r21": 0.23748266013460387
+     "kAtPass": 0.8702170629532705,
+     "r7": 0.21411586795462262,
+     "r21": 0.12619264912011857
     },
     "intervals/5/down/skip": {
-     "kAtPass": 0.9558970664707629,
-     "r7": 0.6540102773239813,
-     "r21": 0.47791352698704603
+     "kAtPass": 0.9792354876311301,
+     "r7": 0.7054709986952135,
+     "r21": 0.5207599657782219
     },
     "intervals/4/up/adjacent": {
-     "kAtPass": 0.9734427615666852,
-     "r7": 0.5590615453437286,
-     "r21": 0.3823168022343156
+     "kAtPass": 0.9157649417256355,
+     "r7": 0.38075052744374177,
+     "r21": 0.2379727366242744
     },
     "intervals/4/up/adjacent-gb": {
-     "kAtPass": 0.9884352244446479,
-     "r7": 0.37633278212825894,
-     "r21": 0.22860249627808826
+     "kAtPass": 0.9913249156961772,
+     "r7": 0.5247905207776713,
+     "r21": 0.3359966254920037
     },
     "intervals/4/down/adjacent": {
-     "kAtPass": 0.9690475323335402,
-     "r7": 0.419856384020042,
-     "r21": 0.26089905886139647
+     "kAtPass": 0.9448418907613819,
+     "r7": 0.3735204935800458,
+     "r21": 0.23256989918822663
     },
     "intervals/4/down/adjacent-gb": {
-     "kAtPass": 0.9998626466599478,
-     "r7": 0.397020437229197,
-     "r21": 0.24230812701752236
+     "kAtPass": 0.9593219309947456,
+     "r7": 0.24186245924217922,
+     "r21": 0.14269549389817382
     },
     "intervals/8/up/skip": {
-     "kAtPass": 0.9465839209579536,
-     "r7": 0.41508415917669034,
-     "r21": 0.2689399165225058
+     "kAtPass": 0.9322335256610853,
+     "r7": 0.48806184188586305,
+     "r21": 0.33072004764723373
+    },
+    "intervals/8/down/skip": {
+     "kAtPass": 0.8993815109393335,
+     "r7": 0.26713427080380703,
+     "r21": 0.16221024516548171
+    },
+    "intervals/3/up/adjacent": {
+     "kAtPass": 0.911334471423858,
+     "r7": 0.42124858320090375,
+     "r21": 0.26373491139501165
     }
    },
    "falsePasses": [
     "intervals/5/up/adjacent",
     "intervals/5/up/adjacent-gb",
-    "intervals/5/down/adjacent",
     "intervals/5/down/adjacent-gb",
     "intervals/4/up/adjacent",
     "intervals/4/up/adjacent-gb",
     "intervals/4/down/adjacent",
     "intervals/4/down/adjacent-gb",
-    "intervals/8/up/skip"
+    "intervals/8/up/skip",
+    "intervals/8/down/skip",
+    "intervals/3/up/adjacent"
    ],
-   "falsePassRate": 0.8181818181818182,
-   "overScheduled": 0.25638051044083526,
+   "falsePassRate": 0.7692307692307693,
+   "overScheduled": 0.19605568445475638,
    "underScheduled": 1,
-   "weakShare": 0.5415977026864136,
+   "weakShare": 0.6614173160995686,
    "calibration": {
-    "knowledge": 0.10053448654201627,
-    "recall": 0.439319807196848
+    "knowledge": 0.10016766826010912,
+    "recall": 0.4330677521465704
    },
    "helpByDay": [
     1,
@@ -4904,18 +4954,18 @@
     null,
     null,
     1,
-    2,
+    3,
     2,
     null,
     3,
     3,
-    0,
-    0,
-    3,
-    3,
-    1,
+    2,
     1,
     2,
+    2,
+    2,
+    3,
+    3,
     null,
     null,
     3,
@@ -4944,8 +4994,8 @@
    "reviewShare": 0,
    "warmupPicks": null,
    "trueSkills": {
-    "seen": 36,
-    "meanK": 0.9406630143818098
+    "seen": 41,
+    "meanK": 0.9285311566214361
    },
    "jamChords": 0
   },
@@ -5009,22 +5059,22 @@
      "days": 2
     }
    },
-   "retention7": 0.5137556675444943,
+   "retention7": 0.5137556675444944,
    "retention21": 0.3495666774221426,
    "retentionByDrill": {
     "intervals/5/up/adjacent": {
      "kAtPass": 0.9282578199900897,
-     "r7": 0.6773844149538287,
+     "r7": 0.6773844149538288,
      "r21": 0.49162721711778756
     },
     "intervals/5/up/adjacent-gb": {
      "kAtPass": 0.9024970072370959,
-     "r7": 0.22000110563204794,
-     "r21": 0.12961095236352918
+     "r7": 0.22000110563204792,
+     "r21": 0.12961095236352915
     },
     "intervals/5/up/skip": {
      "kAtPass": 0.9745484160156405,
-     "r7": 0.6779338177884137,
+     "r7": 0.6779338177884138,
      "r21": 0.4919227330002472
     },
     "intervals/5/down/adjacent": {
@@ -5049,8 +5099,8 @@
     },
     "intervals/4/up/adjacent-gb": {
      "kAtPass": 0.9878602735094715,
-     "r7": 0.39220273859682375,
-     "r21": 0.23936408939000006
+     "r7": 0.3922027385968237,
+     "r21": 0.23936408939000003
     }
    },
    "falsePasses": [
@@ -5063,10 +5113,10 @@
    "falsePassRate": 0.625,
    "overScheduled": 0.16847826086956522,
    "underScheduled": 1,
-   "weakShare": 0.6437104877332435,
+   "weakShare": 0.639276854315895,
    "calibration": {
     "knowledge": 0.15009848637123413,
-    "recall": 0.3733898595064621
+    "recall": 0.3721688696672005
    },
    "helpByDay": [
     0,
@@ -5181,7 +5231,7 @@
      "days": 4
     },
     "intervals/5/down/skip": {
-     "answers": 98,
+     "answers": 99,
      "sessions": 7,
      "days": 14
     },
@@ -5191,22 +5241,22 @@
      "days": 4
     },
     "intervals/4/up/adjacent-gb": {
-     "answers": 36,
+     "answers": 35,
      "sessions": 4,
      "days": 4
     }
    },
-   "retention7": 0.5465408312080083,
-   "retention21": 0.38159485280651023,
+   "retention7": 0.547449961149754,
+   "retention21": 0.38258248028702885,
    "retentionByDrill": {
     "intervals/5/up/adjacent": {
      "kAtPass": 0.9704775374201473,
      "r7": 0.45318626688423036,
-     "r21": 0.2935043987733308
+     "r21": 0.29350439877333073
     },
     "intervals/5/up/adjacent-gb": {
      "kAtPass": 0.9872200680103419,
-     "r7": 0.39200038560516814,
+     "r7": 0.3920003856051682,
      "r21": 0.23924430663830223
     },
     "intervals/5/up/skip": {
@@ -5216,8 +5266,8 @@
     },
     "intervals/5/down/adjacent": {
      "kAtPass": 0.9849606033272207,
-     "r7": 0.8090561047266578,
-     "r21": 0.6367618543489786
+     "r7": 0.8090485270710254,
+     "r21": 0.6367487445555627
     },
     "intervals/5/down/adjacent-gb": {
      "kAtPass": 0.9888663236195032,
@@ -5225,19 +5275,19 @@
      "r21": 0.2309229445416227
     },
     "intervals/5/down/skip": {
-     "kAtPass": 0.9687215912807257,
-     "r7": 0.7610214588824402,
-     "r21": 0.573550282131213
+     "kAtPass": 0.9742603897420906,
+     "r7": 0.7687709476838258,
+     "r21": 0.5817141118323065
     },
     "intervals/4/up/adjacent": {
-     "kAtPass": 0.9586468083416831,
-     "r7": 0.4144172555373993,
-     "r21": 0.25735761333230694
+     "kAtPass": 0.9577208950014114,
+     "r7": 0.41493539158769477,
+     "r21": 0.2577285635955565
     },
     "intervals/4/up/adjacent-gb": {
-     "kAtPass": 0.9265660275351729,
-     "r7": 0.4496520192520686,
-     "r21": 0.28275025960401623
+     "kAtPass": 0.9245321708427799,
+     "r7": 0.4486650115899848,
+     "r21": 0.28212960927723785
     }
    },
    "falsePasses": [
@@ -5248,12 +5298,12 @@
     "intervals/4/up/adjacent-gb"
    ],
    "falsePassRate": 0.625,
-   "overScheduled": 0.21207177814029363,
+   "overScheduled": 0.2300163132137031,
    "underScheduled": 1,
-   "weakShare": 0.8867597368326351,
+   "weakShare": 0.8275508678517506,
    "calibration": {
-    "knowledge": 0.10344687626164084,
-    "recall": 0.37100799260946066
+    "knowledge": 0.09555236125544204,
+    "recall": 0.3708094641771403
    },
    "helpByDay": [
     0,
@@ -5293,14 +5343,14 @@
     3,
     null,
     null,
-    1,
+    3,
     null,
     null,
     null,
     null,
     null,
     null,
-    1,
+    3,
     3,
     3,
     3,
@@ -5319,7 +5369,7 @@
    "warmupPicks": null,
    "trueSkills": {
     "seen": 27,
-    "meanK": 0.9632441366023055
+    "meanK": 0.9650809604763159
    },
    "jamChords": 0
   },
@@ -5394,7 +5444,7 @@
     "keys/maj/1": {
      "kAtPass": 0.9988885535192915,
      "r7": 0.5440419862520971,
-     "r21": 0.3506870779593431
+     "r21": 0.35068707795934306
     },
     "keys/maj/2": {
      "kAtPass": 0.9917190784163135,
@@ -5409,7 +5459,7 @@
     "keys/min/1": {
      "kAtPass": 0.9925471705746822,
      "r7": 0.560346506595877,
-     "r21": 0.3645570287516537
+     "r21": 0.36455702875165363
     },
     "keys/min/2": {
      "kAtPass": 0.9998111993509972,
@@ -5441,8 +5491,8 @@
    "underScheduled": null,
    "weakShare": 2.913405026359379,
    "calibration": {
-    "knowledge": 0.1720992415771658,
-    "recall": 0.07744745752244124
+    "knowledge": 0.17197242935291404,
+    "recall": 0.07704107629458072
    },
    "helpByDay": [
     3,
@@ -5543,7 +5593,7 @@
    "retentionByDrill": {
     "keys/maj/0": {
      "kAtPass": 0.9839016539492905,
-     "r7": 0.27685112404640283,
+     "r7": 0.2768511240464028,
      "r21": 0.16423322826444892
     },
     "keys/maj/1": {
@@ -5554,7 +5604,7 @@
     "keys/maj/2": {
      "kAtPass": 0.9998918992440953,
      "r7": 0.9253435676258221,
-     "r21": 0.8156342845285717
+     "r21": 0.8156342845285718
     },
     "keys/min/0": {
      "kAtPass": 0.9951906552548233,
@@ -5587,8 +5637,8 @@
    "underScheduled": null,
    "weakShare": 3.8195031915711777,
    "calibration": {
-    "knowledge": 0.1447766549149642,
-    "recall": 0.02436664187505375
+    "knowledge": 0.14451158083928053,
+    "recall": 0.02398708032899514
    },
    "helpByDay": [
     2,
@@ -5636,8 +5686,8 @@
    "track": "keys",
    "days": 28,
    "seed": 3,
-   "answers": 270,
-   "sessions": 16,
+   "answers": 274,
+   "sessions": 17,
    "passed": [
     "keys/maj/0",
     "keys/maj/1",
@@ -5685,13 +5735,13 @@
      "days": 3
     },
     "keys/aug": {
-     "answers": 53,
-     "sessions": 4,
+     "answers": 57,
+     "sessions": 5,
      "days": 4
     }
    },
-   "retention7": 0.6920369722822866,
-   "retention21": 0.5434266878382593,
+   "retention7": 0.6977119891251076,
+   "retention21": 0.5479080791384312,
    "retentionByDrill": {
     "keys/maj/0": {
      "kAtPass": 0.9858670212997886,
@@ -5701,37 +5751,37 @@
     "keys/maj/1": {
      "kAtPass": 0.9999996650666014,
      "r7": 0.8645581584453343,
-     "r21": 0.704717082524711
+     "r21": 0.7047170825247109
     },
     "keys/maj/2": {
      "kAtPass": 0.9973359870005433,
      "r7": 0.8499249071357451,
-     "r21": 0.6832214101064554
+     "r21": 0.6832214101064555
     },
     "keys/min/0": {
      "kAtPass": 0.9909303071462181,
      "r7": 0.9242731456840777,
-     "r21": 0.8234016720792318
+     "r21": 0.8234016720792317
     },
     "keys/min/1": {
      "kAtPass": 0.9999381338033347,
-     "r7": 0.7798732632630869,
+     "r7": 0.779873263263087,
      "r21": 0.5839749091371935
     },
     "keys/min/2": {
      "kAtPass": 0.9983574022710668,
      "r7": 0.9158001494828292,
-     "r21": 0.7979799644817201
+     "r21": 0.7979799644817203
     },
     "keys/dim": {
      "kAtPass": 0.9678025055487783,
-     "r7": 0.519248897771226,
+     "r7": 0.5192488977712258,
      "r21": 0.3376312820951701
     },
     "keys/aug": {
-     "kAtPass": 0.9528192585237334,
-     "r7": 0.41538597924809256,
-     "r21": 0.2582776843754344
+     "kAtPass": 0.9764240159379981,
+     "r7": 0.460786113990661,
+     "r21": 0.2941288147768089
     }
    },
    "falsePasses": [
@@ -5740,12 +5790,12 @@
     "keys/aug"
    ],
    "falsePassRate": 0.375,
-   "overScheduled": 0.5185185185185185,
+   "overScheduled": 0.5364963503649635,
    "underScheduled": null,
-   "weakShare": 3.8963503341837264,
+   "weakShare": 4.027808825501856,
    "calibration": {
-    "knowledge": 0.14818993932498098,
-    "recall": 0.061047443141653036
+    "knowledge": 0.14351752337530502,
+    "recall": 0.06597446536211465
    },
    "helpByDay": [
     3,
@@ -5783,7 +5833,7 @@
    "warmupPicks": null,
    "trueSkills": {
     "seen": 12,
-    "meanK": 0.9798874065038584
+    "meanK": 0.98578051304465
    },
    "jamChords": 840
   },
@@ -5841,7 +5891,7 @@
     "keys/maj/0": {
      "kAtPass": 0.999909737020328,
      "r7": 0.87128821763367,
-     "r21": 0.71584644542041
+     "r21": 0.7158464454204101
     },
     "keys/maj/1": {
      "kAtPass": 0.9971482678317133,
@@ -5861,7 +5911,7 @@
     "keys/min/1": {
      "kAtPass": 0.9998040304576041,
      "r7": 0.5762646174897799,
-     "r21": 0.3770724355540171
+     "r21": 0.37707243555401715
     },
     "keys/min/2": {
      "kAtPass": 0.9945668873489433,
@@ -5878,8 +5928,8 @@
    "underScheduled": null,
    "weakShare": 3.4656188605108063,
    "calibration": {
-    "knowledge": 0.15435630643418272,
-    "recall": 0.08954641420822114
+    "knowledge": 0.15428497719901835,
+    "recall": 0.08921682013967999
    },
    "helpByDay": [
     2,
@@ -6027,8 +6077,8 @@
    "underScheduled": null,
    "weakShare": 2.993014609231232,
    "calibration": {
-    "knowledge": 0.17336043417794567,
-    "recall": 0.07045774518017638
+    "knowledge": 0.17331455167067367,
+    "recall": 0.07034060597748557
    },
    "helpByDay": [
     3,

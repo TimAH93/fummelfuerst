@@ -1,5 +1,8 @@
 import { describe, expect, it } from './expect';
-import { DEFAULT_MODEL, LearnerState, SkillStats, emptyState, freshSkill, knowledge, parseProgression } from '../src/core';
+import {
+  DEFAULT_MODEL, LearnerState, SkillStats, applyEvidence, buildCatalog, buildCurriculum, emptyState, freshSkill, hasSlipped, isComfortable, knowledge, markPassed,
+  parseProgression, recommendDrill,
+} from '../src/core';
 import { PlayEvent, applyPlay, jamEvent, playEvidence, skillsForChord, skillsForHeld, timingEvent, trainerEvent, trainerQuality } from '../src/core/mastery/play';
 
 const MIN = 60_000;
@@ -157,6 +160,44 @@ describe('applying play', () => {
     expect(s.held).toBe(2);
     expect(s.lapses).toBe(0);
     expect(s.n).toBe(0);
+  });
+  it('counts one play miss per recall: further misses before the skill is played or recalled again are worth 0', () => {
+    const before = withSkill('voicing:m9', { a: 2, hl: DAY, last: T0, lastOk: T0, held: 2 });
+    let state = applyPlay(before, trainerEvent(loop[2], null, 80, T0 + MIN, false));
+    const once = state.skills['voicing:m9'];
+    expect(playEvidence(state, trainerEvent(loop[2], null, 80, T0 + 2 * MIN, false))[0].w).toBe(0);
+    for (let i = 2; i <= 50; i++) state = applyPlay(state, trainerEvent(loop[2], null, 80, T0 + i * MIN, false));
+    expect(state.skills['voicing:m9']).toEqual(once);
+    // A hit is a recall again: the next miss counts in full.
+    state = applyPlay(state, trainerEvent(loop[2], [53, 68, 72, 75, 79], 80, T0 + DAY, false));
+    expect(playEvidence(state, trainerEvent(loop[2], null, 80, T0 + DAY + MIN, false))[0].w).toBeCloseTo(0.15);
+    // A skill never seen takes its first miss.
+    expect(playEvidence(emptyState(), trainerEvent(loop[2], null, 80, T0, false))[0].w).toBeCloseTo(0.15);
+  });
+  it('a trainer left running does not wear down a passed drill: 200 empty slots later it is still comfortable and passed', () => {
+    const curriculum = buildCurriculum(buildCatalog());
+    const K = 'keys:maj/inv:0';
+    const drill = curriculum.find((d) => d.id === 'keys/maj/0')!;
+    expect(drill.skills).toEqual([K]);
+    // 20 clean quiz answers in four daily blocks: comfortable, held 3, half-life of days.
+    let state = emptyState();
+    let t = T0;
+    for (let i = 0; i < 20; i++) {
+      state = applyEvidence(state, [{ skill: K, at: t, x: 1, w: 1, f: 1, kind: 'quiz', missWeight: 0 }]);
+      t += i % 5 === 4 ? DAY : 20_000;
+    }
+    state = markPassed(state, curriculum, t);
+    const start = state.skills[K];
+    expect(state.passed[drill.id] !== undefined && isComfortable(start)).toBe(true);
+    // 50 BPM, one bar per slot (4.8 s), nobody playing: every C major slot is missed.
+    for (let k = 1; k <= 200; k++) state = applyPlay(state, trainerEvent({ rootPc: 0, typeId: 'maj' }, null, 50, t + k * 4800, false));
+    const s = state.skills[K];
+    expect(s.b - start.b).toBeCloseTo(0.15); // the first miss counted, the 199 after it not
+    expect(isComfortable(s)).toBe(true);
+    expect(s.hl > DAY).toBe(true);
+    expect([s.n, s.held, s.lapses]).toEqual([start.n, start.held, 0]);
+    expect(hasSlipped(state, drill)).toBe(false);
+    expect(recommendDrill(state, curriculum, 'keys')?.id !== drill.id).toBe(true);
   });
   it('never touches n, held, lapses, help, recent, boost, passed or the session fields', () => {
     const base: LearnerState = {

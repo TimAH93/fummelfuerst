@@ -92,7 +92,7 @@ export function App() {
   switch (screen.name) {
     case 'practice':
       return (
-        <Practice key={screen.drill.id} drill={screen.drill} state={state} settings={settings} pads={pads}
+        <Practice key={screen.drill.id} drill={screen.drill} state={state} settings={settings} pads={pads} autoplay
           onState={updateState} onDrill={(drill) => setScreen({ name: 'practice', drill })} onExit={home} />
       );
     case 'monitor':

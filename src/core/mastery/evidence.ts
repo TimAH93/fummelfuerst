@@ -79,12 +79,14 @@ export function evidenceOf(a: Attempt, tempo: { fastMs: number; slowMs: number }
 // ── Skill update ──
 
 /** A skill before any evidence. */
-export const freshSkill = (): SkillStats => ({ a: 0, b: 0, n: 0, flu: 0.5, hl: 0, last: 0, lastOk: 0, held: 0, lapses: 0 });
+export const freshSkill = (): SkillStats => ({ a: 0, b: 0, n: 0, flu: 0.5, hl: 0, last: 0, lastOk: 0, lastQ: 0, held: 0, lapses: 0 });
 
 /**
  * Fold one piece of evidence into a skill's stats (§3.3): shrink the counts to the window and
  * add the weighted observation; grow the half-life with spacing on a recall, shrink it by
  * surprise on a miss; EMA the fluency over successes; count held / lapses on quiz items only.
+ * `held` measures its break from the previous quiz answer (`lastQ`): a jam or an aside between
+ * two answers is no break, so play can never supply the "held over a break" of the comfort gate.
  */
 export function updateSkill(s: SkillStats | undefined, ev: Evidence, cfg: ModelConfig = DEFAULT_MODEL): SkillStats {
   const prev = s ?? freshSkill();
@@ -106,8 +108,10 @@ export function updateSkill(s: SkillStats | undefined, ev: Evidence, cfg: ModelC
   // 4. quiz-only counters
   const quiz = ev.kind === 'quiz';
   const held = !quiz ? prev.held
-    : success ? (prev.last > 0 && gap >= cfg.heldGap ? Math.min(cfg.heldMax, prev.held + 1) : prev.held)
+    : success ? (prev.lastQ > 0 && ev.at - prev.lastQ >= cfg.heldGap ? Math.min(cfg.heldMax, prev.held + 1) : prev.held)
     : Math.max(0, prev.held - 1);
   const lapses = !quiz ? prev.lapses : success ? 0 : Math.min(cfg.lapseMax, prev.lapses + 1);
-  return { a, b, n: prev.n + (quiz ? 1 : 0), flu, hl, last: ev.at, lastOk: success ? ev.at : prev.lastOk, held, lapses };
+  return {
+    a, b, n: prev.n + (quiz ? 1 : 0), flu, hl, last: ev.at, lastOk: success ? ev.at : prev.lastOk, lastQ: quiz ? ev.at : prev.lastQ, held, lapses,
+  };
 }

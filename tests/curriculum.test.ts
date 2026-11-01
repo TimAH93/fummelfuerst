@@ -12,13 +12,17 @@ import {
   drillProgress,
   emptyState,
   getFamily,
+  hasSlipped,
   intervalShape,
   isComfortable,
+  jamEvent,
+  applyPlay,
   knowledge,
   markPassed,
   nextDrillExercise,
   recommendDrill,
   recordAttempt,
+  updateSkill,
 } from '../src/core';
 
 const catalog = buildCatalog();
@@ -57,7 +61,7 @@ function train(p: number, sessions: number, track: TrackId, seed = 1) {
 }
 
 /** A comfortable skill as a strong player leaves it: 19/1, held, recalled at `lastOk` with half-life `hl`. */
-const comfortable = (hl: number, lastOk: number): SkillStats => ({ a: 19, b: 1, n: 20, flu: 0.8, hl, last: lastOk, lastOk, held: 3, lapses: 0 });
+const comfortable = (hl: number, lastOk: number): SkillStats => ({ a: 19, b: 1, n: 20, flu: 0.8, hl, last: lastOk, lastOk, lastQ: lastOk, held: 3, lapses: 0 });
 
 describe('curriculum', () => {
   it('has one path per track, small drills, unique ids, only catalog skills', () => {
@@ -171,6 +175,32 @@ describe('drill progression', () => {
     expect(drillProgress(shaken, first).progress).toBeCloseTo(0.9);
     expect(recommendDrill(shaken, curriculum, 'fretboard')!.id).toBe(current.id);
   });
+  it('a one-skill drill passed on the fewest clean answers slips after three misses in a row, not two', () => {
+    const MIN = 60_000;
+    const K = 'keys:maj/inv:0';
+    const drill = byId('keys/maj/0');
+    for (const w of [0.9, 1]) { // help 0 and help ≥ 1
+      let state: LearnerState = emptyState();
+      let t = T0;
+      const answer = (x: number, dt: number) => {
+        t += dt;
+        state = markPassed({ ...state, skills: { ...state.skills, [K]: updateSkill(state.skills[K], { skill: K, at: t, x, w, f: 1, kind: 'quiz', missWeight: x === 1 ? 0 : 1 }) } }, curriculum, t);
+      };
+      // Clean answers 5 s apart, every fourth after a 15-minute break, until the drill passes: knowledge just over the bar.
+      for (let i = 0; state.passed[drill.id] === undefined; i++) answer(1, i % 4 === 3 ? 15 * MIN : 5000);
+      expect(knowledge(state.skills[K]) < 0.78).toBe(true);
+      answer(0, 5000);
+      answer(0, 5000);
+      expect(knowledge(state.skills[K]) / DEFAULT_MODEL.comfortMastery * DEFAULT_MODEL.lapsePenalty[2] < DEFAULT_MODEL.slipProgress).toBe(true);
+      expect(hasSlipped(state, drill)).toBe(false); // two misses: the bar dips, the card does not turn
+      expect(recommendDrill(state, curriculum, 'keys')!.id).toBe('keys/maj/1');
+      answer(0, 5000);
+      expect(hasSlipped(state, drill)).toBe(true);
+      expect(recommendDrill(state, curriculum, 'keys')!.id).toBe(drill.id);
+      answer(1, 5000); // one right answer clears the lapses
+      expect(hasSlipped(state, drill)).toBe(false);
+    }
+  });
   it('a later drill being comfortable does not let you skip an earlier one', () => {
     const { state } = train(0.97, 12, 'fretboard');
     const current = recommendDrill(state, curriculum, 'fretboard')!;
@@ -212,8 +242,45 @@ describe('time-free gates', () => {
     expect(isComfortable({ ...comfortable(DAY, T0), n: 2 })).toBe(false);
     expect(isComfortable({ ...comfortable(DAY, T0), a: 14, b: 6 })).toBe(false);
   });
+  it('play gives knowledge but never the break: jamming, then answers seconds apart, passes nothing', () => {
+    // The picked C major ten times a day, an hour apart, for two weeks: knowledge from play alone is past the bar (0.76).
+    const K = 'keys:maj/inv:0';
+    const drill = byId('keys/maj/0');
+    let state: LearnerState = emptyState();
+    for (let day = 0; day < 14; day++) for (let i = 0; i < 10; i++) state = applyPlay(state, jamEvent([60, 64, 67], T0 + day * DAY + i * 3_600_000, true, false));
+    expect(knowledge(state.skills[K]) >= DEFAULT_MODEL.comfortMastery).toBe(true);
+    expect(drillProgress(state, drill)).toEqual({ status: 'new', progress: 0.25, comfortable: 0, total: 1 }); // its own play shows, capped
+    // Three days later: five right answers 5 s apart. The jam three days ago is no break – held stays 0.
+    const rng = createRng(7);
+    let t = T0 + 17 * DAY;
+    for (let i = 0; i < 5; i++, t += 5000) {
+      const { exercise, helpLevel } = nextDrillExercise(state, drill, catalog, rng, t);
+      const a = recordAttempt(exercise, getFamily(exercise.family).solve(exercise), { mode: 'tap', latencyMs: 2000, helpLevel, at: t });
+      state = markPassed(applyAttempt(state, a, getFamily(exercise.family).tempo), curriculum, t);
+    }
+    expect([state.skills[K].n, state.skills[K].held]).toEqual([5, 0]);
+    expect(drill.id in state.passed).toBe(false);
+    // One more right answer after a break between quiz answers holds, and the drill passes.
+    t += 11 * 60_000;
+    const { exercise, helpLevel } = nextDrillExercise(state, drill, catalog, rng, t);
+    state = markPassed(applyAttempt(state, recordAttempt(exercise, getFamily(exercise.family).solve(exercise), { mode: 'tap', latencyMs: 2000, helpLevel, at: t }), getFamily(exercise.family).tempo), curriculum, t);
+    expect(state.skills[K].held).toBe(1);
+    expect(state.passed[drill.id]).toBe(t);
+  });
+  it('shows a skill\'s own play evidence in its bar, like transfer, at most 0.25', () => {
+    // One chord jammed: its own drill and its neighbours' drills all show a little, none is comfortable.
+    let state: LearnerState = emptyState();
+    for (let day = 0; day < 14; day++) state = applyPlay(state, jamEvent([60, 64, 67], T0 + day * DAY, false, false));
+    for (const id of ['keys/maj/0', 'keys/maj/1', 'triads/3-2-1/maj/0']) {
+      const p = drillProgress(state, byId(id));
+      expect(p.status).toBe('new');
+      expect(p.progress > 0).toBe(true);
+      expect(p.progress <= 0.25).toBe(true);
+    }
+    expect(drillProgress(state, byId('keys/maj/0')).progress).toBe(0.25);
+  });
   it('shows transferred knowledge of an unseen skill as a little progress, never as comfortable', () => {
-    // E on string 6 known well: its octave string (1) inherits a prior worth four answers.
+    // E on string 6 known well: its octave string (1) inherits a prior worth six answers (priorMax).
     const state: LearnerState = { ...emptyState(), skills: { 'note:E/string:6': comfortable(DAY, T0) } };
     const drill = byId('fretboard/1/naturals');
     const p = drillProgress(state, drill);

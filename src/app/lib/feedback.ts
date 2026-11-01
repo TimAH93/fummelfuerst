@@ -13,7 +13,7 @@ const INVERSION_DE = ['Grundstellung', '1. Umkehrung', '2. Umkehrung', '3. Umkeh
 /** Chord degrees with their article: '3' → 'die große Terz', '9' → 'die None'. */
 const DEGREE_DE: Record<string, string> = {
   '1': 'der Grundton', b2: 'die kleine Sekunde', '2': 'die große Sekunde', b3: 'die kleine Terz', '3': 'die große Terz',
-  '4': 'die Quarte', b5: 'die verminderte Quinte', '5': 'die Quinte', '#5': 'die übermäßige Quinte', b6: 'die kleine Sexte',
+  '4': 'die Quarte', '#4': 'die übermäßige Quarte', b5: 'die verminderte Quinte', '5': 'die Quinte', '#5': 'die übermäßige Quinte', b6: 'die kleine Sexte',
   '6': 'die große Sexte', bb7: 'die verminderte Septime', b7: 'die kleine Septime', '7': 'die große Septime',
   b9: 'die kleine None', '9': 'die None', '#9': 'die übermäßige None', '11': 'die Undezime', '#11': 'die übermäßige Undezime', '13': 'die Tredezime',
 };

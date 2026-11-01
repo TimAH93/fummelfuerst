@@ -4,12 +4,12 @@ import { ProgChord } from '../../src/core/song/analysis';
  * Simulated learners for the calibration harness (spec §9.1). A persona is plain data: the
  * hidden learner in world.ts reads it, the runner in run.ts draws sessions from it. The
  * numbers describe a *different* functional form from the learner model on purpose (power-law
- * recall, multiplicative help bonus, hidden transfer), so tuning the model against them is
- * not circular.
+ * recall, durable prior knowledge beside fragile new knowledge, multiplicative help bonus,
+ * hidden transfer), so tuning the model against them is not circular.
  */
 export interface Persona {
   id: string;
-  /** Initial true knowledge of every skill before any practice, 0..1. */
+  /** Initial true knowledge of every skill before any practice, 0..1; durable – it starts at world.ts priorStability(k0), not S0. */
   k0: number;
   /** Learning rate: a correct answer moves k by learn·hard·(1 − k); the reveal after a miss by half of that. */
   learn: number;
@@ -17,7 +17,7 @@ export interface Persona {
   hard: number;
   /** Chance level on note and interval questions; other families scale from it (FAMILY_GUESS). */
   guess: number;
-  /** Hidden transfer: a cold skill starts at max(k0, transfer · max k over its true neighbours). */
+  /** Hidden transfer: a cold skill starts at max(k0, transfer · max k over its true neighbours), with the stability of prior knowledge. */
   transfer: number;
   /** Help bonus per help level: P' = 1 − (1 − P)(1 − bonus[level]). Level 0 shows everything. */
   helpBonus: readonly number[];

@@ -73,7 +73,7 @@ function countingRng(seed: number): { rng: Rng; draws: () => number } {
 }
 
 /** A comfortable skill as a strong player leaves it: 19/1, held, recalled at `lastOk` with half-life `hl`. */
-const comfortable = (hl: number, lastOk: number): SkillStats => ({ a: 19, b: 1, n: 20, flu: 0.8, hl, last: lastOk, lastOk, held: 3, lapses: 0 });
+const comfortable = (hl: number, lastOk: number): SkillStats => ({ a: 19, b: 1, n: 20, flu: 0.8, hl, last: lastOk, lastOk, lastQ: lastOk, held: 3, lapses: 0 });
 
 /** A state with `drill` passed and every one of its skills at recall R when read at `now`. */
 function passedAt(drill: Drill, R: number, now: number): LearnerState {

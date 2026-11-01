@@ -100,12 +100,15 @@ export interface ModelConfig {
 }
 
 /**
- * The defaults the app runs with. Fitted by `npm run calibrate` (tests/sim/calibrate.ts, WP9 run
- * of 2026-11-01): coordinate descent on J over seeds 11–15 of the steady, quick, foundOnly,
- * forgetful and optimist learners took J from 3.858 to 2.841 in one pass; a second pass, and a
- * fresh run from these values, move nothing. The acceptance thresholds of tests/calibration.test.ts
- * were then measured on seeds 1–5. Fields marked "calibrated" moved in that run; every other
- * tunable is the spec value and a local optimum of its grid; principles were not swept.
+ * The defaults the app runs with. Fitted by `npm run calibrate` (tests/sim/calibrate.ts):
+ * coordinate descent on J over seeds 11–15 of the steady, quick, foundOnly, forgetful and
+ * optimist learners. WP9 run of 2026-11-01 took J from 3.858 to 2.841 in one pass. Re-run of
+ * 2026-11-01 after the simulated world made prior knowledge durable (tests/sim/world.ts
+ * S_PRIOR): J 2.721 → 2.653 in two passes (weights.floor 0.03 → 0.01, priorMax 4 → 6;
+ * missShrink went 0.2 → 0.35 and back), and a fresh run from these values moves nothing. The
+ * acceptance thresholds of tests/calibration.test.ts were then measured on seeds 1–5. Fields
+ * marked "calibrated" moved in one of those runs; every other tunable is the spec value and a
+ * local optimum of its grid; principles were not swept.
  */
 export const DEFAULT_MODEL: ModelConfig = {
   nMax: 20,
@@ -127,7 +130,8 @@ export const DEFAULT_MODEL: ModelConfig = {
   heldGap: 10 * MIN,
   heldMax: 3,
   lapseMax: 3,
-  priorMax: 4,
+  /** calibrated (spec 4, re-run after durable prior knowledge): transfer is worth at most six answers – a cold note whose octave twin is at 19 / 1 starts at low 0.68 instead of 0.61. */
+  priorMax: 6,
   ladderTransfer: 0.5,
   comfortMastery: 0.75,
   comfortN: 3,
@@ -140,8 +144,11 @@ export const DEFAULT_MODEL: ModelConfig = {
   maxLearningFree: 8,
   rTarget: 0.6,
   fluFloor: 0.75,
-  /** calibrated: recent 0.5 (spec 0.1) – with up to four skills in learning, the last five asked are nearly the whole pool. */
-  weights: { weak: 1, forget: 0.8, fresh: 0.6, floor: 0.03, recent: 0.5, boost: 3, ladderSecond: 0.3 },
+  /**
+   * calibrated: recent 0.5 (spec 0.1) – with up to four skills in learning, the last five asked are nearly the whole pool;
+   * floor 0.01 (spec 0.03, re-run after durable prior knowledge) – a known, freshly recalled skill keeps a third of the old floor weight.
+   */
+  weights: { weak: 1, forget: 0.8, fresh: 0.6, floor: 0.01, recent: 0.5, boost: 3, ladderSecond: 0.3 },
   boostMs: 20 * MIN,
   boostMax: 8,
   reviewDrills: 2,

@@ -37,11 +37,31 @@ import { FAMILY_GUESS, HARD_DIFFICULTY, OPTIMIST_SHARE, Persona } from './person
  * boosts are exercised. Deliberately *not* the learner model's functional form: the model
  * uses an exponential half-life, the world a power law; the model a Beta belief, the world a
  * scalar k. All randomness comes from the supplied Rng in a stable call order.
+ *
+ * Prior knowledge is durable, new knowledge is not. A skill's k is two parts with one rule
+ * set: the knowledge it started with (kPrior – the persona's k0, or hidden transfer from a
+ * neighbour) and what was gained in the app (k − kPrior). Each part has its own stability,
+ * and recall is their knowledge-weighted mean, k·R = kPrior·r(SPrior) + (k − kPrior)·r(S) with
+ * r = (1 + Δt/·)^(−0.5) from the last correct answer. Knowledge brought in has survived outside
+ * the app, so its stability grows with how well it is known: SPrior starts at
+ * S0 · (S_PRIOR / S0)^kPrior, geometric from S0 for a trace to S_PRIOR for a fully known skill
+ * (kPrior counts as that share of the ≈ 10 spaced recalls, sGrowth 2.2, that take a memory
+ * from S0 to S_PRIOR). Gained knowledge starts at S0 and has to be consolidated by spaced
+ * recall, exactly as before; both parts follow the same recall and miss rules. A cold skill
+ * (kPrior 0) behaves as it always did; the quick learner's 0.7 starts at SPrior ≈ 4.9 d
+ * (r 0.94 after 16 h) where it used to start at S0 (r 0.14), the steady learner's 0.25 at 2.7 h.
  */
 
 const MIN = 60_000;
-/** Stability of a skill after its first exposure, and the floor after a miss. */
+const DAY = 86_400_000;
+/** Stability of knowledge gained in the app after its first exposure, and the floor after a miss. */
 export const S0 = 20 * MIN;
+/** Initial stability of a skill known completely before the app: a month without practice still recalls 0.82. */
+export const S_PRIOR = 60 * DAY;
+
+/** Initial stability of knowledge k brought into the app (k0 or hidden transfer): S0 at 0, S_PRIOR at 1, geometric in between. */
+export const priorStability = (k: number): number => S0 * (S_PRIOR / S0) ** k;
+
 /** Spread of the latency noise. */
 const LATENCY_SD = 400;
 /** A wrong self-rated answer is "≈ Fast" this often when the family knows confusables. */
@@ -54,12 +74,15 @@ export const TAP_FAMILIES = ['melody-chord', 'keys-chord', 'keys-voicing'];
 export const modeFor = (family: string): AnswerMode => (TAP_FAMILIES.includes(family) ? 'tap' : 'play');
 
 export interface TrueSkill {
-  /** True knowledge 0..1. */
+  /** True knowledge 0..1, prior plus gained. */
   k: number;
-  /** Memory stability in ms: recall after Δt is (1 + Δt/S)^(−0.5). */
+  /** Memory stability in ms of the knowledge gained in the app: recall after Δt is (1 + Δt/S)^(−0.5). */
   S: number;
   /** Epoch ms of the last correct answer (0 = never); recall is measured from here. */
   lastOk: number;
+  /** The part of k the skill started with (k0 or hidden transfer), and its stability (priorStability(kPrior) at first touch). */
+  kPrior: number;
+  SPrior: number;
 }
 
 /** One hidden-state change, kept per skill so metrics can evaluate true recall at any past time. */
@@ -190,7 +213,7 @@ export class World {
     this.catalog = new Set(catalogIds);
   }
 
-  /** True state of a skill; a cold skill is initialised from k0 and hidden transfer on first touch. */
+  /** True state of a skill; a cold skill is initialised from k0 and hidden transfer on first touch, its stability from that knowledge. */
   skill(id: string): TrueSkill {
     return (this.skills[id] ??= this.initial(id));
   }
@@ -212,7 +235,8 @@ export class World {
       const t = this.skills[n];
       if (t) k = Math.max(k, persona.transfer * t.k);
     }
-    return { k: Math.max(0, Math.min(1, k)), S: S0, lastOk: 0 };
+    k = Math.max(0, Math.min(1, k));
+    return { k, S: S0, lastOk: 0, kPrior: k, SPrior: priorStability(k) };
   }
 
   /** True recall 0..1: a power law from the last correct answer, 1 for knowledge never yet recalled. */
@@ -246,8 +270,9 @@ export class World {
 
   /**
    * Learn from an answer (or a jam chord): a correct answer moves k by learn·hard·(1 − k), the
-   * reveal after a miss by half of that, ×0.7 when everything was on screen; a spaced recall
-   * multiplies stability, a massed one barely, a miss cuts it to 40 % (never below S0).
+   * reveal after a miss by half of that, ×0.7 when everything was on screen – the gain joins the
+   * in-app part. Both parts' stabilities follow the same rule: a spaced recall multiplies
+   * stability, a massed one barely, a miss cuts it to 40 % (never below S0).
    */
   observe(id: string, correct: boolean, help: HelpLevel, now: number, play = false): void {
     const t = this.skill(id);
@@ -256,11 +281,11 @@ export class World {
     const hard = simDifficulty(id, this.ctx) >= HARD_DIFFICULTY ? persona.hard : 1;
     const rate = persona.learn * weak * hard * (correct ? 1 : 0.5) * (help === 0 ? 0.7 : 1) * (play ? 0.5 : 1);
     t.k = Math.min(1, t.k + rate * (1 - t.k));
-    if (correct) {
-      const dt = t.lastOk ? now - t.lastOk : 0;
-      t.S = t.lastOk && dt >= 0.1 * t.S ? Math.max(t.S * persona.sGrowth, 0.6 * dt) : t.S * 1.02;
-      t.lastOk = now;
-    } else t.S = Math.max(S0, 0.4 * t.S);
+    const dt = t.lastOk ? now - t.lastOk : 0;
+    const next = (S: number): number => (!correct ? Math.max(S0, 0.4 * S) : t.lastOk && dt >= 0.1 * S ? Math.max(S * persona.sGrowth, 0.6 * dt) : S * 1.02);
+    t.S = next(t.S);
+    t.SPrior = next(t.SPrior);
+    if (correct) t.lastOk = now;
     (this.history[id] ??= []).push({ at: now, ...t });
   }
 
@@ -318,8 +343,13 @@ export class World {
   }
 }
 
-/** Power-law recall of a true skill at `now`. */
-export const recallOf = (t: TrueSkill, now: number): number => (t.lastOk ? (1 + Math.max(0, now - t.lastOk) / t.S) ** -0.5 : 1);
+/** Power-law recall of a true skill at `now`: the knowledge-weighted mean of its prior and its gained part, 1 before the first correct answer. */
+export function recallOf(t: TrueSkill, now: number): number {
+  if (!t.lastOk) return 1;
+  const dt = Math.max(0, now - t.lastOk);
+  const gained = (1 + dt / t.S) ** -0.5;
+  return t.k > 0 ? (t.kPrior * (1 + dt / t.SPrior) ** -0.5 + (t.k - t.kPrior) * gained) / t.k : gained;
+}
 
 /** Close voicing of a triad in the given inversion, stacked upward from middle C. */
 export function closeVoicing(c: ProgChord, inv: number): number[] {

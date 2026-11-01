@@ -1,10 +1,10 @@
 import { generateExercise } from '../exercises/registry';
 import { Rng } from '../exercises/rng';
 import { DEFAULT_CONTEXT, ExerciseContext } from '../exercises/types';
-import { knowledge, recall } from '../mastery/belief';
+import { belief, knowledge, priorFor, recall } from '../mastery/belief';
 import { DEFAULT_MODEL, ModelConfig } from '../mastery/config';
 import { LearnerState, SkillStats, helpLevelFor, warmupLeft } from '../mastery/model';
-import { CatalogEntry, NextExercise, priorMean, seen, selectSkill } from '../mastery/select';
+import { CatalogEntry, NextExercise, seen, selectSkill } from '../mastery/select';
 
 /**
  * Practice like a fighting-game training mode: one small drill at a time, in a fixed
@@ -186,9 +186,11 @@ export const COMFORT_MASTERY = DEFAULT_MODEL.comfortMastery;
 
 /**
  * A skill is comfortable when it has been asked a few times, held over at least one break
- * (a success ≥ cfg.heldGap after the previous answer) and its knowledge is above the bar.
- * Time-free: the calendar never un-passes anything; `held` and `n` are written by quiz
- * evidence only, so play alone never passes a drill.
+ * (a quiz success ≥ cfg.heldGap after the previous quiz answer) and its knowledge is above the
+ * bar. Time-free: the calendar never un-passes anything. `held` and `n` are written by quiz
+ * evidence only, and the break is measured between quiz answers, so play never passes a drill:
+ * it may lift the knowledge (play raises `a`), but the gate still needs comfortN quiz answers
+ * and one of them a quiz-to-quiz break later.
  */
 export const isComfortable = (s: SkillStats | undefined, cfg: ModelConfig = DEFAULT_MODEL): boolean =>
   !!s && s.n >= cfg.comfortN && s.held >= 1 && knowledge(s) >= cfg.comfortMastery;
@@ -211,15 +213,21 @@ const entriesOf = (drill: Drill): CatalogEntry[] => {
   return drill.skills.map((id) => byId.get(id) ?? { family: drill.family, skill: id, focus: undefined, edges: [], difficulty: 0.5 });
 };
 
+/** The score of a skill that is not comfortable never reaches this; the lapse penalty multiplies it down. */
+const SCORE_CAP = 0.9;
+
+const lapseFactor = (s: SkillStats, cfg: ModelConfig): number => cfg.lapsePenalty[Math.min(s.lapses, cfg.lapsePenalty.length - 1)];
+
 /**
  * Per skill: 1 when comfortable; otherwise the share of the knowledge bar reached (≤ 0.9),
- * multiplied down by consecutive misses (an observed slump, not the calendar); an unseen skill
- * shows what its neighbours transfer, at most 0.25 and never as comfortable.
+ * multiplied down by consecutive misses (an observed slump, not the calendar); a skill without
+ * quiz answers shows what its belief says – its own play or aside evidence plus what its
+ * neighbours transfer – at most 0.25 and never as comfortable.
  */
 function skillScore(entry: CatalogEntry, s: SkillStats | undefined, skills: Record<string, SkillStats>, cfg: ModelConfig): number {
   if (isComfortable(s, cfg)) return 1;
-  if (seen(s)) return Math.min(0.9, knowledge(s) / cfg.comfortMastery) * cfg.lapsePenalty[Math.min(s.lapses, cfg.lapsePenalty.length - 1)];
-  return Math.min(0.25, 2 * Math.max(0, priorMean(entry, skills, cfg) - 0.5));
+  if (seen(s)) return Math.min(SCORE_CAP, knowledge(s) / cfg.comfortMastery) * lapseFactor(s, cfg);
+  return Math.min(0.25, 2 * Math.max(0, belief(s, priorFor(entry.edges, skills, cfg)).mean - 0.5));
 }
 
 export function drillProgress(state: LearnerState, drill: Drill, now?: number, cfg: ModelConfig = DEFAULT_MODEL): DrillProgress {
@@ -243,8 +251,24 @@ export function markPassed(state: LearnerState, curriculum: Drill[], now: number
   return { ...state, passed: { ...state.passed, ...Object.fromEntries(fresh.map((d) => [d.id, now])) } };
 }
 
-export const hasSlipped = (state: LearnerState, drill: Drill, cfg: ModelConfig = DEFAULT_MODEL): boolean =>
-  state.passed[drill.id] !== undefined && drillProgress(state, drill, undefined, cfg).progress < cfg.slipProgress;
+/**
+ * Per skill of a passed drill: 1 while comfortable, otherwise the 0.9 cap multiplied down by
+ * consecutive quiz misses alone – not by how far above the bar the skill was when it passed, so
+ * a one-skill drill slips after exactly three misses in a row (0.9 × 0.3 < 0.5; two leave
+ * 0.9 × 0.6), a 7-skill drill when five of its skills have, and play (which never touches
+ * `lapses`) cannot un-pass anything. A skill the drill gained since it passed scores as in drillProgress.
+ */
+function slipScore(entry: CatalogEntry, s: SkillStats | undefined, skills: Record<string, SkillStats>, cfg: ModelConfig): number {
+  if (isComfortable(s, cfg)) return 1;
+  if (seen(s)) return SCORE_CAP * lapseFactor(s, cfg);
+  return skillScore(entry, s, skills, cfg);
+}
+
+export function hasSlipped(state: LearnerState, drill: Drill, cfg: ModelConfig = DEFAULT_MODEL): boolean {
+  if (state.passed[drill.id] === undefined) return false;
+  const entries = entriesOf(drill);
+  return entries.reduce((sum, e) => sum + slipScore(e, state.skills[e.skill], state.skills, cfg), 0) / entries.length < cfg.slipProgress;
+}
 
 /**
  * The one drill to do next in a track: the first one not yet passed, or – earlier in the

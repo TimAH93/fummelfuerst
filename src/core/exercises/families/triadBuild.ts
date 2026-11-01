@@ -163,8 +163,9 @@ export const triadBuild: ExerciseFamily<TriadBuildParams, TriadBuildSolution, Tr
         return { kind: 'wrong-set', credit: 0.5, ...(aside ? { aside } : {}) };
       }
       if (j === inversion) return shapeOk ? other() : { kind: 'span', credit: 0.5 };
-      const aside = triadSkill(typeId, j, set);
-      return { kind: 'inversion', credit: 0.5, aside, nudge: [asked, aside], detail: { inversion: j, note: chordToneNames(c)[j] } };
+      // Only a playable grip inside the range would pass the other inversion's own check.
+      const aside = inRange && shapeOk ? triadSkill(typeId, j, set) : undefined;
+      return { kind: 'inversion', credit: 0.5, ...(aside ? { aside } : {}), nudge: aside ? [asked, aside] : [asked], detail: { inversion: j, note: chordToneNames(c)[j] } };
     }
 
     const q = played.length === 3 ? identifyChordPcs(pcs[0], played) : undefined;

@@ -26,7 +26,9 @@ export interface SkillStats {
   last: number;
   /** Epoch ms of the last full success (x = 1), any kind. Recall is measured from here. */
   lastOk: number;
-  /** Quiz successes after a gap ≥ cfg.heldGap, capped at cfg.heldMax; −1 per quiz miss, never below 0. */
+  /** Epoch ms of the last quiz answer (0 = none). The break `held` counts is measured from here, never from play or an aside. */
+  lastQ: number;
+  /** Quiz successes ≥ cfg.heldGap after the previous quiz answer, capped at cfg.heldMax; −1 per quiz miss, never below 0. */
   held: number;
   /** Consecutive quiz misses since the last quiz success, capped at cfg.lapseMax. */
   lapses: number;

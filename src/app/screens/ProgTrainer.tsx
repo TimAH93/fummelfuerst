@@ -21,7 +21,10 @@ interface Props {
   settings: Settings;
   /** Stored pads: a slot hit with a pad chord proves pad memory, not the skill. */
   pads: PadBank;
-  /** One play event per slot the click leaves: a hit credits what was played, a miss lands lightly on the target. */
+  /**
+   * One play event per slot the click leaves: a hit credits what was played, a miss lands lightly on the target –
+   * only when keys were played in that slot, since an empty slot means listening, not a miss.
+   */
   onPlay: (ev: PlayEvent) => void;
   onExit: () => void;
 }
@@ -44,6 +47,8 @@ export function ProgTrainer({ chords, bpm: startBpm, settings, pads, onPlay, onE
   const stateRef = useRef(state);
   stateRef.current = state;
   const barCount = useRef(0);
+  /** A chord settled on the keys during the current slot; reset at every bar line. */
+  const playedInSlot = useRef(false);
   const signature = chords.map((c) => `${c.rootPc}${c.typeId}`).join();
 
   // Hear the progression once before the first run of it.
@@ -62,7 +67,11 @@ export function ProgTrainer({ chords, bpm: startBpm, settings, pads, onPlay, onE
   const nameOf = (c: ProgChord) => showChord(chord(key ? spellInKey(keyScale(key), c.rootPc).note : pcToNote(c.rootPc, 'flat'), c.typeId), style);
   const romanOf = (c: ProgChord) => (key ? chordFunction(key, c).roman : '');
 
-  const midi = useMidi((settled) => { if (running) setState((s) => onPlayed(s, settled)); }, 3);
+  const midi = useMidi((settled) => {
+    if (!running) return;
+    playedInSlot.current = true;
+    setState((s) => onPlayed(s, settled));
+  }, 3);
 
   const stopClick = () => { metro.current?.stop(); metro.current = null; };
   const startClick = async (bpm: number, countIn: number) => {
@@ -72,12 +81,15 @@ export function ProgTrainer({ chords, bpm: startBpm, settings, pads, onPlay, onE
       setBeat(b);
       if (b.countIn || b.beat !== 1) return;
       // A new bar: the first one is slot 0 of the round; each further bar moves the slot on.
+      const played = playedInSlot.current;
+      playedInSlot.current = false;
       if (barCount.current++ === 0) return;
       setState((s) => {
         // The slot being left: judged from the state before onSlot, which resets hits and hitMidis at the wrap.
+        // A slot nobody played in is no evidence: the player is listening, finding the chord, or away.
         if (!s.done) {
           const midis = s.hits[s.index] ? s.hitMidis[s.index] : null;
-          onPlay(trainerEvent(chords[s.index], midis, s.bpm, Date.now(), midis !== null && padFor(pads, midis) !== null));
+          if (midis !== null || played) onPlay(trainerEvent(chords[s.index], midis, s.bpm, Date.now(), midis !== null && padFor(pads, midis) !== null));
         }
         const next = onSlot(s);
         if (next.lastRound) void beep().catch(() => {});

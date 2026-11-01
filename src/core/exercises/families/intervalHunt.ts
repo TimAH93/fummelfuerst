@@ -158,10 +158,11 @@ export const intervalHunt: ExerciseFamily<IntervalHuntParams, IntervalHuntSoluti
     if (wrong.string === targetString) {
       if (Math.abs(pitch - wanted) === 12) return { kind: 'octave', credit: 0.5 };
       if (Math.abs(pitch - wanted) === 1) {
-        // Semitones actually played in the asked direction: 0 (unison) … 13 (minor ninth).
+        // Semitones actually played in the asked direction: 0 (unison) … 13 (minor ninth). Only a simple
+        // interval is named – intervalInfo would fold the ninth onto a minor second.
         const played = direction === 'up' ? pitch - base : base - pitch;
         const nudge = played >= 1 && played <= 12 ? [intervalSkill(played, direction, a, b)] : [];
-        return { kind: 'off-by-one', credit: 0.25, nudge, detail: { degree: intervalInfo(played).degree } };
+        return { kind: 'off-by-one', credit: 0.25, nudge, ...(played >= 0 && played <= 12 ? { detail: { degree: intervalInfo(played).degree } } : {}) };
       }
       return other();
     }

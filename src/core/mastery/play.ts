@@ -14,10 +14,12 @@ import { LearnerState, applyEvidence } from './model';
  * Play evidence: chords played on the keys outside Practice – the jam monitor, the progression
  * trainer and the timing screen – mapped to the keys / voicing skills they demonstrate and
  * folded into the learner state as light 'play' evidence. Play may raise a skill's belief,
- * fluency and half-life (it stops being due) and lift drill progress; it never touches `n`,
+ * fluency and half-life (it stops being due) and lift drill progress; it never touches `n`, `lastQ`,
  * `held`, `lapses`, help, `recent`, `boost` or `passed`, so no drill passes from play alone.
  * The (1 − R) discount tames noodling: a chord the model already expects you to recall is
- * worth almost nothing; a chord equal to a stored pad proves pad memory, not the skill.
+ * worth almost nothing; a chord equal to a stored pad proves pad memory, not the skill. Play
+ * misses do not compound: one counts per recall, so a trainer left running (or a player still
+ * listening) cannot wear a quiz-built belief down slot by slot.
  */
 
 export type { PlaySource } from './config';
@@ -125,11 +127,14 @@ export const timingEvent = (midis: Midi[], verdict: Verdict, at: number, pad: bo
 /**
  * Evidence of one play event: per credited skill, weight = source weight × factor × pad
  * weight × (1 − R) on a success (floored at cfg.playMin), read against the skill as it is
- * before the event. Evidence worth nothing is dropped by applyEvidence.
+ * before the event. A miss counts in full, but only when the skill's last evidence was a
+ * success: after a miss (or any failure) further play misses are worth 0 until it is recalled
+ * again. Evidence worth nothing is dropped by applyEvidence.
  */
 export function playEvidence(state: LearnerState, ev: PlayEvent, cfg: ModelConfig = DEFAULT_MODEL): Evidence[] {
   return ev.skills.map(({ skill, factor }) => {
-    const fresh = ev.correct ? Math.max(cfg.playMin, 1 - recall(state.skills[skill], ev.at)) : 1;
+    const s = state.skills[skill];
+    const fresh = ev.correct ? Math.max(cfg.playMin, 1 - recall(s, ev.at)) : s !== undefined && s.last > s.lastOk ? 0 : 1;
     const w = cfg.playW[ev.source] * factor * (ev.pad ? cfg.playPadWeight : 1) * fresh;
     return { skill, at: ev.at, x: ev.correct ? 1 : 0, w, f: ev.quality, kind: 'play', missWeight: 0 };
   });

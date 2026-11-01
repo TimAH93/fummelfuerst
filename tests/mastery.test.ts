@@ -72,7 +72,7 @@ const quiz = (x: number, at: number, w = 1, f = 1): Evidence => ({ skill: C5, at
 
 /** Stored stats with given weighted counts (the rest neutral). */
 const stats = (a: number, b: number, extra: Partial<SkillStats> = {}): SkillStats =>
-  ({ a, b, n: Math.round(a + b), flu: 0.5, hl: 10 * MIN, last: 0, lastOk: 0, held: 0, lapses: 0, ...extra });
+  ({ a, b, n: Math.round(a + b), flu: 0.5, hl: 10 * MIN, last: 0, lastOk: 0, lastQ: 0, held: 0, lapses: 0, ...extra });
 
 /** Simulated player: answers each skill correctly with probability p(skill). */
 function simulate(p: (skill: string) => number, steps: number, families: string[], seed = 1) {
@@ -173,6 +173,24 @@ describe('skill stats', () => {
     s = applyAttempt(s, attempt(C5, false, T0 + 9_000 + 10 * MIN + 1), TEMPO);
     expect(s.skills[C5].held).toBe(0); // a miss takes one back
     expect(s.skills[C5].lapses).toBe(1);
+  });
+  it('measures the break of held between quiz answers: play or an aside in between is no break', () => {
+    const play = (at: number): Evidence => ({ skill: C5, at, x: 1, w: 0.25, f: 0.8, kind: 'play', missWeight: 0 });
+    const aside = (at: number): Evidence => ({ ...play(at), w: 0.5, kind: 'aside' });
+    // Exposure long ago that was not a quiz answer: the first quiz answer has nothing to have held over.
+    for (const before of [play, aside]) {
+      let s = updateSkill(undefined, before(T0));
+      expect(s.lastQ).toBe(0);
+      s = updateSkill(s, quiz(1, T0 + 3 * DAY));
+      expect([s.held, s.lastQ]).toEqual([0, T0 + 3 * DAY]);
+      // Seconds later, with another exposure in between that is older than heldGap: still no break between quiz answers.
+      s = updateSkill(updateSkill(s, before(T0 + 3 * DAY + 1000)), quiz(1, T0 + 3 * DAY + 2000));
+      expect(s.held).toBe(0);
+      // Ten minutes after the previous quiz answer it holds, whatever came in between.
+      s = updateSkill(updateSkill(s, before(T0 + 3 * DAY + 5 * MIN)), quiz(1, T0 + 3 * DAY + 2000 + 10 * MIN));
+      expect([s.held, s.lastQ]).toEqual([1, T0 + 3 * DAY + 2000 + 10 * MIN]);
+      expect(updateSkill(s, play(T0 + 4 * DAY)).lastQ).toBe(s.lastQ); // play never moves it
+    }
   });
   it('scores tempo from latency for timed answers', () => {
     const fast = applyAttempt(emptyState(), timed(C5, 1000), TEMPO).skills[C5];
@@ -287,17 +305,17 @@ describe('belief reads', () => {
     expect(forgetPressure(s, T0 + DAY)).toBe(1);
     expect(forgetPressure(undefined, T0)).toBe(1);
   });
-  it('a transfer prior is worth at most four answers and never enters knowledge', () => {
+  it('a transfer prior is worth at most six answers and never enters knowledge', () => {
     const edges: Edge[] = [{ to: 'note:E/string:6', kind: 'octave-string', s: 0.8 }];
     const skills = { 'note:E/string:6': stats(19, 1) };
     const prior = priorFor(edges, skills);
-    expect(prior.a0).toBeCloseTo(4.636, 1e-3);
-    expect(prior.b0).toBeCloseTo(1.364, 1e-3);
+    expect(prior.a0).toBeCloseTo(6.455, 1e-3);
+    expect(prior.b0).toBeCloseTo(1.545, 1e-3);
     const cold = belief(undefined, prior);
-    expect(cold.mean).toBeCloseTo(0.773, 1e-3);
-    expect(cold.low).toBeCloseTo(0.614, 1e-3);
+    expect(cold.mean).toBeCloseTo(0.807, 1e-3);
+    expect(cold.low).toBeCloseTo(0.675, 1e-3);
     expect(knowledge(undefined)).toBeCloseTo(0.211, 1e-3);
-    expect(belief(stats(2, 0), prior).low).toBeCloseTo(0.704, 1e-3);
+    expect(belief(stats(2, 0), prior).low).toBeCloseTo(0.736, 1e-3);
     expect(knowledge(stats(2, 0))).toBeCloseTo(belief(stats(2, 0)).low);
     expect(priorFor([], skills)).toEqual({ a0: 1, b0: 1 });
     expect(priorFor([{ to: 'note:B/string:6', kind: 'fret-neighbour', s: 0.3 }], skills)).toEqual({ a0: 1, b0: 1 });
