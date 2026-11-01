@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
 import {
-  DEFAULT_TRAINER, Key, ProgChord, TrainerState, VARIATIONS, analyzeProgression, chord, chordFunction, keyScale, nextChord, nudgeBpm, onPlayed,
-  onSlot, pcToNote, spellInKey, startTrainer, suggestVoicing,
+  DEFAULT_TRAINER, Key, PadBank, PlayEvent, ProgChord, TrainerState, VARIATIONS, analyzeProgression, chord, chordFunction, keyScale, nextChord, nudgeBpm,
+  onPlayed, onSlot, padFor, pcToNote, spellInKey, startTrainer, suggestVoicing, trainerEvent,
 } from '../../core';
 import { Piano } from '../components/Piano';
 import { MetronomeHandle, beep, startMetronome } from '../lib/metronome';
@@ -19,6 +19,10 @@ interface Props {
   chords: ProgChord[];
   bpm?: number;
   settings: Settings;
+  /** Stored pads: a slot hit with a pad chord proves pad memory, not the skill. */
+  pads: PadBank;
+  /** One play event per slot the click leaves: a hit credits what was played, a miss lands lightly on the target. */
+  onPlay: (ev: PlayEvent) => void;
   onExit: () => void;
 }
 
@@ -28,7 +32,7 @@ const BEATS_PER_BAR = 4;
  * Progression trainer: the click runs slowly, the chord to play lies amber on the keys with the
  * next one announced, a clean round speeds it up, the target tempo brings rhythm variations.
  */
-export function ProgTrainer({ chords, bpm: startBpm, settings, onExit }: Props) {
+export function ProgTrainer({ chords, bpm: startBpm, settings, pads, onPlay, onExit }: Props) {
   useWakeLock();
   const style = settings.noteNames;
   const [state, setState] = useState<TrainerState>(() => startTrainer({ chords, ...DEFAULT_TRAINER, startBpm: startBpm ?? DEFAULT_TRAINER.startBpm, targetBpm: Math.max((startBpm ?? DEFAULT_TRAINER.startBpm) + 24, DEFAULT_TRAINER.targetBpm) }));
@@ -70,6 +74,11 @@ export function ProgTrainer({ chords, bpm: startBpm, settings, onExit }: Props) 
       // A new bar: the first one is slot 0 of the round; each further bar moves the slot on.
       if (barCount.current++ === 0) return;
       setState((s) => {
+        // The slot being left: judged from the state before onSlot, which resets hits and hitMidis at the wrap.
+        if (!s.done) {
+          const midis = s.hits[s.index] ? s.hitMidis[s.index] : null;
+          onPlay(trainerEvent(chords[s.index], midis, s.bpm, Date.now(), midis !== null && padFor(pads, midis) !== null));
+        }
         const next = onSlot(s);
         if (next.lastRound) void beep().catch(() => {});
         if (next.bpm !== s.bpm || next.done) window.setTimeout(() => { if (next.done) stopClick(); else void startClick(next.bpm, 0); }, 0);

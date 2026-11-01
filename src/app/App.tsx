@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'preact/hooks';
-import { Drill, LearnerState, PadBank, ProgChord, SessionEntry, crossed, emptyBank, exportOnly, padChord, rankFor, totalSongs } from '../core';
+import { useEffect, useRef, useState } from 'preact/hooks';
+import { Drill, LearnerState, PadBank, PlayEvent, ProgChord, SessionEntry, applyPlay, crossed, emptyBank, exportOnly, padChord, rankFor, totalSongs } from '../core';
 import { downloadBytes } from './lib/download';
 import { onFile } from './lib/link';
 import { context } from './lib/session';
@@ -27,6 +27,8 @@ type Screen =
 
 export function App() {
   const [state, setState] = useState<LearnerState | null>(null);
+  /** Mirror of `state` for callbacks that fire between renders (play events from the keys): never a stale closure. */
+  const stateRef = useRef<LearnerState | null>(null);
   const [settings, setSettings] = useState<Settings>(DEFAULT_SETTINGS);
   const [screen, setScreen] = useState<Screen>({ name: 'home' });
   const [pads, setPads] = useState<PadBank>(emptyBank);
@@ -35,6 +37,7 @@ export function App() {
 
   useEffect(() => {
     void Promise.all([loadState(), loadSettings(), loadPads(), loadSessions()]).then(([s, st, p, log]) => {
+      stateRef.current = s;
       setState(s);
       setSettings(st);
       setPads(p);
@@ -55,9 +58,12 @@ export function App() {
   if (!state) return <main class="screen" />;
 
   const updateState = (s: LearnerState) => {
+    stateRef.current = s;
     setState(s);
     void saveState(s);
   };
+  // Play evidence reads the mirror, so two chords in one render tick fold into one state and no updater has side effects.
+  const onPlay = (ev: PlayEvent) => updateState(applyPlay(stateRef.current ?? state, ev));
   const updateSettings = (s: Settings) => {
     setSettings(s);
     void saveSettings(s);
@@ -86,11 +92,11 @@ export function App() {
   switch (screen.name) {
     case 'practice':
       return (
-        <Practice key={screen.drill.id} drill={screen.drill} state={state} settings={settings}
+        <Practice key={screen.drill.id} drill={screen.drill} state={state} settings={settings} pads={pads}
           onState={updateState} onDrill={(drill) => setScreen({ name: 'practice', drill })} onExit={home} />
       );
     case 'monitor':
-      return <ChordMonitor settings={settings} onSettings={updateSettings} pads={pads} onPads={updatePads} onExit={home} onTrain={(chords) => setScreen({ name: 'trainer', chords })} />;
+      return <ChordMonitor settings={settings} onSettings={updateSettings} pads={pads} onPads={updatePads} onPlay={onPlay} onExit={home} onTrain={(chords) => setScreen({ name: 'trainer', chords })} />;
     case 'recorder':
       return <Recorder settings={settings} onSettings={updateSettings} onExit={home} />;
     case 'pads':
@@ -100,13 +106,13 @@ export function App() {
     case 'lexicon':
       return <Lexicon settings={settings} onSettings={updateSettings} pads={pads} onPads={updatePads} onExit={home} onTrain={(chords, bpm) => setScreen({ name: 'trainer', chords, bpm })} />;
     case 'trainer':
-      return <ProgTrainer key={screen.chords.map((c) => `${c.rootPc}${c.typeId}`).join()} chords={screen.chords} bpm={screen.bpm} settings={settings} onExit={home} />;
+      return <ProgTrainer key={screen.chords.map((c) => `${c.rootPc}${c.typeId}`).join()} chords={screen.chords} bpm={screen.bpm} settings={settings} pads={pads} onPlay={onPlay} onExit={home} />;
     case 'guitar':
       return <Guitar pads={pads} settings={settings} onExit={home} />;
     case 'session':
       return <Session sessions={sessions} onDone={addSession} onArrangement={(reference) => setScreen({ name: 'arrangement', reference })} onExit={home} />;
     case 'timing':
-      return <Timing settings={settings} onSettings={updateSettings} onExit={home} />;
+      return <Timing settings={settings} onSettings={updateSettings} pads={pads} onPlay={onPlay} onExit={home} />;
     case 'hum':
       return <Hum settings={settings} onSettings={updateSettings} onExit={home} />;
     case 'brief':
