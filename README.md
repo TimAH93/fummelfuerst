@@ -100,6 +100,14 @@ Adaptive guitar improvisation trainer: hear → understand → locate → play �
   tuner reading (nearest string, cents), and a note tracker that turns frames into
   played notes. Pure functions on sample buffers; the Web Audio layer comes with the UI.
 
+- **Learner model v2** – the per-skill EMA and Leitner boxes are replaced by a Beta lower bound
+  over windowed, help-weighted evidence plus a half-life forgetting curve; transfer between related
+  skills as a prior that never gates; diagnosed errors with partial credit and a "≈ Fast" rating;
+  light play evidence from jamming and the trainers that can never pass a drill; a difficulty
+  ladder inside drills, labelled reviews inside the normal session and a warm-up after a week
+  away. Tuned against simulated learners (`npm run calibrate`); found-only players now pass,
+  false passes on fretboard drop to 0. State v1 migrates on load, with a `learner.v1` backup.
+
 - **Stage 4** – installable PWA (Vite + Preact) for tablet and phone: one-drill home screen,
   practice screen (play → reveal → self-rate, or tap chord chips), tuner via microphone.
   Progress stays on the device (IndexedDB). UI direction: [docs/ui-guidelines.md](docs/ui-guidelines.md).
@@ -122,7 +130,7 @@ src/core/            pure TypeScript, no DOM – checked with lib ES2022 only
   exercises/ rng · types · registry · attempt · families/{noteFind, intervalHunt, melodyChord}
   listen/   pitch (YIN) · tuner · tracker
   voicing/  voicing search · tabs · string sets
-  mastery/  learner state · skill stats · help levels · selection
+  mastery/  config · skill ids · relations · difficulty · belief · evidence · state + help · migration · play · selection
   curriculum/ tracks · drills · recommendation
   keys/     name held MIDI chords (type + inversion)
   song/     progression parsing · key detection · roman numerals · song brief
@@ -163,7 +171,8 @@ generateExercise('melody-chord', 7, undefined, { mode: 'naturalMinor', tonic: 'A
 ```
 
 - **Modes:** `tap` (checked automatically: fretboard positions or chord chips) and
-  `play` (play on the guitar, reveal, self-rate `miss` / `found` / `instant`).
+  `play` (play on the guitar, reveal, self-rate `miss` / `near` / `found` / `instant`:
+  ✗ Daneben · ≈ Fast · Gefunden · ✓ Sofort, keys 1–4).
 - **Skill ids** are hierarchical and use guitarist string numbers (6 = low E):
   `note:F#/string:5`, `interval:b3/up/strings:5-4`, `melody:minor/deg:3`.
 - **Attempts** store family + seed, not the exercise; the seed regenerates it.
@@ -172,38 +181,250 @@ generateExercise('melody-chord', 7, undefined, { mode: 'naturalMinor', tonic: 'A
 ## Learner model
 
 ```ts
-import { buildCatalog, emptyState, nextExercise, applyAttempt, recordAttempt, createRng, getFamily } from './src/core';
+import { buildCatalog, emptyState, nextExercise, applyAttempt, recordAttempt, createRng, getFamily,
+         knowledge, recall } from './src/core';
 
-const catalog = buildCatalog();               // every trainable skill + the focus that produces it
-let state = emptyState();                      // plain JSON with schemaVersion, persisted later
+const catalog = buildCatalog();               // 285 leaf skills, each with its transfer edges and a difficulty
+let state = emptyState();                      // plain JSON, schemaVersion 2
 const rng = createRng(sessionSeed);
 
 const { exercise, helpLevel } = nextExercise(state, catalog, rng, { now: Date.now(), families: ['interval-hunt'] });
 // … player answers …
 state = applyAttempt(state, recordAttempt(exercise, response, meta), getFamily(exercise.family).tempo);
+knowledge(state.skills['interval:5/up/strings:6-5']);              // 0.556 after two clean answers at help ≥ 1, time-free
+recall(state.skills['interval:5/up/strings:6-5'], Date.now());     // 1 now, 0.5 one half-life later
 ```
 
-- **Selection:** family uniformly, then a skill with weight
-  `weakness + due + novelty (+ small floor)`, ×0.1 if among the last 5. Random proportional, never argmax.
-  New skills enter only while fewer than 8 per family are "in learning" (seen, box < 2).
-- **Leitner:** right and quick *when due* → next box; early practice keeps the schedule;
-  right but slow → stays (at least box 1); wrong → box 0.
-- **Help levels** are kept per skill group (`interval:b3`, `triad:maj`, …): fade after 4 good answers
-  in a row *and* group mastery ≥ 0.5 / 0.65 / 0.8; come back after 2 misses in a row.
+Every tunable is a field of `ModelConfig` (`src/core/mastery/config.ts`); every public model
+function takes `cfg = DEFAULT_MODEL` last, so the simulation harness can sweep them. Only leaf
+skills are stored – ancestors like `note` or `interval:b3/up` are computed on read.
+
+- **Two numbers per skill.** *Knowledge* is the lower bound of a Beta belief, one standard
+  deviation below the mean, over weighted success/failure counts `a`, `b` that are shrunk to a
+  window of 20 (`nMax`, `nLapse`). It needs evidence, not luck: one clean answer gives 0.431, the
+  comfort bar 0.75 is crossed at the 6th clean answer (7th with the board on screen); twenty answers
+  at 90 % sit at 0.79, at 85 % at 0.74, at 80 % at 0.69. *Recall* is a forgetting curve
+  `R = 2^(−Δt/hl)` measured from the last full success, with a half-life `hl` per skill.
+- **One evidence shape** `{ x, w, f }` for quiz, aside and play (`evidenceOf`, `updateSkill`):
+
+  | source | x | f | w |
+  |---|---|---|---|
+  | ✓ Sofort | 1 | 1 | `helpW[level]` = 0.9 / 1 / 1 / 1 for help 0…3 |
+  | Gefunden | 1 | 0.5 | same |
+  | ≈ Fast | 0.25 | 0 | same |
+  | ✗ Daneben | 0 | 0 | same |
+  | tap, right | 1 | by latency between the family's fast and slow time | same |
+  | tap, wrong | the diagnosis' credit (0 / 0.25 / 0.5) | 0 | same |
+  | aside (the skill a wrong answer built instead) | 1 | 0.5 | 0.5 × same |
+  | play | 1 / 0 | clean / in time | ≤ 0.3, see below |
+
+  **"Gefunden" is a success**: correctness and fluency are kept apart, so a player who always
+  finds but never knows instantly passes exactly as fast; fluency (an EMA over correct answers)
+  only adds a little practice to slow-but-right skills (`fluFloor` 0.75).
+- **Half-life.** 10 minutes after the first success. A recall grows it by spacing:
+  `hl × (1 + 2·w·(0.5 + 0.5·f)·min(3, gap/hl))`, so answered right one half-life later each time
+  it walks 10 min → 30 min → 1.5 h → 4.5 h → 13.5 h → 1.7 d → 5.1 d, while 30 right answers one
+  second apart move it from 10.0 to 10.9 minutes – cramming proves short-term memory. A miss
+  shrinks it by how surprising it was: at 21 days, a miss with R = 1 leaves 4.2 d, R = 0.3 7.4 d,
+  R = 0.05 9.0 d; nothing resets to zero.
+- **Quiz-only counters.** `n` (attempts), `held` (successes after a gap ≥ 10 min, max 3, −1 per
+  miss) and `lapses` (consecutive misses, max 3). Asides and play never touch them.
+- **Gates read time-free knowledge, selection reads forgetting.** A skill is *comfortable* at
+  `n ≥ 3`, `held ≥ 1` and knowledge ≥ 0.75; nothing un-passes by the calendar. Selection picks a
+  family uniformly, then a skill with weight
+  `1 × (1 − eff) + 0.8 × forgetPressure + 0.03`, where `eff` is the knowledge (with transfer)
+  scaled by fluency and `forgetPressure` rises from 0 just after a recall to 1 at R ≤ 0.6;
+  unseen skills weigh 0.6; ×0.5 if among the last 5 asked, ×3 while boosted by a confusion.
+  Random proportional, never argmax.
+- **Help levels** are kept per skill group (`interval:b3`, `triad:maj`, …) and fade full →
+  name → sound + name → sound only: level 0 shows board, hint and names; 1 the names only; 2 plays
+  the sound with the name; 3 plays the sound and shows the name at the reveal. Fade after 4 good
+  answers in a row *and* group knowledge ≥ 0.6 / 0.75 / 0.85; back after 2 misses (a near miss
+  counts half). Group knowledge is time-free, so help can fade at the start of a session.
+
+### Transfer
+
+Related skills give a cold skill a head start (`relations.ts`, computed from the parsed id and
+the tuning, only between catalog ids):
+
+| kind | between | strength |
+|---|---|---|
+| mirror | `interval:5/up/strings:6-5` ↔ `interval:5/down/strings:5-6` (all 132) | 0.8 |
+| same-shape | same interval, same string distance, same fret offset (60 shape classes; G/B falls out) | 0.6 |
+| octave-string | same note on strings 6 and 1 (identical frets) | 0.8 |
+| same-pc | same note on another string, distance 1 / 2 / 3 / 4 | 0.3 / 0.45 / 0.2 / 0.2, ×0.7 across G/B |
+| fret-neighbour | a semitone apart on the same string | 0.3 |
+| degree-neighbour | same pair and direction, ±1 semitone (b3 ↔ 3) | 0.2 |
+| same-gaps | the same triad on 6-5-4 and 5-4-3 (the only sets with equal gaps) | 0.6 |
+| inversion-sibling | other inversion, same type and set (and on the keys) | 0.3 |
+| keys-guitar | `keys:T/inv:k` ↔ `triad:T/inv:k/strings:*` | 0.3 |
+| simpler-voicing | maj9 → maj7, m9 → m7, 9/13/7♯9 → 7 (and back) | 0.7 (0.4 back) |
+| relative-key | `melody:major/deg:d` ↔ the minor degree with the same chord | 0.5 |
+
+It is a **prior worth at most four answers** (`priorMax`), read one hop deep and never written
+into the stored counts: a cold note whose octave twin sits at 19 right / 1 wrong starts at mean
+0.77, low 0.61. **Gates never see it** – only selection, the ladder and the progress bar do.
+
+### Errors
+
+A wrong tap answer is diagnosed from the question and the response (`diagnose`, never from the
+stored solution): note find `wrong-string` · `off-by-one` · `octave`; interval hunt `direction` ·
+`octave` · `off-by-one` · `wrong-string`; triad build `wrong-set` · `span` · `inversion` ·
+`missing-tone` · `wrong-type`; keys chord `inversion` · `extra-tone` · `missing-tone` · `wrong-type`;
+neo-soul voicing `bass` · `missing-guide` · `missing-colour` · `wrong-tone`; melody → chord
+`missed-chord` · `extra-chord`. A diagnosis carries partial **credit** for the asked skill
+(0 / 0.25 / 0.5 – only the Beta sees the fraction; for the half-life, `held` and `lapses` a
+wrong answer is a full miss), an **aside** for the skill actually built (an inversion 1 asked,
+inversion 0 played credits `keys:maj/inv:0` at half weight) and a **boost** (×3 for 20 minutes)
+on the confusable skills. Play-mode families get a fourth rating, **≈ Fast** (x 0.25, boosts the
+semitone neighbours or the other two inversions). Practice shows one amber line under the verdict
+in tap mode – "Richtige Töne, aber E im Bass: 1. Umkehrung", "Einen Bund zu hoch", "Der Farbton
+fehlt: 9 = G" – and nothing in play mode.
+
+### Play evidence
+
+Jamming, the progression trainer and the timing trainer feed the model (`play.ts`, `applyPlay`):
+a held chord maps to `keys:T/inv:i` (augmented at half weight) or to a complete `voicing:T`, else
+to its simpler voicing, else to nothing.
+
+| source | weight | quality f |
+|---|---|---|
+| jam, free | 0.1 | 0.7 |
+| jam, the suggested next chord | 0.25 | 0.8 |
+| trainer hit | 0.3 | 0.4 at 50 BPM … 1 at 90 BPM |
+| trainer miss (the only play failure) | 0.15 | – |
+| timing trainer | 0.15 | genau 1 · früh/spät 0.6 · daneben 0.3 |
+
+A success is discounted by `max(0.1, 1 − R)`: the same chord ten times in a minute is worth about
+0.015 answers after the first, the same chord after a day 0.1 × 0.5. **A chord equal to a stored
+pad counts 0** – it proves pad memory, not the skill (Practice still accepts it as an answer but
+says "Pad erkannt – Töne bitte greifen").
+
+| play may | play may not |
+|---|---|
+| raise `a`, fluency, half-life, last success (the skill stops being due) | touch `n`, `held`, `lapses` |
+| feed guitar triads through `keys-guitar` | change help, recent, boosts, warm-up |
+| lift a drill's progress bar | pass a drill – comfort needs `n ≥ 3` and `held ≥ 1` |
+
+Four weeks of jamming alone take `keys:maj/inv:0` to knowledge 0.53–0.58 and pass no keys drill.
 
 ## Curriculum
 
 ```ts
 const curriculum = buildCurriculum(catalog);
 const drill = recommendDrill(state, curriculum, 'intervals');   // 'Quinte aufwärts – Nachbarsaite'
-const { exercise, helpLevel } = nextDrillExercise(state, drill, catalog, rng, Date.now());
+const plan = planSession(state, curriculum, drill, Date.now()); // recompute per pick
+const { exercise, helpLevel, review } = nextSessionExercise(state, plan, rng, Date.now());
+// review: the passed drill this pick came from – Practice shows 'Wiederholung · <title>'
 // … answer …
 state = markPassed(applyAttempt(state, attempt, tempo), curriculum, Date.now());
-drillProgress(state, drill);   // { status: 'learning', progress: 0.62, comfortable: 2, total: 4 }
+drillProgress(state, drill, Date.now());   // { status: 'learning', progress: 0.62, comfortable: 2, total: 4, recall: 0.81 }
 ```
 
 The order lives in `src/core/curriculum/curriculum.ts` as plain lists – edit there to reorder.
 Interval drills group string pairs by hand shape: adjacent, adjacent across G/B, one string skipped.
+117 drills in six tracks (12 fretboard, 42 interval, 32 triad, 14 melody, 8 keys, 9 neo-soul);
+67 of them train one skill, 6 seven and 6 twelve.
+
+- **Unchanged rules.** One recommended drill per track in a fixed order, nothing skipped, "Du
+  entscheidest". A drill is passed once every skill is comfortable – which includes having held
+  over a break of ≥ 10 minutes – and it comes back only when it clearly slips.
+- **Ladder.** Inside a drill, unseen skills enter easiest first: ranked by difficulty
+  (low frets before high, naturals before accidentals, adjacent strings before G/B and skips,
+  root position before inversions) minus half of what transfer already suggests; only the two
+  best-ranked unseen skills can be drawn (the second at 0.3), and only while fewer than four skills
+  are in learning. 'Saite 6: Stammtöne' thus opens with E and F and climbs the neck
+  (E F G A B C D); on 'Saite 1' the notes already known on string 6 come first.
+- **Mixed session.** *Start* still trains the one recommended drill, but passed drills of the
+  same track whose mean recall dropped below 90 % come back as labelled reviews: up to two
+  review drills, 25–50 % of the picks (more the more is forgotten), never an unseen skill, never
+  another track. Home says "· mit Wiederholung aus N Drills". Without reviews the random stream
+  is identical to a single-drill session.
+- **Warm-up.** After ≥ 7 days away the first five picks are reviews. The home card does not
+  change after a holiday – predicted forgetting decides *what is reviewed*, never what is passed.
+- **Slips are observed, not scheduled.** A skill's progress is multiplied by 1 / 0.85 / 0.6 / 0.3
+  after 0 / 1 / 2 / 3 consecutive misses, so a one-skill drill slips (progress < 0.5, the card
+  turns to "Wiederholen") after three misses in a row, a 7-skill drill when five of its skills
+  have; one right answer clears a skill's lapses.
+
+### Calibration
+
+`tests/sim/` simulates learners with a different functional form than the model – a power-law
+forgetting curve, its own learning rule, help bonuses and hidden transfer – so the fit is not
+circular. Personas: `quick`, `steady` (5 sessions a week of 12–20 answers), `slow`, `stuck`
+(p = 0.5 forever), `foundOnly`, `optimist` (rates a fifth of "found" as "instant"), `forgetful`,
+`returning` (a 14-day break), `gbWeak` (weak on G/B intervals), `noodler` (30 jam chords a day,
+70 % from pads). Metrics: time to pass, false passes (true knowledge < 0.6 at the pass or a week
+later), retention 7 and 21 days after the pass, over-/under-scheduling, weak-skill share, belief
+calibration, help by day, comeback slips and warm-up picks.
+
+```bash
+npm run baseline     # the frozen v1 model (tests/sim/v1/) on every persona, 5 seeds, ~3 s → tests/sim/baseline-v1.json
+npm run calibrate    # coordinate descent of DEFAULT_MODEL on seeds 11–15, then the v2 table on seeds 1–5
+                     #   --passes=2 --budget=240 (s) --workers=4; --free also sweeps the test-pinned constants
+```
+
+The calibrator minimises `J = 3·falsePassRate + 2·underScheduled + overScheduled +
+mean(|ttp − target|/target) + 2·calibration` (targets 10 / 35 / 55 / 90 answers for drills of
+1 / 4 / 7 / 12 skills). The run of 2026-11-01 took J from 3.858 to 2.841 in one pass and moved
+`nLapse` 12 → 20, `helpW` [0.7, 0.85, 1, 1] → [0.9, 1, 1, 1], `learningDone` 0.6 → 0.5,
+`maxLearningDrill` 2 → 4, the recent-pick damping 0.1 → 0.5 and `helpUp` → [0.6, 0.75, 0.85];
+no transfer strength moved. **Principles are never tuned:** comfort 0.75, `n ≥ 3`, held after
+10 minutes, slip below 0.5, 4 good answers to fade help, 2 misses to bring it back.
+
+v1 (`tests/sim/baseline-v1.json`) against v2 (`DEFAULT_MODEL`), same personas, seeds 1–5
+(first drill: seeds that passed it, median answers / sessions; rates pooled or averaged):
+
+| persona · track · days | first drill v1 | first drill v2 | false passes v1 → v2 | retention 7 d / 21 d v1 → v2 | recall error v1 → v2 |
+|---|---|---|---|---|---|
+| quick · fretboard · 28 | 5/5, 96 / 6 | 5/5, 187 / 12 | 17 % → 0 | 0.78 / 0.62 → 0.89 / 0.77 | 0.07 → 0.01 |
+| steady · fretboard · 28 | 5/5, 129 / 8 | 4/5, 229 / 15 | 0 → 0 | 0.75 / 0.58 → 0.91 / 0.81 | 0.05 → 0.01 |
+| steady · intervals · 28 | 5/5, 69 / 5 | 5/5, 135 / 8 | 75 % → 38 % | 0.51 / 0.34 → 0.61 / 0.46 | 0.28 → 0.05 |
+| foundOnly · fretboard · 42 | **0/5** | 4/5, 260 / 16 | – → 0 | – → 0.93 / 0.84 | 0.00 → 0.02 |
+| optimist · fretboard · 28 | 5/5, 138 / 8 | 3/5, 228 / 14 | 13 % → 0 | 0.71 / 0.54 → 0.92 / 0.81 | 0.06 → 0.01 |
+| forgetful · fretboard · 28 | 5/5, 135 / 9 | 2/5, 278 / 18 | 14 % → 0 | 0.67 / 0.48 → 0.80 / 0.62 | 0.06 → 0.01 |
+| gbWeak · intervals · 56 | 5/5, 69 / 5 | 5/5, 135 / 8 | 73 % → 32 % | 0.49 / 0.34 → 0.71 / 0.55 | 0.40 → 0.04 |
+| noodler · keys · 28 | 5/5, 21 / 2 | 5/5, 35 / 3 | 58 % → 43 % | 0.61 / 0.45 → 0.57 / 0.42 | 0.06 → 0.04 |
+| stuck · intervals · 56 | 0/5 | 0/5 | – | – | 0.01 → 0.04 |
+
+What else moved: v1 never revisited a passed drill (under-scheduled 1.00 on intervals; review share
+0), v2 leaves no forgotten interval skill unasked for a week (0.00) and mixes in 6 % reviews; on
+`gbWeak` the share of picks on weak skills rose from 0.63 to 4.15 times their share of the pool.
+After a two-week break (`returning`, break after day 20 on intervals) nothing slips and all five
+first picks are reviews; v1 had no warm-up. The price is speed: the lower-bound gate plus "held
+over a break" roughly doubles the answers to a first pass, and knowledge sits 0.21–0.22 below the
+true skill on average (v1's EMA: 0.17), because it is a lower bound by design.
+
+`tests/calibration.test.ts` (part of `npm test`) pins these as acceptance tests on seeds 1–5.
+Where the spec's first guesses proved infeasible under the principles (≤ 70 answers for
+'fretboard/6/naturals', review share ≥ 15 % within 28 days, over-scheduling ≤ 0.30) the measured
+value is pinned with a margin and the test says so; everything else is tighter than the spec –
+p = 0.5 passes no interval drill in 100 days (877–1453 answers), found-only passes the first
+fretboard drill within 20 sessions in ≥ 4 of 5 seeds, steady retention ≥ 0.85 / 0.75.
+
+### Schema
+
+```ts
+interface SkillStats {        // per leaf skill, schemaVersion 2
+  a: number; b: number;       // windowed weighted successes / failures (direct evidence only)
+  n: number;                  // quiz attempts
+  flu: number;                // fluency 0..1, starts at 0.5
+  hl: number;                 // half-life in ms
+  last: number; lastOk: number; // last evidence of any kind / last full success (epoch ms)
+  held: number; lapses: number;
+}
+// LearnerState: { schemaVersion: 2, skills, help, recent, passed, boost, lastActive, warmup }
+```
+
+`parseState` reads both versions: a v1 state (`acc`, `tempo`, `box`, …) is migrated by `migrateV1`
+– ancestors dropped, `a`/`b` = accuracy × a window of `min(n, 20)` (at least 14 for a skill v1
+called comfortable, so the home screen does not change on upgrade day), half-life from the Leitner
+box (10 min, 1 d, 3 d, 7 d, 21 d), `held` = box − 1. Any other version throws. In the app,
+`loadState` (`src/app/lib/store.ts`) first copies the untouched v1 string to the kv key
+**`learner.v1`** (once, never overwritten), then saves the migrated state; a state it cannot parse
+falls back to an empty one without overwriting what is stored. `DB_VERSION` stays 1.
+`exportAttempts()` returns every stored answer (Home: "Antworten exportieren" in the songs panel),
+so the model can later be re-fitted against real answers instead of simulated ones.
 
 ## On the iPad / iPhone
 

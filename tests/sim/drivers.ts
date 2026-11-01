@@ -1,4 +1,20 @@
+import {
+  Drill,
+  TrackId,
+  buildCurriculum,
+  hasSlipped,
+  markPassed,
+  nextSessionExercise,
+  planSession,
+  recommendDrill,
+} from '../../src/core/curriculum/curriculum';
 import { Attempt, DEFAULT_CONTEXT, Exercise, ExerciseContext, HelpLevel, Rng } from '../../src/core/exercises';
+import { knowledge as knowledgeOf, recall as recallOf } from '../../src/core/mastery/belief';
+import { DEFAULT_MODEL, ModelConfig } from '../../src/core/mastery/config';
+import { LearnerState, applyAttempt, emptyState, helpLevelFor } from '../../src/core/mastery/model';
+import { applyPlay, jamEvent } from '../../src/core/mastery/play';
+import { TRANSFER_S, TransferStrengths, buildEdges } from '../../src/core/mastery/relations';
+import { buildCatalog } from '../../src/core/mastery/select';
 import { SimPlay } from './world';
 import * as v1 from './v1/curriculum';
 import * as v1model from './v1/model';
@@ -8,8 +24,9 @@ import * as v1select from './v1/select';
  * What the runner needs from a learner model (spec §9.2): one Driver per model version, each
  * wrapping its own state type behind `unknown`. The v1 driver wraps the frozen copy under
  * tests/sim/v1/ so `npm run baseline` reproduces the "before" numbers after v2 lands; the v2
- * slot is filled by WP9 (planSession / nextSessionExercise, applyAttempt + markPassed,
- * applyPlay).
+ * driver wraps the real model (planSession / nextSessionExercise, applyAttempt + markPassed,
+ * applyPlay) and takes a ModelConfig and a transfer-strength table, so `npm run calibrate`
+ * can sweep both.
  */
 
 /** The part of a Drill both curriculum versions share. */
@@ -85,9 +102,50 @@ export function v1Driver(ctx: ExerciseContext = DEFAULT_CONTEXT): Driver {
   };
 }
 
-// ── v2: filled by WP9 ──
+// ── v2: belief, half-life, mixed sessions, play evidence ──
 
-/** The v2 driver factory; `null` until WP9 wires planSession / applyAttempt / applyPlay. */
-export const v2Driver: ((ctx?: ExerciseContext) => Driver) | null = null;
+/** What a v2 driver is built from; everything defaults to what the app runs with. */
+export interface V2Options {
+  cfg?: ModelConfig;
+  /** Transfer strengths for the catalog edges (relations.ts TRANSFER_S by default). */
+  strengths?: Readonly<TransferStrengths>;
+}
 
-export const DRIVERS: Record<DriverName, ((ctx?: ExerciseContext) => Driver) | null> = { v1: v1Driver, v2: v2Driver };
+/**
+ * The v2 driver: the home card is `recommendDrill`, a pick is `planSession` +
+ * `nextSessionExercise` (labelled review picks report their drill), an answer is
+ * `applyAttempt` + `markPassed`, a jam chord is `applyPlay(jamEvent(…))`. The drills are the
+ * real `buildCurriculum` objects, so they carry their catalog entries (edges, difficulty).
+ */
+export function v2Driver(ctx: ExerciseContext = DEFAULT_CONTEXT, opts: V2Options = {}): Driver {
+  const cfg = opts.cfg ?? DEFAULT_MODEL;
+  let catalog = buildCatalog(ctx);
+  if (opts.strengths && opts.strengths !== TRANSFER_S) {
+    const edges = buildEdges(catalog.map((c) => c.skill), ctx, opts.strengths);
+    catalog = catalog.map((c) => ({ ...c, edges: edges[c.skill] ?? [] }));
+  }
+  const curriculum = buildCurriculum(catalog);
+  const S = (s: unknown) => s as LearnerState;
+  const D = (d: SimDrill) => d as Drill;
+  return {
+    name: 'v2',
+    catalogIds: catalog.map((c) => c.skill),
+    curriculum,
+    empty: () => emptyState(),
+    recommend: (s, cur, track) => recommendDrill(S(s), cur as Drill[], track as TrackId, cfg),
+    next: (s, drill, cur, rng, now) => {
+      const plan = planSession(S(s), cur as Drill[], D(drill), now, cfg);
+      const { exercise, helpLevel, review } = nextSessionExercise(S(s), plan, rng, now, ctx, cfg);
+      return review ? { exercise, helpLevel, review } : { exercise, helpLevel };
+    },
+    apply: (s, a, tempo, cur, now) => markPassed(applyAttempt(S(s), a, tempo, cfg), cur as Drill[], now, cfg),
+    play: (s, jam) => applyPlay(S(s), jamEvent(jam.midis, jam.at, jam.picked, jam.pad), cfg),
+    knowledge: (s, skill) => knowledgeOf(S(s).skills[skill]),
+    recall: (s, skill, now) => recallOf(S(s).skills[skill], now),
+    passed: (s) => S(s).passed,
+    slipped: (s, drill) => hasSlipped(S(s), D(drill), cfg),
+    helpLevel: (s, skill) => helpLevelFor(S(s), skill),
+  };
+}
+
+export const DRIVERS: Record<DriverName, (ctx?: ExerciseContext) => Driver> = { v1: v1Driver, v2: (ctx) => v2Driver(ctx) };

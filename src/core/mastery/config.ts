@@ -99,10 +99,20 @@ export interface ModelConfig {
   nearMissWeight: number;
 }
 
+/**
+ * The defaults the app runs with. Fitted by `npm run calibrate` (tests/sim/calibrate.ts, WP9 run
+ * of 2026-11-01): coordinate descent on J over seeds 11–15 of the steady, quick, foundOnly,
+ * forgetful and optimist learners took J from 3.858 to 2.841 in one pass; a second pass, and a
+ * fresh run from these values, move nothing. The acceptance thresholds of tests/calibration.test.ts
+ * were then measured on seeds 1–5. Fields marked "calibrated" moved in that run; every other
+ * tunable is the spec value and a local optimum of its grid; principles were not swept.
+ */
 export const DEFAULT_MODEL: ModelConfig = {
   nMax: 20,
-  nLapse: 12,
-  helpW: [0.7, 0.85, 1, 1],
+  /** calibrated (spec 12): the simulated misses are mostly overnight forgetting, so a miss shrinks the window no further than a success. */
+  nLapse: 20,
+  /** calibrated (spec [0.7, 0.85, 1, 1]): answers with the board on screen still count 0.9; a p = 0.97 player passes 7 skills in 56–86 answers instead of 82–117. */
+  helpW: [0.9, 1, 1, 1],
   asideW: 0.5,
   nearCredit: 0.25,
   fluAlpha: 0.3,
@@ -121,14 +131,17 @@ export const DEFAULT_MODEL: ModelConfig = {
   ladderTransfer: 0.5,
   comfortMastery: 0.75,
   comfortN: 3,
-  learningDone: 0.6,
+  /** calibrated (spec 0.6): two clean answers take a skill out of "in learning". */
+  learningDone: 0.5,
   lapsePenalty: [1, 0.85, 0.6, 0.3],
   slipProgress: 0.5,
-  maxLearningDrill: 2,
+  /** calibrated (spec 2): the grid's cap – the simulated learner has no interference cost, so the sweep stops at four. */
+  maxLearningDrill: 4,
   maxLearningFree: 8,
   rTarget: 0.6,
   fluFloor: 0.75,
-  weights: { weak: 1, forget: 0.8, fresh: 0.6, floor: 0.03, recent: 0.1, boost: 3, ladderSecond: 0.3 },
+  /** calibrated: recent 0.5 (spec 0.1) – with up to four skills in learning, the last five asked are nearly the whole pool. */
+  weights: { weak: 1, forget: 0.8, fresh: 0.6, floor: 0.03, recent: 0.5, boost: 3, ladderSecond: 0.3 },
   boostMs: 20 * MIN,
   boostMax: 8,
   reviewDrills: 2,
@@ -141,7 +154,8 @@ export const DEFAULT_MODEL: ModelConfig = {
   playMin: 0.1,
   playPadWeight: 0,
   augWeight: 0.5,
-  helpUp: [0.5, 0.65, 0.8],
+  /** calibrated (spec [0.5, 0.65, 0.8]): help fades later; level 3 stays reachable for a p = 0.97 player (≈ 0.87). */
+  helpUp: [0.6, 0.75, 0.85],
   helpUpStreak: 4,
   helpDownMisses: 2,
   nearMissWeight: 0.5,

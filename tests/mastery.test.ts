@@ -127,8 +127,8 @@ describe('skill stats', () => {
     expect(knowledge(s.skills[C5])).toBeCloseTo(0.431, 1e-3);
     expect(s.skills[C5].n).toBe(1);
     expect(Object.keys(s.skills)).toEqual([C5]);
-    // the same answer with the board on screen (level 0) is weaker evidence: 0.379
-    expect(knowledge(applyAttempt(emptyState(), attempt(C5, true), TEMPO).skills[C5])).toBeCloseTo(0.379, 1e-3);
+    // the same answer with the board on screen (level 0, w = helpW[0] = 0.9) is weaker evidence: 0.414
+    expect(knowledge(applyAttempt(emptyState(), attempt(C5, true), TEMPO).skills[C5])).toBeCloseTo(0.414, 1e-3);
   });
   it('half-life triples per on-time recall, 10 min → 5.1 d in six; found grows it ×2.5; a miss at R = 1 divides it by five, never to zero', () => {
     let now = T0;
@@ -182,7 +182,7 @@ describe('skill stats', () => {
     expect(slow.held).toBe(0);
     expect(knowledge(slow)).toBeCloseTo(knowledge(fast)); // fluency never gates passing
   });
-  it('clean successes reach the comfort bar at the 6th answer unaided, the 7th at level 1, the 8th at level 0', () => {
+  it('clean successes reach the comfort bar at the 6th answer unaided (w 1), the 7th at w 0.85 or 0.9, the 8th at w 0.7', () => {
     const firstAbove = (w: number): number => {
       let s: SkillStats | undefined;
       for (let k = 1; k <= 20; k++) {
@@ -192,6 +192,8 @@ describe('skill stats', () => {
       return Infinity;
     };
     expect([firstAbove(1), firstAbove(0.85), firstAbove(0.7)]).toEqual([6, 7, 8]);
+    // with the calibrated help weights: levels 1–3 count fully (6th answer), level 0 at 0.9 (7th)
+    expect(DEFAULT_MODEL.helpW.map(firstAbove)).toEqual([7, 6, 6, 6]);
     let three: SkillStats | undefined;
     for (let k = 1; k <= 3; k++) three = updateSkill(three, quiz(1, k * 1000));
     expect(knowledge(three)).toBeCloseTo(0.637, 1e-3);
@@ -211,13 +213,17 @@ describe('skill stats', () => {
     expect(found.skills[C5].held).toBe(instant.skills[C5].held);
     expect(found.skills[C5].flu < instant.skills[C5].flu).toBe(true);
   });
-  it('windows the counts: old successes count less once you miss', () => {
+  it('windows the counts: nMax answers after a success, nLapse after a miss', () => {
     let s: SkillStats | undefined;
     for (let k = 1; k <= 30; k++) s = updateSkill(s, quiz(1, k * 1000));
     expect(s!.a + s!.b).toBeCloseTo(DEFAULT_MODEL.nMax + 1); // shrunk to 20 before the 21st success
     const missed = updateSkill(s, quiz(0, 31_000));
-    expect(missed.a + missed.b).toBeCloseTo(DEFAULT_MODEL.nLapse + 1);
+    expect(missed.a + missed.b).toBeCloseTo(DEFAULT_MODEL.nLapse + 1); // calibrated nLapse = nMax: a miss shrinks nothing extra
     expect(knowledge(missed) < knowledge(s)).toBe(true);
+    // a narrower lapse window makes old successes count less once you miss
+    const narrow = updateSkill(s, quiz(0, 31_000), { ...DEFAULT_MODEL, nLapse: 12 });
+    expect(narrow.a + narrow.b).toBeCloseTo(13);
+    expect(knowledge(narrow) < knowledge(missed)).toBe(true);
   });
   it('is pure and round-trips through JSON', () => {
     const before = emptyState();
@@ -231,19 +237,19 @@ describe('skill stats', () => {
 describe('evidence', () => {
   it('maps ratings, timed answers, near misses and asides to one shape', () => {
     const ev = (a: Attempt) => evidenceOf(a, TEMPO);
-    expect(ev(attempt(C5, true))).toEqual([{ skill: C5, at: 0, x: 1, w: 0.7, f: 1, kind: 'quiz', missWeight: 0 }]);
+    expect(ev(attempt(C5, true))).toEqual([{ skill: C5, at: 0, x: 1, w: 0.9, f: 1, kind: 'quiz', missWeight: 0 }]);
     expect(ev(attempt(C5, 'found', 0, { helpLevel: 3 }))).toEqual([{ skill: C5, at: 0, x: 1, w: 1, f: 0.5, kind: 'quiz', missWeight: 0 }]);
-    expect(ev(attempt(C5, 'near'))).toEqual([{ skill: C5, at: 0, x: 0.25, w: 0.7, f: 0, kind: 'quiz', missWeight: 0.5 }]);
-    expect(ev(attempt(C5, false))).toEqual([{ skill: C5, at: 0, x: 0, w: 0.7, f: 0, kind: 'quiz', missWeight: 1 }]);
+    expect(ev(attempt(C5, 'near'))).toEqual([{ skill: C5, at: 0, x: 0.25, w: 0.9, f: 0, kind: 'quiz', missWeight: 0.5 }]);
+    expect(ev(attempt(C5, false))).toEqual([{ skill: C5, at: 0, x: 0, w: 0.9, f: 0, kind: 'quiz', missWeight: 1 }]);
     expect(ev(timed(C5, 5000))[0].f).toBeCloseTo(0.5);
     expect(ev(timed(C5, 100))[0].f).toBe(1);
     expect(ev(timed(C5, 20_000))[0].f).toBe(0);
     const wrong = ev(timed(C5, 3000, { kind: 'other', credit: 0 }));
-    expect(wrong).toEqual([{ skill: C5, at: 0, x: 0, w: 0.7, f: 0, kind: 'quiz', missWeight: 1 }]);
+    expect(wrong).toEqual([{ skill: C5, at: 0, x: 0, w: 0.9, f: 0, kind: 'quiz', missWeight: 1 }]);
     const inversion = ev(timed('keys:maj/inv:1', 3000, { kind: 'inversion', credit: 0.5, aside: 'keys:maj/inv:0' }, 7, 1));
     expect(inversion).toEqual([
-      { skill: 'keys:maj/inv:1', at: 7, x: 0.5, w: 0.85, f: 0, kind: 'quiz', missWeight: 0.5 },
-      { skill: 'keys:maj/inv:0', at: 7, x: 1, w: 0.5 * 0.85, f: 0.5, kind: 'aside', missWeight: 0 },
+      { skill: 'keys:maj/inv:1', at: 7, x: 0.5, w: 1, f: 0, kind: 'quiz', missWeight: 0.5 },
+      { skill: 'keys:maj/inv:0', at: 7, x: 1, w: 0.5, f: 0.5, kind: 'aside', missWeight: 0 },
     ]);
   });
   it('aside and play evidence move the belief but never n, held or lapses', () => {
@@ -317,11 +323,11 @@ describe('attempt reducer', () => {
     const asked = 'keys:maj/inv:1', shown = 'keys:maj/inv:0';
     const s = applyAttempt(emptyState(), timed(asked, 3000, { kind: 'inversion', credit: 0.5, aside: shown }, 1000), TEMPO);
     expect(s.skills[asked].n).toBe(1);
-    expect(s.skills[asked].a).toBeCloseTo(0.35);
-    expect(s.skills[asked].b).toBeCloseTo(0.35);
+    expect(s.skills[asked].a).toBeCloseTo(0.45); // x 0.5 at w 0.9 (help level 0)
+    expect(s.skills[asked].b).toBeCloseTo(0.45);
     expect([s.skills[asked].lapses, s.skills[asked].lastOk]).toEqual([1, 0]); // a wrong answer is a full lapse
     expect(s.skills[shown].n).toBe(0);
-    expect(s.skills[shown].a).toBeCloseTo(0.35);
+    expect(s.skills[shown].a).toBeCloseTo(0.45); // asideW 0.5 × 0.9
     expect([s.skills[shown].lastOk, s.skills[shown].hl, s.skills[shown].held]).toEqual([1000, DEFAULT_MODEL.hl0, 0]);
     expect(s.help['keys:maj']).toEqual({ level: 0, good: 0, misses: 0.5 }); // an inversion error is half a miss
     expect(s.recent).toEqual([asked]);
@@ -330,7 +336,7 @@ describe('attempt reducer', () => {
   it('boosts the confusables a diagnosis names for 20 minutes and keeps the newest eight', () => {
     const nudged = applyAttempt(emptyState(), attempt(C5, 'near', 0, { nudge: ['note:C#/string:5', 'note:B/string:5', 'note:C'] }), TEMPO);
     expect(nudged.boost).toEqual({ 'note:C#/string:5': 20 * MIN, 'note:B/string:5': 20 * MIN }); // 'note:C' is no leaf
-    expect(nudged.skills[C5].a).toBeCloseTo(0.7 * 0.25); // partial credit…
+    expect(nudged.skills[C5].a).toBeCloseTo(0.9 * 0.25); // partial credit…
     expect([nudged.skills[C5].lastOk, nudged.skills[C5].lapses]).toEqual([0, 1]); // …but no recall and a full lapse
     const still = applyAttempt(nudged, attempt(C5, true, 20 * MIN - 1), TEMPO);
     expect(Object.keys(still.boost).length).toBe(2);
@@ -417,8 +423,9 @@ describe('selection', () => {
     const s = applyAttempt(emptyState(), attempt(C5, false), TEMPO);
     const entry = catalog.find((c) => c.skill === C5)!;
     const w = skillWeight(s, entry, 0, { allowNew: true });
-    const other = skillWeight(applyAttempt(emptyState(), attempt('note:D/string:5', false), TEMPO), entry, 0, { allowNew: true });
-    expect(w < other).toBe(true);
+    const notRecent = skillWeight({ ...s, recent: [] }, entry, 0, { allowNew: true });
+    expect(w < notRecent).toBe(true);
+    expect(w / notRecent).toBeCloseTo(DEFAULT_MODEL.weights.recent);
   });
   it('introduces new skills only while few are in learning', () => {
     const { picks } = simulate(() => 0, 60, ['note-find']);
